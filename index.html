@@ -301,19 +301,19 @@
                 }
                 
                 let html = '<div class="image-container">';
-                pngImages.forEach(image => {
-                    const fileName = image.split('/').pop();
-                    html += `
-                        <div class="image-item">
-                            <img src="${image}" alt="${fileName}" 
-                                 oncontextmenu="showContextMenu(event, '${image}', '${fileName}')"
-                                 ontouchstart="handleTouchStart(event, '${image}', '${fileName}')"
-                                 ontouchend="handleTouchEnd()"
-                                 ontouchmove="handleTouchMove()">
-                            <div class="image-name">${fileName}</div>
-                        </div>
-                    `;
-                });
+pngImages.forEach(image => {
+    const fileName = image.split('/').pop();
+    html += `
+        <div class="image-item">
+            <img src="${image}" alt="${fileName}" 
+                 oncontextmenu="showContextMenu(event, '${image}', '${fileName}')"
+                 ontouchstart="handleTouchStart(event, '${image}', '${fileName}')"
+                 ontouchend="handleTouchEnd()"
+                 ontouchmove="handleTouchMove()">
+            <div class="image-name">${fileName}</div>
+        </div>
+    `;
+});
                 html += '</div>';
                 
                 imageDisplay.innerHTML = html;
@@ -380,17 +380,33 @@
             setTimeout(() => document.addEventListener('click', closeMenu), 10);
         }
         
-        // 触摸事件处理
-        function handleTouchStart(event, url, filename) {
-            touchStartTime = Date.now();
-            clearTimeout(touchTimer);
-            
-            touchTimer = setTimeout(() => {
-                if (Date.now() - touchStartTime >= 1000) {
-                    showContextMenu(event, url, filename);
-                }
-            }, 1000);
+// 触摸事件处理
+function handleTouchStart(event, url, filename) {
+    touchStartTime = Date.now();
+    clearTimeout(touchTimer);
+    
+    // 保存当前触摸的图片信息
+    const imageUrl = url;
+    const imageFilename = filename;
+    const touchEvent = event; // 保存事件对象
+    
+    touchTimer = setTimeout(() => {
+        if (Date.now() - touchStartTime >= 1000) {
+            showContextMenu(touchEvent, imageUrl, imageFilename);
         }
+    }, 1000);
+    
+    // 阻止默认行为
+    event.preventDefault();
+}
+
+function handleTouchEnd() {
+    clearTimeout(touchTimer);
+}
+
+function handleTouchMove() {
+    clearTimeout(touchTimer);
+}
         
         function handleTouchEnd() {
             clearTimeout(touchTimer);
