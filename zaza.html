@@ -307,6 +307,23 @@
             z-index: 1000;
             display: none;
         }
+        
+        /* 缩放控制 */
+        .scale-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .scale-controls input[type="range"] {
+            flex: 1;
+        }
+        
+        .scale-value {
+            min-width: 50px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -342,6 +359,12 @@
                     <div class="tool-button active" data-tool="move">移动</div>
                     <div class="tool-button" data-tool="crop">裁剪</div>
                     <div class="tool-button" data-tool="erase">橡皮擦</div>
+                </div>
+                
+                <div class="scale-controls">
+                    <label for="scale-slider">图片缩放:</label>
+                    <input type="range" id="scale-slider" min="10" max="200" value="100">
+                    <span class="scale-value" id="scale-value">100%</span>
                 </div>
                 
                 <div id="canvas"></div>
@@ -394,6 +417,8 @@
         let touchStartY = 0;
         let isLongPress = false;
         let longPressTimer = null;
+        let initialImageWidth = 0;
+        let scaleValue = 100;
         
         // DOM 元素
         const libraryImagesEl = document.getElementById('library-images');
@@ -410,6 +435,8 @@
         const applyCropBtn = document.getElementById('apply-crop');
         const cancelCropBtn = document.getElementById('cancel-crop');
         const longPressHint = document.getElementById('long-press-hint');
+        const scaleSlider = document.getElementById('scale-slider');
+        const scaleValueEl = document.getElementById('scale-value');
         
         // 初始化
         function init() {
@@ -477,6 +504,9 @@
                 updateBrushSizeDisplay();
             });
             
+            // 缩放控制
+            scaleSlider.addEventListener('input', handleScaleChange);
+            
             // 按钮事件
             downloadBtn.addEventListener('click', downloadCanvas);
             clearBtn.addEventListener('click', clearCanvas);
@@ -487,6 +517,17 @@
             // 裁剪按钮事件
             applyCropBtn.addEventListener('click', applyCrop);
             cancelCropBtn.addEventListener('click', cancelCrop);
+        }
+        
+        // 处理缩放变化
+        function handleScaleChange() {
+            scaleValue = parseInt(scaleSlider.value);
+            scaleValueEl.textContent = scaleValue + '%';
+            
+            if (selectedImage) {
+                const newWidth = (initialImageWidth * scaleValue) / 100;
+                selectedImage.style.width = newWidth + 'px';
+            }
         }
         
         // 更新画布尺寸
@@ -621,6 +662,14 @@
             // 选中当前图片
             selectedImage = e.target || e.currentTarget;
             selectedImage.classList.add('selected');
+            
+            // 保存初始宽度用于缩放
+            initialImageWidth = selectedImage.offsetWidth;
+            
+            // 重置缩放滑块
+            scaleValue = 100;
+            scaleSlider.value = 100;
+            scaleValueEl.textContent = '100%';
             
             // 阻止事件冒泡
             e.stopPropagation();
@@ -826,6 +875,12 @@
             selectedImage.style.left = cropRect.x + 'px';
             selectedImage.style.top = cropRect.y + 'px';
             
+            // 更新初始宽度
+            initialImageWidth = cropWidth;
+            scaleSlider.value = 100;
+            scaleValue = 100;
+            scaleValueEl.textContent = '100%';
+            
             // 退出裁剪模式
             exitCropMode();
             
@@ -947,8 +1002,11 @@
             isDrawing = true;
             const canvasRect = canvasEl.getBoundingClientRect();
             const imgRect = selectedImage.getBoundingClientRect();
-            const x = e.clientX - canvasRect.left - (imgRect.left - canvasRect.left);
-            const y = e.clientY - canvasRect.top - (imgRect.top - canvasRect.top);
+            
+            // 计算相对于图片的坐标
+            const x = e.clientX - imgRect.left;
+            const y = e.clientY - imgRect.top;
+            
             eraseAt(x, y);
         }
         
@@ -957,10 +1015,12 @@
             if (!selectedImage) return;
             
             isDrawing = true;
-            const canvasRect = canvasEl.getBoundingClientRect();
             const imgRect = selectedImage.getBoundingClientRect();
-            const x = touch.clientX - canvasRect.left - (imgRect.left - canvasRect.left);
-            const y = touch.clientY - canvasRect.top - (imgRect.top - canvasRect.top);
+            
+            // 计算相对于图片的坐标
+            const x = touch.clientX - imgRect.left;
+            const y = touch.clientY - imgRect.top;
+            
             eraseAt(x, y);
         }
         
@@ -969,10 +1029,9 @@
             if (currentTool === 'move' && isDragging && selectedImage) {
                 moveImage(e.clientX, e.clientY);
             } else if (currentTool === 'erase' && isDrawing && selectedImage) {
-                const canvasRect = canvasEl.getBoundingClientRect();
                 const imgRect = selectedImage.getBoundingClientRect();
-                const x = e.clientX - canvasRect.left - (imgRect.left - canvasRect.left);
-                const y = e.clientY - canvasRect.top - (imgRect.top - canvasRect.top);
+                const x = e.clientX - imgRect.left;
+                const y = e.clientY - imgRect.top;
                 eraseAt(x, y);
             } else if (isCropping && isDragging && cropRect) {
                 moveCrop(e);
@@ -992,8 +1051,8 @@
                 moveImage(touch.clientX, touch.clientY);
             } else if (currentTool === 'erase' && isDrawing && selectedImage) {
                 const imgRect = selectedImage.getBoundingClientRect();
-                const x = touch.clientX - canvasRect.left - (imgRect.left - canvasRect.left);
-                const y = touch.clientY - canvasRect.top - (imgRect.top - canvasRect.top);
+                const x = touch.clientX - imgRect.left;
+                const y = touch.clientY - imgRect.top;
                 eraseAt(x, y);
             } else if (isCropping && isDragging && cropRect) {
                 const x = touch.clientX - canvasRect.left - dragOffset.x;
@@ -1249,8 +1308,13 @@
             
             const ctx = getOrCreateCanvasContext(selectedImage);
             ctx.globalCompositeOperation = 'destination-out';
+            
+            // 根据图片实际尺寸和显示尺寸的比例调整橡皮擦大小
+            const scaleX = selectedImage.naturalWidth / selectedImage.offsetWidth;
+            const scaleY = selectedImage.naturalHeight / selectedImage.offsetHeight;
+            
             ctx.beginPath();
-            ctx.arc(x, y, brushSize / 2, 0, Math.PI * 2);
+            ctx.arc(x * scaleX, y * scaleY, (brushSize / 2) * scaleX, 0, Math.PI * 2);
             ctx.fill();
         }
         
@@ -1270,17 +1334,7 @@
                 
                 img.canvasOverlay = canvas;
                 img.parentNode.insertBefore(canvas, img.nextSibling);
-                
-                // 缩放图片以适应画布
-                const scaleX = canvas.width / img.offsetWidth;
-                const scaleY = canvas.height / img.offsetHeight;
-                canvas.getContext('2d').setTransform(scaleX, 0, 0, scaleY, 0, 0);
             }
-            
-            // 确保变换正确
-            const scaleX = canvas.width / img.offsetWidth;
-            const scaleY = canvas.height / img.offsetHeight;
-            canvas.getContext('2d').setTransform(scaleX, 0, 0, scaleY, 0, 0);
             
             return canvas.getContext('2d');
         }
