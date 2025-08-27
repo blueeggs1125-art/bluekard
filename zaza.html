@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>制作库 - KARDS素材</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
@@ -135,11 +135,14 @@
             min-height: 300px;
             border: 1px solid #ddd;
             margin-bottom: 15px;
+            touch-action: none;
         }
         
         .canvas-image {
             position: absolute;
             cursor: move;
+            -webkit-user-drag: none;
+            user-drag: none;
         }
         
         .canvas-image.selected {
@@ -257,18 +260,20 @@
         
         .crop-handle {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 20px;
+            height: 20px;
             background: white;
-            border: 1px solid #333;
+            border: 2px solid #333;
+            border-radius: 50%;
             pointer-events: all;
             z-index: 102;
+            transform: translate(-50%, -50%);
         }
         
-        .crop-handle-nw { top: -5px; left: -5px; cursor: nw-resize; }
-        .crop-handle-ne { top: -5px; right: -5px; cursor: ne-resize; }
-        .crop-handle-sw { bottom: -5px; left: -5px; cursor: sw-resize; }
-        .crop-handle-se { bottom: -5px; right: -5px; cursor: se-resize; }
+        .crop-handle-nw { cursor: nw-resize; }
+        .crop-handle-ne { cursor: ne-resize; }
+        .crop-handle-sw { cursor: sw-resize; }
+        .crop-handle-se { cursor: se-resize; }
         
         .crop-buttons {
             display: flex;
@@ -287,6 +292,20 @@
         
         .crop-cancel {
             background: #f44336;
+        }
+        
+        /* 长按提示 */
+        .long-press-hint {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
         }
     </style>
 </head>
@@ -346,6 +365,10 @@
             </div>
         </div>
     </div>
+    
+    <div class="long-press-hint" id="long-press-hint">
+        长按图片可拖动
+    </div>
 
     <script>
         // 全局变量
@@ -366,6 +389,11 @@
         let isResizing = false;
         let resizeHandle = null;
         let originalCropRect = null;
+        let touchStartTime = 0;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let isLongPress = false;
+        let longPressTimer = null;
         
         // DOM 元素
         const libraryImagesEl = document.getElementById('library-images');
@@ -381,6 +409,7 @@
         const cropButtons = document.getElementById('crop-buttons');
         const applyCropBtn = document.getElementById('apply-crop');
         const cancelCropBtn = document.getElementById('cancel-crop');
+        const longPressHint = document.getElementById('long-press-hint');
         
         // 初始化
         function init() {
@@ -502,6 +531,7 @@
             img.src = url;
             img.className = 'canvas-image';
             img.dataset.filename = filename;
+            img.draggable = false;
             
             img.onload = function() {
                 // 设置初始位置为画布中心
@@ -516,10 +546,71 @@
                 canvasEl.appendChild(img);
                 canvasImages.push(img);
                 
-                // 添加点击事件选择图片
-                img.addEventListener('mousedown', selectImage);
+                // 添加触摸事件
                 img.addEventListener('touchstart', handleImageTouchStart);
+                img.addEventListener('touchmove', handleImageTouchMove);
+                img.addEventListener('touchend', handleImageTouchEnd);
             };
+        }
+        
+        // 处理图片触摸开始
+        function handleImageTouchStart(e) {
+            if (currentTool !== 'move') return;
+            
+            const touch = e.touches[0];
+            touchStartTime = Date.now();
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            isLongPress = false;
+            
+            // 长按定时器
+            longPressTimer = setTimeout(() => {
+                if (!isLongPress) {
+                    isLongPress = true;
+                    selectImage(e);
+                    startDrag(touch.clientX, touch.clientY);
+                    
+                    // 显示长按提示
+                    longPressHint.style.display = 'block';
+                    setTimeout(() => {
+                        longPressHint.style.display = 'none';
+                    }, 1000);
+                }
+            }, 500);
+            
+            e.preventDefault();
+        }
+        
+        // 处理图片触摸移动
+        function handleImageTouchMove(e) {
+            if (currentTool !== 'move') return;
+            
+            const touch = e.touches[0];
+            
+            // 检查是否移动超过阈值，取消长按
+            if (!isLongPress && (Math.abs(touch.clientX - touchStartX) > 10 || Math.abs(touch.clientY - touchStartY) > 10)) {
+                clearTimeout(longPressTimer);
+                return;
+            }
+            
+            if (isLongPress && isDragging && selectedImage) {
+                moveImage(touch.clientX, touch.clientY);
+            }
+            
+            e.preventDefault();
+        }
+        
+        // 处理图片触摸结束
+        function handleImageTouchEnd(e) {
+            if (currentTool !== 'move') return;
+            
+            clearTimeout(longPressTimer);
+            
+            if (isLongPress) {
+                isDragging = false;
+            }
+            
+            e.preventDefault();
         }
         
         // 选择图片
@@ -528,19 +619,11 @@
             canvasImages.forEach(img => img.classList.remove('selected'));
             
             // 选中当前图片
-            selectedImage = e.target;
+            selectedImage = e.target || e.currentTarget;
             selectedImage.classList.add('selected');
             
             // 阻止事件冒泡
             e.stopPropagation();
-        }
-        
-        // 处理图片触摸开始
-        function handleImageTouchStart(e) {
-            selectImage(e);
-            const touch = e.touches[0];
-            startDrag(touch.clientX, touch.clientY);
-            e.preventDefault();
         }
         
         // 进入裁剪模式
@@ -629,13 +712,19 @@
         
         // 创建裁剪手柄
         function createCropHandles() {
-            const handles = ['nw', 'ne', 'sw', 'se'];
+            const positions = [
+                { pos: 'nw', x: cropRect.x, y: cropRect.y },
+                { pos: 'ne', x: cropRect.x + cropRect.width, y: cropRect.y },
+                { pos: 'sw', x: cropRect.x, y: cropRect.y + cropRect.height },
+                { pos: 'se', x: cropRect.x + cropRect.width, y: cropRect.y + cropRect.height }
+            ];
             
-            handles.forEach(position => {
+            positions.forEach(pos => {
                 const handle = document.createElement('div');
-                handle.className = `crop-handle crop-handle-${position}`;
-                handle.dataset.position = position;
-                handle.addEventListener('mousedown', startResize);
+                handle.className = `crop-handle crop-handle-${pos.pos}`;
+                handle.dataset.position = pos.pos;
+                handle.addEventListener('touchstart', handleHandleTouchStart);
+                handle.addEventListener('mousedown', handleHandleMouseDown);
                 canvasEl.appendChild(handle);
                 cropHandles.push(handle);
             });
@@ -643,32 +732,27 @@
             updateCropHandlesPosition();
         }
         
-        // 更新裁剪手柄位置
-        function updateCropHandlesPosition() {
-            cropHandles.forEach(handle => {
-                switch (handle.dataset.position) {
-                    case 'nw':
-                        handle.style.left = (cropRect.x - 5) + 'px';
-                        handle.style.top = (cropRect.y - 5) + 'px';
-                        break;
-                    case 'ne':
-                        handle.style.left = (cropRect.x + cropRect.width - 5) + 'px';
-                        handle.style.top = (cropRect.y - 5) + 'px';
-                        break;
-                    case 'sw':
-                        handle.style.left = (cropRect.x - 5) + 'px';
-                        handle.style.top = (cropRect.y + cropRect.height - 5) + 'px';
-                        break;
-                    case 'se':
-                        handle.style.left = (cropRect.x + cropRect.width - 5) + 'px';
-                        handle.style.top = (cropRect.y + cropRect.height - 5) + 'px';
-                        break;
-                }
-            });
+        // 处理手柄触摸开始
+        function handleHandleTouchStart(e) {
+            e.stopPropagation();
+            isResizing = true;
+            resizeHandle = e.target;
+            originalCropRect = { ...cropRect };
+            
+            const touch = e.touches[0];
+            const canvasRect = canvasEl.getBoundingClientRect();
+            const startX = touch.clientX - canvasRect.left;
+            const startY = touch.clientY - canvasRect.top;
+            
+            // 保存起始位置
+            resizeHandle.startX = startX;
+            resizeHandle.startY = startY;
+            
+            e.preventDefault();
         }
         
-        // 开始调整大小
-        function startResize(e) {
+        // 处理手柄鼠标按下
+        function handleHandleMouseDown(e) {
             e.stopPropagation();
             isResizing = true;
             resizeHandle = e.target;
@@ -681,6 +765,23 @@
             // 保存起始位置
             resizeHandle.startX = startX;
             resizeHandle.startY = startY;
+        }
+        
+        // 更新裁剪手柄位置
+        function updateCropHandlesPosition() {
+            if (cropHandles.length < 4) return;
+            
+            cropHandles[0].style.left = cropRect.x + 'px';           // nw
+            cropHandles[0].style.top = cropRect.y + 'px';
+            
+            cropHandles[1].style.left = (cropRect.x + cropRect.width) + 'px';  // ne
+            cropHandles[1].style.top = cropRect.y + 'px';
+            
+            cropHandles[2].style.left = cropRect.x + 'px';           // sw
+            cropHandles[2].style.top = (cropRect.y + cropRect.height) + 'px';
+            
+            cropHandles[3].style.left = (cropRect.x + cropRect.width) + 'px';  // se
+            cropHandles[3].style.top = (cropRect.y + cropRect.height) + 'px';
         }
         
         // 应用裁剪
@@ -753,13 +854,15 @@
                 return;
             }
             
-            if (currentTool === 'move') {
+            if (currentTool === 'move' && e.target.classList.contains('canvas-image')) {
+                selectImage(e);
                 startDrag(e.clientX, e.clientY);
-            } else if (currentTool === 'erase') {
+            } else if (currentTool === 'erase' && e.target.classList.contains('canvas-image')) {
+                selectImage(e);
                 startErasing(e);
-            } else if (isCropping && cropSelection && cropSelection.contains(e.target)) {
+            } else if (isCropping && e.target === cropSelection) {
                 startMovingCrop(e);
-            } else if (isCropping && cropSelection) {
+            } else if (isCropping && !cropHandles.includes(e.target) && e.target !== cropSelection) {
                 startCreatingCrop(e);
             }
         }
@@ -785,21 +888,46 @@
         
         // 处理触摸开始
         function handleTouchStart(e) {
+            const touch = e.touches[0];
+            
             if (e.target === canvasEl) {
                 canvasImages.forEach(img => img.classList.remove('selected'));
                 selectedImage = null;
                 return;
             }
             
-            const touch = e.touches[0];
-            
-            if (currentTool === 'move') {
+            if (currentTool === 'move' && e.target.classList.contains('canvas-image')) {
+                selectImage(e);
                 startDrag(touch.clientX, touch.clientY);
-            } else if (currentTool === 'erase') {
+            } else if (currentTool === 'erase' && e.target.classList.contains('canvas-image')) {
+                selectImage(e);
                 startErasingFromTouch(touch);
+            } else if (isCropping && e.target === cropSelection) {
+                startMovingCropFromTouch(touch);
+            } else if (isCropping && !cropHandles.includes(e.target) && e.target !== cropSelection) {
+                startCreatingCropFromTouch(touch);
             }
             
             e.preventDefault();
+        }
+        
+        // 从触摸开始移动裁剪区域
+        function startMovingCropFromTouch(touch) {
+            if (!cropRect) return;
+            
+            isDragging = true;
+            const canvasRect = canvasEl.getBoundingClientRect();
+            dragOffset.x = touch.clientX - canvasRect.left - cropRect.x;
+            dragOffset.y = touch.clientY - canvasRect.top - cropRect.y;
+        }
+        
+        // 从触摸开始创建裁剪区域
+        function startCreatingCropFromTouch(touch) {
+            const canvasRect = canvasEl.getBoundingClientRect();
+            cropStart = {
+                x: touch.clientX - canvasRect.left,
+                y: touch.clientY - canvasRect.top
+            };
         }
         
         // 开始拖拽
@@ -828,12 +956,11 @@
         function startErasingFromTouch(touch) {
             if (!selectedImage) return;
             
+            isDrawing = true;
             const canvasRect = canvasEl.getBoundingClientRect();
             const imgRect = selectedImage.getBoundingClientRect();
             const x = touch.clientX - canvasRect.left - (imgRect.left - canvasRect.left);
             const y = touch.clientY - canvasRect.top - (imgRect.top - canvasRect.top);
-            
-            isDrawing = true;
             eraseAt(x, y);
         }
         
@@ -854,6 +981,90 @@
             } else if (isResizing && resizeHandle) {
                 resizeCrop(e);
             }
+        }
+        
+        // 处理触摸移动
+        function handleTouchMove(e) {
+            const touch = e.touches[0];
+            const canvasRect = canvasEl.getBoundingClientRect();
+            
+            if (currentTool === 'move' && isDragging && selectedImage) {
+                moveImage(touch.clientX, touch.clientY);
+            } else if (currentTool === 'erase' && isDrawing && selectedImage) {
+                const imgRect = selectedImage.getBoundingClientRect();
+                const x = touch.clientX - canvasRect.left - (imgRect.left - canvasRect.left);
+                const y = touch.clientY - canvasRect.top - (imgRect.top - canvasRect.top);
+                eraseAt(x, y);
+            } else if (isCropping && isDragging && cropRect) {
+                const x = touch.clientX - canvasRect.left - dragOffset.x;
+                const y = touch.clientY - canvasRect.top - dragOffset.y;
+                
+                // 限制裁剪区域在图片内
+                const imgRect = selectedImage.getBoundingClientRect();
+                const canvasLeft = imgRect.left - canvasRect.left;
+                const canvasTop = imgRect.top - canvasRect.top;
+                
+                cropRect.x = Math.max(canvasLeft, Math.min(x, canvasLeft + imgRect.width - cropRect.width));
+                cropRect.y = Math.max(canvasTop, Math.min(y, canvasTop + imgRect.height - cropRect.height));
+                
+                cropSelection.style.left = cropRect.x + 'px';
+                cropSelection.style.top = cropRect.y + 'px';
+                updateCropHandlesPosition();
+            } else if (isCropping && cropStart) {
+                updateCropPreviewFromTouch(touch);
+            } else if (isResizing && resizeHandle) {
+                const mouseX = touch.clientX - canvasRect.left;
+                const mouseY = touch.clientY - canvasRect.top;
+                
+                const deltaX = mouseX - resizeHandle.startX;
+                const deltaY = mouseY - resizeHandle.startY;
+                
+                const imgRect = selectedImage.getBoundingClientRect();
+                const canvasLeft = imgRect.left - canvasRect.left;
+                const canvasTop = imgRect.top - canvasRect.top;
+                
+                switch (resizeHandle.dataset.position) {
+                    case 'nw':
+                        cropRect.x = Math.max(canvasLeft, originalCropRect.x + deltaX);
+                        cropRect.y = Math.max(canvasTop, originalCropRect.y + deltaY);
+                        cropRect.width = Math.max(20, originalCropRect.width - deltaX);
+                        cropRect.height = Math.max(20, originalCropRect.height - deltaY);
+                        break;
+                    case 'ne':
+                        cropRect.x = originalCropRect.x;
+                        cropRect.y = Math.max(canvasTop, originalCropRect.y + deltaY);
+                        cropRect.width = Math.max(20, originalCropRect.width + deltaX);
+                        cropRect.height = Math.max(20, originalCropRect.height - deltaY);
+                        break;
+                    case 'sw':
+                        cropRect.x = Math.max(canvasLeft, originalCropRect.x + deltaX);
+                        cropRect.y = originalCropRect.y;
+                        cropRect.width = Math.max(20, originalCropRect.width - deltaX);
+                        cropRect.height = Math.max(20, originalCropRect.height + deltaY);
+                        break;
+                    case 'se':
+                        cropRect.width = Math.max(20, originalCropRect.width + deltaX);
+                        cropRect.height = Math.max(20, originalCropRect.height + deltaY);
+                        break;
+                }
+                
+                // 确保裁剪区域不超过图片边界
+                if (cropRect.x + cropRect.width > canvasLeft + imgRect.width) {
+                    cropRect.width = canvasLeft + imgRect.width - cropRect.x;
+                }
+                
+                if (cropRect.y + cropRect.height > canvasTop + imgRect.height) {
+                    cropRect.height = canvasTop + imgRect.height - cropRect.y;
+                }
+                
+                cropSelection.style.left = cropRect.x + 'px';
+                cropSelection.style.top = cropRect.y + 'px';
+                cropSelection.style.width = cropRect.width + 'px';
+                cropSelection.style.height = cropRect.height + 'px';
+                updateCropHandlesPosition();
+            }
+            
+            e.preventDefault();
         }
         
         // 移动裁剪区域
@@ -975,21 +1186,46 @@
             }
         }
         
-        // 处理触摸移动
-        function handleTouchMove(e) {
-            const touch = e.touches[0];
+        // 从触摸更新裁剪预览
+        function updateCropPreviewFromTouch(touch) {
+            if (!cropStart) return;
             
-            if (currentTool === 'move' && isDragging && selectedImage) {
-                moveImage(touch.clientX, touch.clientY);
-            } else if (currentTool === 'erase' && isDrawing && selectedImage) {
-                const canvasRect = canvasEl.getBoundingClientRect();
-                const imgRect = selectedImage.getBoundingClientRect();
-                const x = touch.clientX - canvasRect.left - (imgRect.left - canvasRect.left);
-                const y = touch.clientY - canvasRect.top - (imgRect.top - canvasRect.top);
-                eraseAt(x, y);
+            const canvasRect = canvasEl.getBoundingClientRect();
+            const mouseX = touch.clientX - canvasRect.left;
+            const mouseY = touch.clientY - canvasRect.top;
+            
+            if (!cropSelection) {
+                cropSelection = document.createElement('div');
+                cropSelection.className = 'crop-selection';
+                canvasEl.appendChild(cropSelection);
             }
             
-            e.preventDefault();
+            const x = Math.min(cropStart.x, mouseX);
+            const y = Math.min(cropStart.y, mouseY);
+            const width = Math.abs(mouseX - cropStart.x);
+            const height = Math.abs(mouseY - cropStart.y);
+            
+            // 限制裁剪区域在选中图片内
+            if (selectedImage) {
+                const imgRect = selectedImage.getBoundingClientRect();
+                const canvasLeft = imgRect.left - canvasRect.left;
+                const canvasTop = imgRect.top - canvasRect.top;
+                
+                const boundedX = Math.max(canvasLeft, Math.min(x, canvasLeft + imgRect.width));
+                const boundedY = Math.max(canvasTop, Math.min(y, canvasTop + imgRect.height));
+                const boundedWidth = Math.min(width, canvasLeft + imgRect.width - boundedX);
+                const boundedHeight = Math.min(height, canvasTop + imgRect.height - boundedY);
+                
+                cropSelection.style.left = boundedX + 'px';
+                cropSelection.style.top = boundedY + 'px';
+                cropSelection.style.width = boundedWidth + 'px';
+                cropSelection.style.height = boundedHeight + 'px';
+            } else {
+                cropSelection.style.left = x + 'px';
+                cropSelection.style.top = y + 'px';
+                cropSelection.style.width = width + 'px';
+                cropSelection.style.height = height + 'px';
+            }
         }
         
         // 移动图片
@@ -1056,7 +1292,6 @@
             
             if (cropStart && cropSelection) {
                 // 保存裁剪区域
-                const canvasRect = canvasEl.getBoundingClientRect();
                 cropRect = {
                     x: parseFloat(cropSelection.style.left),
                     y: parseFloat(cropSelection.style.top),
@@ -1075,10 +1310,24 @@
         }
         
         // 处理触摸结束
-        function handleTouchEnd() {
+        function handleTouchEnd(e) {
             isDragging = false;
             isDrawing = false;
-            cropStart = null;
+            
+            if (cropStart && cropSelection) {
+                // 保存裁剪区域
+                cropRect = {
+                    x: parseFloat(cropSelection.style.left),
+                    y: parseFloat(cropSelection.style.top),
+                    width: parseFloat(cropSelection.style.width),
+                    height: parseFloat(cropSelection.style.height)
+                };
+                
+                // 添加调整手柄
+                createCropHandles();
+                cropStart = null;
+            }
+            
             isResizing = false;
             resizeHandle = null;
             originalCropRect = null;
