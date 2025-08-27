@@ -103,6 +103,20 @@
             grid-column: 1 / -1;
         }
         
+        /* 添加导航链接样式 */
+        .nav-link {
+            display: block;
+            text-align: center;
+            margin: 15px 0;
+            color: #1e90ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 0 10px;
@@ -132,9 +146,12 @@
     </style>
 </head>
 <body>
-    <a href="https://space.bilibili.com/596035099" target="_blank" style="display: block; text-align: center; margin-top: 20px; color: #1e90ff; text-decoration: none;">bilibili</a>
+    <a href="https://space.bilibili.com/59603099" target="_blank" style="display: block; text-align: center; margin-top: 20px; color: #1e90ff; text-decoration: none;">blueeggs</a>
     <div class="container">
         <h1>KARDS素材库</h1>
+        
+        <!-- 添加跳转到音效页面的链接 -->
+        <a href="suck.html" class="nav-link">前往音效库</a>
         
         <div class="selector-group">
             <label for="country-select">选择国家/类型:</label>
@@ -311,5 +328,4 @@
         });
     </script>
 </body>
-
 </html>
