@@ -53,7 +53,7 @@
         
         .image-container {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 15px;
             margin-top: 10px;
         }
@@ -104,7 +104,7 @@
             grid-column: 1 / -1;
         }
         
-
+        /* 添加导航链接样式 */
         .nav-link {
             display: block;
             text-align: center;
@@ -118,13 +118,34 @@
             text-decoration: underline;
         }
         
+        /* 上下文菜单样式 */
+        .context-menu {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            min-width: 120px;
+        }
+        
+        .context-menu-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .context-menu-item:hover {
+            background-color: #f0f0f0;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 0 10px;
             }
             
             .image-container {
-                grid-template-columns: repeat(5, 1fr);
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
                 gap: 8px;
             }
             
@@ -135,13 +156,13 @@
         
         @media (max-width: 480px) {
             .image-container {
-                grid-template-columns: repeat(5, 1fr);
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
                 gap: 5px;
             }
             
             .image-item .image-name {
-                font-size: 9px;
-                padding: 3px;
+                font-size: 8px;
+                padding: 2px;
             }
         }
     </style>
@@ -151,8 +172,9 @@
     <div class="container">
         <h1>KARDS素材库</h1>
         
-
+        <!-- 添加跳转到音效页面的链接 -->
         <a href="suck.html" class="nav-link">前往音效库</a>
+        <a href="zaza.html" class="nav-link">前往活字印刷术</a>
         
         <div class="selector-group">
             <label for="country-select">选择国家/类型:</label>
@@ -283,7 +305,11 @@
                     const fileName = image.split('/').pop();
                     html += `
                         <div class="image-item">
-                            <img src="${image}" alt="${fileName}" oncontextmenu="downloadImage(event, '${image}', '${fileName}')">
+                            <img src="${image}" alt="${fileName}" 
+                                 oncontextmenu="showContextMenu(event, '${image}', '${fileName}')"
+                                 ontouchstart="handleTouchStart(event, '${image}', '${fileName}')"
+                                 ontouchend="handleTouchEnd()"
+                                 ontouchmove="handleTouchMove()">
                             <div class="image-name">${fileName}</div>
                         </div>
                     `;
@@ -298,6 +324,83 @@
             }
         }
         
+        // 上下文菜单相关变量
+        let contextMenu = null;
+        let touchStartTime;
+        let touchTimer;
+        
+        // 显示上下文菜单
+        function showContextMenu(event, url, filename) {
+            event.preventDefault();
+            
+            // 如果已有菜单，先移除
+            if (contextMenu) {
+                document.body.removeChild(contextMenu);
+                contextMenu = null;
+            }
+            
+            // 创建新菜单
+            contextMenu = document.createElement('div');
+            contextMenu.className = 'context-menu';
+            contextMenu.style.left = event.pageX + 'px';
+            contextMenu.style.top = event.pageY + 'px';
+            
+            // 下载选项
+            const downloadItem = document.createElement('div');
+            downloadItem.className = 'context-menu-item';
+            downloadItem.textContent = '下载';
+            downloadItem.onclick = () => {
+                downloadImage(event, url, filename);
+                document.body.removeChild(contextMenu);
+                contextMenu = null;
+            };
+            
+            // 导入制作库选项
+            const importItem = document.createElement('div');
+            importItem.className = 'context-menu-item';
+            importItem.textContent = '导入制作库';
+            importItem.onclick = () => {
+                importToCreationLibrary(url, filename);
+                document.body.removeChild(contextMenu);
+                contextMenu = null;
+            };
+            
+            contextMenu.appendChild(downloadItem);
+            contextMenu.appendChild(importItem);
+            document.body.appendChild(contextMenu);
+            
+            // 点击其他地方关闭菜单
+            const closeMenu = (e) => {
+                if (contextMenu && !contextMenu.contains(e.target)) {
+                    document.body.removeChild(contextMenu);
+                    contextMenu = null;
+                    document.removeEventListener('click', closeMenu);
+                }
+            };
+            setTimeout(() => document.addEventListener('click', closeMenu), 10);
+        }
+        
+        // 触摸事件处理
+        function handleTouchStart(event, url, filename) {
+            touchStartTime = Date.now();
+            clearTimeout(touchTimer);
+            
+            touchTimer = setTimeout(() => {
+                if (Date.now() - touchStartTime >= 1000) {
+                    showContextMenu(event, url, filename);
+                }
+            }, 1000);
+        }
+        
+        function handleTouchEnd() {
+            clearTimeout(touchTimer);
+        }
+        
+        function handleTouchMove() {
+            clearTimeout(touchTimer);
+        }
+        
+        // 下载图片
         function downloadImage(event, url, filename) {
             event.preventDefault();
             
@@ -309,26 +412,37 @@
             document.body.removeChild(link);
         }
         
-        let longPressTimer;
-        document.addEventListener('touchstart', function(e) {
-            if (e.target.tagName === 'IMG') {
-                longPressTimer = setTimeout(() => {
-                    const url = e.target.src;
-                    const filename = url.split('/').pop();
-                    downloadImage(event, url, filename);
-                }, 1000); 
+        // 导入制作库
+        function importToCreationLibrary(url, filename) {
+            // 从localStorage获取现有制作库数据
+            let creationLibrary = JSON.parse(localStorage.getItem('creationLibrary') || '[]');
+            
+            // 检查是否已存在
+            const exists = creationLibrary.some(item => item.url === url);
+            if (exists) {
+                alert('该图片已存在于制作库中');
+                return;
             }
-        });
+            
+            // 添加到制作库
+            creationLibrary.push({
+                url: url,
+                filename: filename,
+                addedAt: new Date().toISOString()
+            });
+            
+            // 保存到localStorage
+            localStorage.setItem('creationLibrary', JSON.stringify(creationLibrary));
+            alert('已导入制作库');
+        }
         
-        document.addEventListener('touchend', function(e) {
-            clearTimeout(longPressTimer);
-        });
-        
-        document.addEventListener('touchmove', function(e) {
-            clearTimeout(longPressTimer);
+        // 页面点击关闭菜单
+        document.addEventListener('click', function(e) {
+            if (contextMenu && !contextMenu.contains(e.target)) {
+                document.body.removeChild(contextMenu);
+                contextMenu = null;
+            }
         });
     </script>
 </body>
-
 </html>
-
