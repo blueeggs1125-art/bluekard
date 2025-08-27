@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FUCK 1939</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+        }
+        
+        .sound-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .sound-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            background-color: white;
+            aspect-ratio: 1/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .sound-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .sound-item .sound-name {
+            padding: 10px;
+            font-size: 14px;
+            text-align: center;
+            color: #333;
+            word-break: break-word;
+        }
+        
+        .no-sounds {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-style: italic;
+            grid-column: 1 / -1;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+        
+        /* 添加导航链接样式 */
+        .nav-link {
+            display: block;
+            text-align: center;
+            margin: 15px 0;
+            color: #1e90ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .sound-container {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 10px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .sound-container {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 8px;
+            }
+            
+            .sound-item .sound-name {
+                font-size: 12px;
+                padding: 5px;
+            }
+        }
+        
+        audio {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <a href="https://space.bilibili.com/59603099" target="_blank" style="display: block; text-align: center; margin-top: 20px; color: #1e90ff; text-decoration: none;">blueeggs</a>
+    <div class="container">
+        <h1>KARDS音效</h1>
+        
+        <!-- 添加返回素材库的链接 -->
+        <a href="index.html" class="nav-link">返回素材库</a>
+        
+        <div id="sound-display">
+            <div class="loading">加载中...</div>
+        </div>
+    </div>
+
+    <audio id="audio-player"></audio>
+
+    <!-- 引入外部JavaScript文件 -->
+    <script src="js/sound.js"></script>
+</body>
+</html>
