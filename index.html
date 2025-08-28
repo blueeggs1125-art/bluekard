@@ -2,6 +2,17 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" sizes="16x16" href="icon/16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icon/32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="icon/48x48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="icon/64x64.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="icon/128x128.png">
+    <link rel="icon" type="image/png" sizes="256x256" href="icon/256x256.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon/512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon/180x180.png">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FUCK 1939</title>
@@ -174,7 +185,6 @@
         
         <!-- 添加跳转到音效页面的链接 -->
         <a href="suck.html" class="nav-link">前往音效库</a>
-        <a href="zaza.html" class="nav-link">前往活字印刷术</a>
         
         <div class="selector-group">
             <label for="country-select">选择国家/类型:</label>
@@ -208,257 +218,170 @@
 
     <script src="js/image.js"></script>
     
-    <script>
-        const countries = {
-            '苏联': { name: '苏联', hasSubtypes: true },
-            '美国': { name: '美国', hasSubtypes: true },
-            '德国': { name: '德国', hasSubtypes: true },
-            '日本': { name: '日本', hasSubtypes: true },
-            '英国': { name: '英国', hasSubtypes: true },
-            '波兰': { name: '波兰', hasSubtypes: true },
-            '法国': { name: '法国', hasSubtypes: true },
-            '意大利': { name: '意大利', hasSubtypes: true },
-            '芬兰': { name: '芬兰', hasSubtypes: true },
-            '总部': { name: '总部', hasSubtypes: false },
-            '卡背': { name: '卡背', hasSubtypes: false }
-        };
+
+<script>
+    const countries = {
+        '苏联': { name: '苏联', hasSubtypes: true },
+        '美国': { name: '美国', hasSubtypes: true },
+        '德国': { name: '德国', hasSubtypes: true },
+        '日本': { name: '日本', hasSubtypes: true },
+        '英国': { name: '英国', hasSubtypes: true },
+        '波兰': { name: '波兰', hasSubtypes: true },
+        '法国': { name: '法国', hasSubtypes: true },
+        '意大利': { name: '意大利', hasSubtypes: true },
+        '芬兰': { name: '芬兰', hasSubtypes: true },
+        '总部': { name: '总部', hasSubtypes: false },
+        '卡背': { name: '卡背', hasSubtypes: false }
+    };
+    
+    const subtypes = {
+        '金卡': '金卡',
+        '银卡': '银卡',
+        '铜卡': '铜卡',
+        '铁卡': '铁卡'
+    };
+    
+    const noGoldCountries = ['波兰', '法国', '意大利', '芬兰'];
+    
+    const countrySelect = document.getElementById('country-select');
+    const subtypeGroup = document.getElementById('subtype-group');
+    const subtypeSelect = document.getElementById('subtype-select');
+    const imageDisplay = document.getElementById('image-display');
+    
+    countrySelect.addEventListener('change', function() {
+        const country = this.value;
+        if (!country) {
+            subtypeGroup.style.display = 'none';
+            imageDisplay.innerHTML = '<div class="no-images">请先选择国家/类型</div>';
+            return;
+        }
         
-        const subtypes = {
-            '金卡': '金卡',
-            '银卡': '银卡',
-            '铜卡': '铜卡',
-            '铁卡': '铁卡'
-        };
+        const countryConfig = countries[country];
+        if (countryConfig.hasSubtypes) {
+            subtypeGroup.style.display = 'block';
+            updateSubtypeOptions(country);
+            imageDisplay.innerHTML = '<div class="no-images">请选择卡牌类型</div>';
+        } else {
+            subtypeGroup.style.display = 'none';
+            displayImages(country);
+        }
+    });
+    
+    subtypeSelect.addEventListener('change', function() {
+        const country = countrySelect.value;
+        const subtype = this.value;
+        if (country && subtype) {
+            displayImages(country, subtype);
+        } else {
+            imageDisplay.innerHTML = '<div class="no-images">请选择卡牌类型</div>';
+        }
+    });
+    
+    function updateSubtypeOptions(country) {
+        subtypeSelect.innerHTML = '<option value="">请选择...</option>';
         
-        const noGoldCountries = ['波兰', '法国', '意大利', '芬兰'];
+        for (const [key, name] of Object.entries(subtypes)) {
+            if (key === '金卡' && noGoldCountries.includes(country)) {
+                continue;
+            }
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = name;
+            subtypeSelect.appendChild(option);
+        }
+    }
+    
+    async function displayImages(country, subtype = null) {
+        imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
         
-        const countrySelect = document.getElementById('country-select');
-        const subtypeGroup = document.getElementById('subtype-group');
-        const subtypeSelect = document.getElementById('subtype-select');
-        const imageDisplay = document.getElementById('image-display');
-        
-        countrySelect.addEventListener('change', function() {
-            const country = this.value;
-            if (!country) {
-                subtypeGroup.style.display = 'none';
-                imageDisplay.innerHTML = '<div class="no-images">请先选择国家/类型</div>';
+        try {
+            const images = await getImagesForCountry(country, subtype);
+            
+            if (images.length === 0) {
+                imageDisplay.innerHTML = '<div class="no-images">该分类下暂无图片</div>';
                 return;
             }
             
-            const countryConfig = countries[country];
-            if (countryConfig.hasSubtypes) {
-                subtypeGroup.style.display = 'block';
-                updateSubtypeOptions(country);
-                imageDisplay.innerHTML = '<div class="no-images">请选择卡牌类型</div>';
-            } else {
-                subtypeGroup.style.display = 'none';
-                displayImages(country);
-            }
-        });
-        
-        subtypeSelect.addEventListener('change', function() {
-            const country = countrySelect.value;
-            const subtype = this.value;
-            if (country && subtype) {
-                displayImages(country, subtype);
-            } else {
-                imageDisplay.innerHTML = '<div class="no-images">请选择卡牌类型</div>';
-            }
-        });
-        
-        function updateSubtypeOptions(country) {
-            subtypeSelect.innerHTML = '<option value="">请选择...</option>';
+            const pngImages = images.filter(image => 
+                image.toLowerCase().endsWith('.png')
+            );
             
-            for (const [key, name] of Object.entries(subtypes)) {
-                if (key === '金卡' && noGoldCountries.includes(country)) {
-                    continue;
-                }
-                const option = document.createElement('option');
-                option.value = key;
-                option.textContent = name;
-                subtypeSelect.appendChild(option);
-            }
-        }
-        
-        async function displayImages(country, subtype = null) {
-            imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
-            
-            try {
-                const images = await getImagesForCountry(country, subtype);
-                
-                if (images.length === 0) {
-                    imageDisplay.innerHTML = '<div class="no-images">该分类下暂无图片</div>';
-                    return;
-                }
-                
-                const pngImages = images.filter(image => 
-                    image.toLowerCase().endsWith('.png')
-                );
-                
-                if (pngImages.length === 0) {
-                    imageDisplay.innerHTML = '<div class="no-images">该分类下暂无PNG图片</div>';
-                    return;
-                }
-                
-                let html = '<div class="image-container">';
-pngImages.forEach(image => {
-    const fileName = image.split('/').pop();
-    html += `
-        <div class="image-item">
-            <img src="${image}" alt="${fileName}" 
-                 oncontextmenu="showContextMenu(event, '${image}', '${fileName}')"
-                 ontouchstart="handleTouchStart(event, '${image}', '${fileName}')"
-                 ontouchend="handleTouchEnd()"
-                 ontouchmove="handleTouchMove()">
-            <div class="image-name">${fileName}</div>
-        </div>
-    `;
-});
-                html += '</div>';
-                
-                imageDisplay.innerHTML = html;
-                
-            } catch (error) {
-                console.error('加载图片出错:', error);
-                imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
-            }
-        }
-        
-        // 上下文菜单相关变量
-        let contextMenu = null;
-        let touchStartTime;
-        let touchTimer;
-        
-        // 显示上下文菜单
-        function showContextMenu(event, url, filename) {
-            event.preventDefault();
-            
-            // 如果已有菜单，先移除
-            if (contextMenu) {
-                document.body.removeChild(contextMenu);
-                contextMenu = null;
-            }
-            
-            // 创建新菜单
-            contextMenu = document.createElement('div');
-            contextMenu.className = 'context-menu';
-            contextMenu.style.left = event.pageX + 'px';
-            contextMenu.style.top = event.pageY + 'px';
-            
-            // 下载选项
-            const downloadItem = document.createElement('div');
-            downloadItem.className = 'context-menu-item';
-            downloadItem.textContent = '下载';
-            downloadItem.onclick = () => {
-                downloadImage(event, url, filename);
-                document.body.removeChild(contextMenu);
-                contextMenu = null;
-            };
-            
-            // 导入制作库选项
-            const importItem = document.createElement('div');
-            importItem.className = 'context-menu-item';
-            importItem.textContent = '导入制作库';
-            importItem.onclick = () => {
-                importToCreationLibrary(url, filename);
-                document.body.removeChild(contextMenu);
-                contextMenu = null;
-            };
-            
-            contextMenu.appendChild(downloadItem);
-            contextMenu.appendChild(importItem);
-            document.body.appendChild(contextMenu);
-            
-            // 点击其他地方关闭菜单
-            const closeMenu = (e) => {
-                if (contextMenu && !contextMenu.contains(e.target)) {
-                    document.body.removeChild(contextMenu);
-                    contextMenu = null;
-                    document.removeEventListener('click', closeMenu);
-                }
-            };
-            setTimeout(() => document.addEventListener('click', closeMenu), 10);
-        }
-        
-// 触摸事件处理
-function handleTouchStart(event, url, filename) {
-    touchStartTime = Date.now();
-    clearTimeout(touchTimer);
-    
-    // 保存当前触摸的图片信息
-    const imageUrl = url;
-    const imageFilename = filename;
-    const touchEvent = event; // 保存事件对象
-    
-    touchTimer = setTimeout(() => {
-        if (Date.now() - touchStartTime >= 1000) {
-            showContextMenu(touchEvent, imageUrl, imageFilename);
-        }
-    }, 1000);
-    
-    // 阻止默认行为
-    event.preventDefault();
-}
-
-function handleTouchEnd() {
-    clearTimeout(touchTimer);
-}
-
-function handleTouchMove() {
-    clearTimeout(touchTimer);
-}
-        
-        function handleTouchEnd() {
-            clearTimeout(touchTimer);
-        }
-        
-        function handleTouchMove() {
-            clearTimeout(touchTimer);
-        }
-        
-        // 下载图片
-        function downloadImage(event, url, filename) {
-            event.preventDefault();
-            
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-        
-        // 导入制作库
-        function importToCreationLibrary(url, filename) {
-            // 从localStorage获取现有制作库数据
-            let creationLibrary = JSON.parse(localStorage.getItem('creationLibrary') || '[]');
-            
-            // 检查是否已存在
-            const exists = creationLibrary.some(item => item.url === url);
-            if (exists) {
-                alert('该图片已存在于制作库中');
+            if (pngImages.length === 0) {
+                imageDisplay.innerHTML = '<div class="no-images">该分类下暂无PNG图片</div>';
                 return;
             }
             
-            // 添加到制作库
-            creationLibrary.push({
-                url: url,
-                filename: filename,
-                addedAt: new Date().toISOString()
+            let html = '<div class="image-container">';
+            pngImages.forEach(image => {
+                const fileName = image.split('/').pop();
+                html += `
+                    <div class="image-item">
+                        <img src="${image}" alt="${fileName}" 
+                             oncontextmenu="downloadImage(event, '${image}', '${fileName}')"
+                             ontouchstart="handleTouchStart(event, '${image}', '${fileName}')"
+                             ontouchend="handleTouchEnd()"
+                             ontouchmove="handleTouchMove(event)">
+                        <div class="image-name">${fileName}</div>
+                    </div>
+                `;
             });
+            html += '</div>';
             
-            // 保存到localStorage
-            localStorage.setItem('creationLibrary', JSON.stringify(creationLibrary));
-            alert('已导入制作库');
+            imageDisplay.innerHTML = html;
+            
+        } catch (error) {
+            console.error('加载图片出错:', error);
+            imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
         }
+    }
+    
+    // 触摸事件处理变量
+    let touchStartTime;
+    let touchTimer;
+    let touchHandled = false;
+    
+    // 触摸开始事件
+    function handleTouchStart(event, url, filename) {
+        touchStartTime = Date.now();
+        touchHandled = false;
+        clearTimeout(touchTimer);
         
-        // 页面点击关闭菜单
-        document.addEventListener('click', function(e) {
-            if (contextMenu && !contextMenu.contains(e.target)) {
-                document.body.removeChild(contextMenu);
-                contextMenu = null;
+        // 长按800ms后触发下载
+        touchTimer = setTimeout(() => {
+            if (!touchHandled) {
+                downloadImage(event, url, filename);
+                touchHandled = true;
             }
-        });
-    </script>
+        }, 800);
+        
+        event.preventDefault();
+    }
+    
+    // 触摸移动事件
+    function handleTouchMove(event) {
+        // 如果用户移动手指，取消长按下载
+        clearTimeout(touchTimer);
+        touchHandled = true;
+    }
+    
+    // 触摸结束事件
+    function handleTouchEnd() {
+        // 如果用户提前结束触摸，取消长按下载
+        clearTimeout(touchTimer);
+        touchHandled = true;
+    }
+    
+    // 下载图片
+    function downloadImage(event, url, filename) {
+        event.preventDefault();
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
 </body>
 </html>
