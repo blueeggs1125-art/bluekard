@@ -82,6 +82,11 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            -webkit-touch-callout: default; /* 允许iOS上的长按菜单 */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         
         .image-item .image-name {
@@ -160,7 +165,7 @@
     <a href="https://space.bilibili.com/596035099" target="_blank" style="display: block; text-align: center; margin-top: 20px; color: #1e90ff; text-decoration: none;">blueeggs</a>
     <div class="container">
         <h1>KARDS素材库</h1>
-         <h2>最后提交时间：2525/8/28 19:24</h2>
+         <h2>最后提交时间：2525/8/28 12:21</h2>
         <!-- 添加跳转到音效页面的链接 -->
         <a href="suck.html" class="nav-link">前往音效库</a>
         
@@ -202,57 +207,35 @@
     <script src="js/image.js"></script>
     
 <script>
-
     // 添加一个新函数用于处理包含中文的图片路径
-function encodeImagePath(path) {
-    // 将路径中的每个部分进行编码，但保持分隔符不变
-    return path.split('/').map(part => encodeURIComponent(part)).join('/');
-}
+    function encodeImagePath(path) {
+        // 将路径中的每个部分进行编码，但保持分隔符不变
+        return path.split('/').map(part => encodeURIComponent(part)).join('/');
+    }
 
-// 根据关键词搜索图片
-function searchImagesByKeyword(keyword) {
-    return fetch('data/newimages.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('newimages.json 网络响应错误');
-            }
-            return response.json();
-        })
-        .then(imagesData => {
-            const results = [];
-            const searchKeyword = keyword.trim().toLowerCase();
-            const addedPaths = new Set(); // 用于避免重复添加
-            
-            // 遍历 newimages.json 中的图片数据
-            for (const country in imagesData) {
-                if (!imagesData.hasOwnProperty(country)) continue;
+    // 根据关键词搜索图片
+    function searchImagesByKeyword(keyword) {
+        return fetch('data/newimages.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('newimages.json 网络响应错误');
+                }
+                return response.json();
+            })
+            .then(imagesData => {
+                const results = [];
+                const searchKeyword = keyword.trim().toLowerCase();
+                const addedPaths = new Set(); // 用于避免重复添加
                 
-                const countryData = imagesData[country];
-                
-                // 如果国家数据是数组格式（总部、卡背等没有子类型）
-                if (Array.isArray(countryData)) {
-                    countryData.forEach(imagePath => {
-                        const fileName = imagePath.split('/').pop();
-                        // 只检查文件名是否匹配关键词（不区分大小写）
-                        if (fileName.toLowerCase().includes(searchKeyword)) {
-                            // 避免重复添加
-                            if (!addedPaths.has(imagePath)) {
-                                addedPaths.add(imagePath);
-                                results.push({
-                                    path: imagePath,
-                                    name: fileName,
-                                    description: ''
-                                });
-                            }
-                        }
-                    });
-                } 
-                // 如果国家数据是对象格式（有子类型：金卡、银卡等）
-                else {
-                    for (const subtype in countryData) {
-                        if (!countryData.hasOwnProperty(subtype)) continue;
-                        
-                        countryData[subtype].forEach(imagePath => {
+                // 遍历 newimages.json 中的图片数据
+                for (const country in imagesData) {
+                    if (!imagesData.hasOwnProperty(country)) continue;
+                    
+                    const countryData = imagesData[country];
+                    
+                    // 如果国家数据是数组格式（总部、卡背等没有子类型）
+                    if (Array.isArray(countryData)) {
+                        countryData.forEach(imagePath => {
                             const fileName = imagePath.split('/').pop();
                             // 只检查文件名是否匹配关键词（不区分大小写）
                             if (fileName.toLowerCase().includes(searchKeyword)) {
@@ -267,19 +250,38 @@ function searchImagesByKeyword(keyword) {
                                 }
                             }
                         });
+                    } 
+                    // 如果国家数据是对象格式（有子类型：金卡、银卡等）
+                    else {
+                        for (const subtype in countryData) {
+                            if (!countryData.hasOwnProperty(subtype)) continue;
+                            
+                            countryData[subtype].forEach(imagePath => {
+                                const fileName = imagePath.split('/').pop();
+                                // 只检查文件名是否匹配关键词（不区分大小写）
+                                if (fileName.toLowerCase().includes(searchKeyword)) {
+                                    // 避免重复添加
+                                    if (!addedPaths.has(imagePath)) {
+                                        addedPaths.add(imagePath);
+                                        results.push({
+                                            path: imagePath,
+                                            name: fileName,
+                                            description: ''
+                                        });
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
-            }
-            
-            return results;
-        })
-        .catch(error => {
-            console.error('搜索图片失败:', error);
-            return [];
-        });
-}
-
-
+                
+                return results;
+            })
+            .catch(error => {
+                console.error('搜索图片失败:', error);
+                return [];
+            });
+    }
 
     const countries = {
         '苏联': { name: '苏联', hasSubtypes: true },
@@ -372,42 +374,43 @@ function searchImagesByKeyword(keyword) {
         }
     }
     
-// 显示特定国家和类型的图片
-async function displayImages(country, subtype = null) {
-    imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
-    
-    try {
-        const response = await fetch('data/newimages.json');
-        if (!response.ok) {
-            throw new Error('newimages.json 网络响应错误');
-        }
-        const imagesData = await response.json();
+    // 显示特定国家和类型的图片
+    async function displayImages(country, subtype = null) {
+        imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
         
-        let filteredImages = [];
-        
-        // 根据国家和子类型筛选图片
-        if (imagesData[country]) {
-            if (countries[country].hasSubtypes && subtype && imagesData[country][subtype]) {
-                // 有子类型的情况
-                filteredImages = imagesData[country][subtype];
-            } else if (!countries[country].hasSubtypes) {
-                // 没有子类型的情况（总部、卡背）
-                filteredImages = imagesData[country];
+        try {
+            const response = await fetch('data/newimages.json');
+            if (!response.ok) {
+                throw new Error('newimages.json 网络响应错误');
             }
+            const imagesData = await response.json();
+            
+            let filteredImages = [];
+            
+            // 根据国家和子类型筛选图片
+            if (imagesData[country]) {
+                if (countries[country].hasSubtypes && subtype && imagesData[country][subtype]) {
+                    // 有子类型的情况
+                    filteredImages = imagesData[country][subtype];
+                } else if (!countries[country].hasSubtypes) {
+                    // 没有子类型的情况（总部、卡背）
+                    filteredImages = imagesData[country];
+                }
+            }
+            
+            if (filteredImages.length === 0) {
+                imageDisplay.innerHTML = '<div class="no-images">暂无图片</div>';
+                return;
+            }
+            
+            renderImages(filteredImages);
+            
+        } catch (error) {
+            console.error('加载图片出错:', error);
+            imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
         }
-        
-        if (filteredImages.length === 0) {
-            imageDisplay.innerHTML = '<div class="no-images">暂无图片</div>';
-            return;
-        }
-        
-        renderImages(filteredImages);
-        
-    } catch (error) {
-        console.error('加载图片出错:', error);
-        imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
     }
-}
+    
     // 搜索图片功能
     async function searchImages(keyword) {
         imageDisplay.innerHTML = '<div class="loading">搜索中...</div>';
@@ -428,93 +431,108 @@ async function displayImages(country, subtype = null) {
     }
     
     // 渲染图片列表
-// 渲染图片列表
-// 渲染图片列表
-function renderImages(images) {
-    let html = '<div class="image-container">';
-    images.forEach(image => {
-        // 处理搜索结果和普通图片路径的不同
-        const imagePath = typeof image === 'object' ? image.path : image;
-        // 对整个路径进行编码以支持中文
-        const encodedImagePath = encodeImagePath(imagePath);
-        const fileName = imagePath.split('/').pop();
-        const displayName = typeof image === 'object' ? (image.name || fileName) : fileName;
+    function renderImages(images) {
+        let html = '<div class="image-container">';
+        images.forEach(image => {
+            // 处理搜索结果和普通图片路径的不同
+            const imagePath = typeof image === 'object' ? image.path : image;
+            // 对整个路径进行编码以支持中文
+            const encodedImagePath = encodeImagePath(imagePath);
+            const fileName = imagePath.split('/').pop();
+            const displayName = typeof image === 'object' ? (image.name || fileName) : fileName;
+            
+            // 对文件名进行编码用于下载
+            const encodedFileName = encodeURIComponent(fileName);
+            
+            html += `
+                <div class="image-item">
+                    <img src="${encodedImagePath}" alt="${displayName}" 
+                         data-url="${encodedImagePath}"
+                         data-filename="${encodedFileName}"
+                         onload="this.parentNode.classList.add('loaded')">
+                </div>
+            `;
+        });
+        html += '</div>';
         
-        // 对文件名进行编码用于下载
-        const encodedFileName = encodeURIComponent(fileName);
+        imageDisplay.innerHTML = html;
         
-        html += `
-            <div class="image-item">
-                <img src="${encodedImagePath}" alt="${displayName}" 
-                     oncontextmenu="downloadImage(event, '${encodedImagePath}', '${encodedFileName}')"
-                     ontouchstart="handleTouchStart(event, '${encodedImagePath}', '${encodedFileName}')"
-                     ontouchend="handleTouchEnd(event)"
-                     ontouchmove="handleTouchMove(event)"
-                     onload="this.parentNode.classList.add('loaded')">
-            </div>
-        `;
-    });
-    html += '</div>';
-    
-    imageDisplay.innerHTML = html;
-}
-    // 添加一个新函数用于处理包含中文的图片路径
-function encodeImagePath(path) {
-    // 将路径中的每个部分进行编码，但保持分隔符不变
-    return path.split('/').map(part => encodeURIComponent(part)).join('/');
-}
-    
-    // 触摸事件处理变量
-    let touchStartTime;
-    let touchTimer;
-    let touchHandled = false;
-    let touchTarget = null;
-    
-    // 触摸开始事件
-    function handleTouchStart(event, url, filename) {
-        touchStartTime = Date.now();
-        touchHandled = false;
-        touchTarget = event.target;
-        clearTimeout(touchTimer);
-        
-        // 长按800ms后触发下载
-        touchTimer = setTimeout(() => {
-            if (!touchHandled) {
-                downloadImage(event, url, filename);
-                touchHandled = true;
-            }
-        }, 800);
-        
-        // 阻止默认行为和事件冒泡
-        event.preventDefault();
-        event.stopPropagation();
+        // 为所有图片添加触摸事件
+        document.querySelectorAll('.image-item img').forEach(img => {
+            new ImageTouchHandler(img);
+        });
     }
     
-    // 触摸移动事件
-    function handleTouchMove(event) {
-        // 如果用户移动手指，取消长按下载
-        clearTimeout(touchTimer);
-        touchHandled = true;
+    // 图片触摸处理类
+    class ImageTouchHandler {
+        constructor(element) {
+            this.element = element;
+            this.touchStartTime = 0;
+            this.touchTimer = null;
+            this.touchHandled = false;
+            
+            this.init();
+        }
         
-        // 阻止默认行为和事件冒泡
-        event.preventDefault();
-        event.stopPropagation();
-    }
-    
-    // 触摸结束事件
-    function handleTouchEnd(event) {
-        // 如果用户提前结束触摸，取消长按下载
-        clearTimeout(touchTimer);
-        touchHandled = true;
+        init() {
+            // 添加触摸事件监听器
+            this.element.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
+            this.element.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false });
+            this.element.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
+            this.element.addEventListener('contextmenu', (e) => this.handleContextMenu(e));
+        }
         
-        // 防止在触摸结束时触发点击事件
-        if (event && touchTarget) {
+        handleTouchStart(event) {
+            this.touchStartTime = Date.now();
+            this.touchHandled = false;
+            clearTimeout(this.touchTimer);
+            
+            // 长按800ms后触发下载
+            this.touchTimer = setTimeout(() => {
+                if (!this.touchHandled) {
+                    this.downloadImage();
+                    this.touchHandled = true;
+                }
+            }, 800);
+            
+            // 阻止默认行为和事件冒泡
+            // 注意：不要完全阻止，否则可能影响长按菜单
+            // event.preventDefault();
+            // event.stopPropagation();
+        }
+        
+        handleTouchMove(event) {
+            // 如果用户移动手指，取消长按下载
+            clearTimeout(this.touchTimer);
+            this.touchHandled = true;
+        }
+        
+        handleTouchEnd(event) {
+            // 如果用户提前结束触摸，取消长按下载
+            clearTimeout(this.touchTimer);
+            this.touchHandled = true;
+        }
+        
+        handleContextMenu(event) {
+            // 右键菜单触发下载
             event.preventDefault();
-            event.stopPropagation();
+            this.downloadImage();
+        }
+        
+        downloadImage() {
+            const url = this.element.dataset.url;
+            const filename = decodeURIComponent(this.element.dataset.filename);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     }
     
-    // 下载图片
+    // 为了兼容性，也保留全局函数
     function downloadImage(event, url, filename) {
         event.preventDefault();
         event.stopPropagation();
@@ -528,5 +546,4 @@ function encodeImagePath(path) {
     }
 </script>
 </body>
-
 </html>
