@@ -2,6 +2,15 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8"> 
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="16x16" href="icon/16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icon/32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="icon/48x48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="icon/64x64.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="icon/128x128.png">
+    <link rel="icon" type="image/png" sizes="256x256" href="icon/256x256.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon/512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon/180x180.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOVE 1939</title>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -1001,11 +1010,27 @@ function saveAsImage() {
         logging: false
     }).then(canvas => {
         try {
-            // 将 canvas 转换为 Blob
-            canvas.toBlob(function(blob) {
-                // 使用 FileSaver.js 保存 Blob
-                saveAs(blob, 'kards-tier-list-' + new Date().getTime() + '.png');
-            }, 'image/png');
+            // 检查是否为移动设备
+            const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // 移动端处理方式
+                handleMobileDownload(canvas);
+            } else {
+                // 桌面端处理方式
+                canvas.toBlob(function(blob) {
+                    if (typeof saveAs !== 'undefined') {
+                        saveAs(blob, 'kards-tier-list-' + new Date().getTime() + '.png');
+                    } else {
+                        // 备用方案
+                        const link = document.createElement('a');
+                        link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
+                        link.href = URL.createObjectURL(blob);
+                        link.click();
+                        URL.revokeObjectURL(link.href);
+                    }
+                }, 'image/png');
+            }
         } catch (error) {
             console.error('保存图片时出错:', error);
             alert('保存图片失败: ' + error.message);
