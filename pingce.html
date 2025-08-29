@@ -1238,7 +1238,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // 其他事件监听器...
 });
 // 添加保存为图片的函数
-
 // 保存为图片的函数（只保留这一个定义）
 function saveAsImage() {
     const tierList = document.querySelector('.tier-list');
@@ -1253,21 +1252,14 @@ function saveAsImage() {
         return;
     }
 
-    // 显示生成中提示
-    const originalContent = tierList.innerHTML;
-    tierList.innerHTML = '<div style="text-align: center; padding: 50px; color: #666; font-size: 18px;">图片生成中...</div>';
-    
+    // 使用 html2canvas 生成图片
     html2canvas(tierList, {
         scale: 2,
         backgroundColor: '#f5f5f5',
         useCORS: true,
-        logging: false,
-        allowTaint: true
+        logging: false
     }).then(canvas => {
-        // 恢复原始内容
-        tierList.innerHTML = originalContent;
-        
-        // 生成图片数据
+        // 生成 base64 图片数据
         const dataUrl = canvas.toDataURL('image/png');
         
         // 检查是否为移动设备
@@ -1282,48 +1274,31 @@ function saveAsImage() {
         }
     }).catch(error => {
         console.error('生成图片时出错:', error);
-        tierList.innerHTML = originalContent;
         alert('生成图片失败: ' + error.message);
     });
 }
 
 // 桌面端直接下载
 function downloadImageDirectly(dataUrl) {
-    try {
-        // 尝试使用 FileSaver.js
-        if (typeof saveAs !== 'undefined' && typeof saveAs === 'function') {
-            fetch(dataUrl)
-                .then(res => res.blob())
-                .then(blob => {
-                    saveAs(blob, 'kards-tier-list-' + new Date().getTime() + '.png');
-                });
-        } else {
-            // 备用方案
-            const link = document.createElement('a');
-            link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
-            link.href = dataUrl;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    } catch (error) {
-        console.error('下载失败:', error);
-        alert('下载失败，请右键图片另存为');
-    }
+    const link = document.createElement('a');
+    link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
+    link.href = dataUrl;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 // 移动端显示预览
 function showMobilePreview(dataUrl) {
     // 创建预览模态框
     const modal = document.createElement('div');
-    modal.id = 'image-preview-modal';
     modal.style.cssText = `
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0,0,0,0.95);
+        background: rgba(0,0,0,0.9);
         z-index: 10000;
         display: flex;
         flex-direction: column;
@@ -1331,22 +1306,16 @@ function showMobilePreview(dataUrl) {
         align-items: center;
         padding: 20px;
         color: white;
-        text-align: center;
     `;
     
     modal.innerHTML = `
-        <div style="background: #333; padding: 20px; border-radius: 15px; max-width: 95%; width: 100%; max-height: 95%; overflow: auto;">
-            <h2 style="margin-top: 0; color: #fff;">图片已生成</h2>
-            <p style="font-size: 16px; margin: 10px 0;">长按下方图片保存到手机</p>
-            <img src="${dataUrl}" id="preview-image" style="max-width: 100%; height: auto; margin: 15px 0; border: 2px solid #666; border-radius: 8px;" />
-            <div style="display: flex; gap: 10px; width: 100%; justify-content: center; flex-wrap: wrap; margin-top: 15px;">
-                <button id="save-instruction" style="padding: 12px 25px; background: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; min-width: 120px;">
-                    保存说明
-                </button>
-                <button id="close-preview" style="padding: 12px 25px; background: #1e90ff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; min-width: 100px;">
-                    关闭
-                </button>
-            </div>
+        <div style="background: #333; padding: 20px; border-radius: 10px; max-width: 90%; text-align: center;">
+            <h2>图片已生成</h2>
+            <p>长按下方图片保存到手机</p>
+            <img src="${dataUrl}" style="max-width: 100%; height: auto; margin: 15px 0; border: 2px solid #666;" />
+            <button id="close-preview" style="padding: 10px 20px; background: #1e90ff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                关闭
+            </button>
         </div>
     `;
     
@@ -1357,11 +1326,6 @@ function showMobilePreview(dataUrl) {
         document.body.removeChild(modal);
     });
     
-    // 保存说明按钮事件
-    document.getElementById('save-instruction').addEventListener('click', function() {
-        alert('保存图片方法：\n1. 长按上方图片\n2. 选择"保存图片"或"下载图片"\n3. 图片将保存到您的相册中');
-    });
-    
     // 点击模态框背景关闭
     modal.addEventListener('click', function(e) {
         if (e.target === modal) {
@@ -1369,6 +1333,8 @@ function showMobilePreview(dataUrl) {
         }
     });
 }
+// 保存为图片的函数（只保留这一个定义）
+
         // 切换横屏模式
         function toggleLandscapeMode() {
             document.body.classList.add('landscape-mode');
