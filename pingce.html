@@ -977,8 +977,8 @@ function saveTierList() {
 }
 
 // 保存为图片的函数
+// 简化版移动端处理
 function saveAsImage() {
-    // 获取要保存的区域（整个tier-list）
     const tierList = document.querySelector('.tier-list');
     
     if (!tierList) {
@@ -986,7 +986,6 @@ function saveAsImage() {
         return;
     }
     
-    // 确保 html2canvas 已经加载
     if (typeof html2canvas === 'undefined') {
         alert('图片保存库未加载，请刷新页面重试');
         return;
@@ -994,21 +993,40 @@ function saveAsImage() {
     
     console.log('开始生成图片...');
     
-    // 使用 html2canvas 将 DOM 转换为图片
     html2canvas(tierList, {
         scale: 2,
         backgroundColor: '#f5f5f5',
         useCORS: true,
         logging: false
     }).then(canvas => {
-        // 将 canvas 转换为图片并下载
-        const link = document.createElement('a');
-        link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
-        link.href = canvas.toDataURL('image/png');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        console.log('图片保存完成');
+        const dataURL = canvas.toDataURL('image/png');
+        
+        // 检测移动设备
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            // 移动端：在新窗口打开图片，用户可以长按保存
+            const newWindow = window.open();
+            newWindow.document.write(`
+                <html>
+                    <head><title>保存图片</title></head>
+                    <body style="margin: 0; padding: 20px; text-align: center;">
+                        <h2>长按图片保存到手机</h2>
+                        <img src="${dataURL}" style="max-width: 100%; height: auto;" />
+                        <p style="margin-top: 20px;"><button onclick="window.close()">关闭</button></p>
+                    </body>
+                </html>
+            `);
+            newWindow.document.close();
+        } else {
+            // 桌面端：直接下载
+            const link = document.createElement('a');
+            link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
+            link.href = dataURL;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     }).catch(error => {
         console.error('生成图片失败:', error);
         alert('生成图片失败: ' + error.message);
