@@ -3,10 +3,19 @@
 <head>
 
     <meta charset="UTF-8">
-    
+    <link rel="icon" type="image/png" sizes="16x16" href="icon/16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icon/32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="icon/48x48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="icon/64x64.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="icon/128x128.png">
+    <link rel="icon" type="image/png" sizes="256x256" href="icon/256x256.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon/512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon/180x180.png">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOVE 1939</title>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -1156,11 +1165,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // 其他事件监听器...
 });
 // 添加保存为图片的函数
-// 保存为图片的函数
-// 保存为图片的函数 - 适配各种手机浏览器
-// 保存为图片的函数 - 适配中国手机浏览器
+
 function saveAsImage() {
-    // 获取要保存的区域（整个tier-list）
     const tierList = document.querySelector('.tier-list');
     
     if (!tierList) {
@@ -1168,55 +1174,27 @@ function saveAsImage() {
         return;
     }
     
-    // 确保 html2canvas 已经加载
-    if (typeof html2canvas === 'undefined') {
-        alert('图片保存库未加载，请刷新页面重试');
-        return;
-    }
-    
-    console.log('开始生成图片...');
-    
-    // 使用 html2canvas 将 DOM 转换为图片
     html2canvas(tierList, {
         scale: 2,
         backgroundColor: '#f5f5f5',
         useCORS: true,
         logging: false
     }).then(canvas => {
-        try {
-            // 将 canvas 转换为 Blob
-            canvas.toBlob(function(blob) {
-                // 创建 Blob URL
-                const url = URL.createObjectURL(blob);
-                
-                // 检测
-                const isChineseBrowser = /MicroMessenger|QQBrowser|UCBrowser|baiduboxapp/i.test(navigator.userAgent);
-                
-                if (isChineseBrowser) {
-                    // 中国手机浏览器直接打开链接
-                    window.location.href = url;
-                } else {
-                    // 其他浏览器直接下载图片
-                    const link = document.createElement('a');
-                    link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
-                    link.href = url;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    
-                    // 清理 Blob URL
-                    setTimeout(() => URL.revokeObjectURL(url), 100);
-                }
-            }, 'image/png');
-        } catch (error) {
-            console.error('保存图片时出错:', error);
-            alert('保存图片失败: ' + error.message);
-        }
+        canvas.toBlob(function(blob) {
+            try {
+                // 使用 FileSaver.js 进行保存
+                saveAs(blob, 'kards-tier-list-' + new Date().getTime() + '.png');
+            } catch (error) {
+                console.error('保存图片时出错:', error);
+                alert('保存图片失败: ' + error.message);
+            }
+        }, 'image/png');
     }).catch(error => {
         console.error('生成图片时出错:', error);
         alert('生成图片失败: ' + error.message);
     });
 }
+
 
 
     
