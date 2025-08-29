@@ -82,30 +82,31 @@
             margin: 30px 0;
         }
 
-
         .tier-label {
-    width: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 24px;
-    text-align: center;
-    padding: 10px;
-    color: white;
-    writing-mode: horizontal-tb;
-    text-orientation: mixed;
-}
-.tier-dropzone.drag-over {
-    background-color: #c0c0c0;
-}
-.instructions {
-    text-align: center;
-    margin: 20px 0;
-    color: #666;
-    font-style: italic;
-    font-size: 18px;
-}
+            width: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 24px;
+            text-align: center;
+            padding: 10px;
+            color: white;
+            writing-mode: horizontal-tb;
+            text-orientation: mixed;
+        }
+        
+        .tier-dropzone.drag-over {
+            background-color: #c0c0c0;
+        }
+        
+        .instructions {
+            text-align: center;
+            margin: 20px 0;
+            color: #666;
+            font-style: italic;
+            font-size: 18px;
+        }
 
         .upload-btn {
             display: block;
@@ -130,17 +131,17 @@
         }
 
         .nav-link {
-    display: block;
-    text-align: center;
-    margin: 15px 0;
-    color: #1e90ff;
-    text-decoration: none;
-    font-weight: bold;
-}
+            display: block;
+            text-align: center;
+            margin: 15px 0;
+            color: #1e90ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
 
-.nav-link:hover {
-    text-decoration: underline;
-}
+        .nav-link:hover {
+            text-decoration: underline;
+        }
 
         .gallery {
             display: grid;
@@ -186,11 +187,46 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        .instructions {
-            text-align: center;
+        .selector-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: white;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
             margin: 20px 0;
-            color: #666;
-            font-style: italic;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            background-color: #1e90ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .control-btn:hover {
+            background-color: #0d80e0;
         }
 
         /* 添加横向滑动条容器 */
@@ -313,16 +349,74 @@
         .horizontal-tier-3 .horizontal-tier-label { background-color: #ffff00; color: #333; }
         .horizontal-tier-4 .horizontal-tier-label { background-color: #ffcc99; color: #333; }
         .horizontal-tier-5 .horizontal-tier-label { background-color: #ffffff; color: #333; }
+        
+        /* 横屏模式 */
+        .landscape-mode {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            padding: 0;
+        }
+        
+        .landscape-mode .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            max-width: none;
+        }
+        
+        .landscape-mode .header-section {
+            display: none;
+        }
+        
+        .landscape-mode .tier-section {
+            flex: 1;
+            overflow: auto;
+            padding: 10px;
+        }
+        
+        .landscape-mode .gallery-section {
+            width: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            border-left: 1px solid #ccc;
+        }
+        
+        .landscape-mode .tier-list,
+        .landscape-mode .horizontal-scroll-container {
+            display: block;
+        }
+        
+        .landscape-mode .horizontal-scroll-container {
+            display: none;
+        }
+        
+        .landscape-mode .tier-row {
+            min-height: 80px;
+        }
+        
+        .landscape-mode .tier-label {
+            width: 80px;
+            writing-mode: horizontal-tb;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>KARDS</h1>
-<div class="selector-group">
-    <label for="search-input">搜索图片:</label>
-    <input type="text" id="search-input" placeholder="输入关键词搜索图片...">
-</div>
-        <a href="index.html" class="nav-link">返回素材库</a>
+        <div class="header-section">
+            <h1>KARDS</h1>
+            <div class="selector-group">
+                <label for="search-input">搜索图片:</label>
+                <input type="text" id="search-input" placeholder="输入关键词搜索图片...">
+            </div>
+            <a href="index.html" class="nav-link">返回素材库</a>
+            
+            <div class="controls">
+                <button class="control-btn" id="save-btn">保存评测</button>
+                <button class="control-btn" id="landscape-btn">横屏模式</button>
+                <button class="control-btn" id="portrait-btn" style="display: none;">竖屏模式</button>
+            </div>
+        </div>
         
         <!-- 手机端横向滑动条 -->
         <div class="horizontal-scroll-container">
@@ -406,9 +500,14 @@
         let dragImage = null;
         let touchStartX, touchStartY;
         let currentDropZone = null;
+        let searchResults = []; // 存储搜索结果
 
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('file-input').addEventListener('change', handleFileSelect);
+            document.getElementById('search-input').addEventListener('input', handleSearch);
+            document.getElementById('save-btn').addEventListener('click', saveTierList);
+            document.getElementById('landscape-btn').addEventListener('click', toggleLandscapeMode);
+            document.getElementById('portrait-btn').addEventListener('click', togglePortraitMode);
             
             // 为所有拖拽区域添加事件监听（包括横向和纵向）
             document.querySelectorAll('.tier-dropzone, .horizontal-tier-dropzone').forEach(zone => {
@@ -422,6 +521,9 @@
                 zone.addEventListener('touchleave', handleTouchLeaveZone);
                 zone.addEventListener('touchend', handleTouchDropZone);
             });
+            
+            // 加载保存的数据
+            loadTierList();
         });
 
         function handleFileSelect(event) {
@@ -447,6 +549,26 @@
             event.target.value = '';
         }
 
+        // 搜索功能
+        function handleSearch() {
+            const keyword = document.getElementById('search-input').value.trim().toLowerCase();
+            
+            if (keyword.length === 0) {
+                renderGallery();
+                return;
+            }
+            
+            // 模拟搜索结果（实际应该从服务器获取）
+            searchResults = [];
+            imageData.forEach(img => {
+                if (img.name.toLowerCase().includes(keyword)) {
+                    searchResults.push(img);
+                }
+            });
+            
+            renderSearchResults();
+        }
+
         function renderGallery() {
             const gallery = document.getElementById('image-gallery');
             gallery.innerHTML = '';
@@ -457,7 +579,36 @@
                     item.className = 'gallery-item';
                     item.draggable = true;
                     item.innerHTML = `
-                        <img src="${img.src}" alt="${img.name}" data-id="${img.id}">
+                        <img src="${img.src}" alt="${img.name}" data-id="${img.id}" data-src="${img.src}" data-name="${img.name}">
+                    `;
+                    
+                    const imgElement = item.querySelector('img');
+                    imgElement.addEventListener('dragstart', handleDragStart);
+                    imgElement.addEventListener('dragend', handleDragEnd);
+                    
+                    // 添加触摸事件处理
+                    imgElement.addEventListener('touchstart', handleTouchStart);
+                    imgElement.addEventListener('touchmove', handleTouchMove);
+                    imgElement.addEventListener('touchend', handleTouchEnd);
+                    imgElement.addEventListener('contextmenu', handleContextMenu);
+                    
+                    gallery.appendChild(item);
+                }
+            });
+        }
+
+        // 渲染搜索结果
+        function renderSearchResults() {
+            const gallery = document.getElementById('image-gallery');
+            gallery.innerHTML = '';
+            
+            searchResults.forEach(img => {
+                if (!isImageInAnyTier(img.id)) {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    item.draggable = true;
+                    item.innerHTML = `
+                        <img src="${img.src}" alt="${img.name}" data-id="${img.id}" data-src="${img.src}" data-name="${img.name}">
                     `;
                     
                     const imgElement = item.querySelector('img');
@@ -513,6 +664,8 @@
             e.dataTransfer.effectAllowed = 'move';
             e.dataTransfer.setData('text/html', draggedElement.outerHTML);
             e.dataTransfer.setData('image-id', draggedElement.dataset.id);
+            e.dataTransfer.setData('image-src', draggedElement.dataset.src);
+            e.dataTransfer.setData('image-name', draggedElement.dataset.name);
             
             setTimeout(() => {
                 draggedElement.style.opacity = '0.4';
@@ -546,11 +699,15 @@
             
             if (draggedElement) {
                 const imageId = draggedElement.dataset.id;
+                const imageSrc = draggedElement.dataset.src;
+                const imageName = draggedElement.dataset.name;
                 
                 if (draggedFromGallery) {
                     const newImg = document.createElement('img');
-                    newImg.src = draggedElement.src;
+                    newImg.src = imageSrc || draggedElement.src;
                     newImg.dataset.id = imageId;
+                    newImg.dataset.src = imageSrc || draggedElement.src;
+                    newImg.dataset.name = imageName || draggedElement.alt;
                     newImg.className = 'draggable-image';
                     newImg.draggable = true;
                     
@@ -568,7 +725,7 @@
                 } else {
                     this.appendChild(draggedElement);
                     
-                    if (draggedFromTier != this.dataset.tier) {
+                    if (draggedFromTier && draggedFromTier != this.dataset.tier) {
                         renderGallery();
                     }
                 }
@@ -686,12 +843,16 @@
             if (!draggedElement) return;
             
             const imageId = draggedElement.dataset.id;
+            const imageSrc = draggedElement.dataset.src;
+            const imageName = draggedElement.dataset.name;
             
             if (draggedFromGallery) {
                 // 从画廊拖拽来的图片
                 const newImg = document.createElement('img');
-                newImg.src = draggedElement.src;
+                newImg.src = imageSrc || draggedElement.src;
                 newImg.dataset.id = imageId;
+                newImg.dataset.src = imageSrc || draggedElement.src;
+                newImg.dataset.name = imageName || draggedElement.alt;
                 newImg.className = 'draggable-image';
                 newImg.draggable = true;
                 
@@ -746,6 +907,97 @@
         function handleContextMenu(e) {
             e.preventDefault();
             return false;
+        }
+        
+        // 保存评测列表
+        function saveTierList() {
+            const tierData = {};
+            
+            // 收集所有tier中的图片
+            for (let i = 1; i <= 5; i++) {
+                const tierZones = document.querySelectorAll(`.tier-dropzone[data-tier="${i}"], .horizontal-tier-dropzone[data-tier="${i}"]`);
+                tierData[i] = [];
+                
+                tierZones.forEach(zone => {
+                    const images = zone.querySelectorAll('img');
+                    images.forEach(img => {
+                        tierData[i].push({
+                            id: img.dataset.id,
+                            src: img.dataset.src,
+                            name: img.dataset.name
+                        });
+                    });
+                });
+            }
+            
+            // 保存到localStorage
+            localStorage.setItem('tierListData', JSON.stringify(tierData));
+            localStorage.setItem('tierListImageData', JSON.stringify(imageData));
+            
+            alert('评测列表已保存！');
+        }
+        
+        // 加载评测列表
+        function loadTierList() {
+            const savedData = localStorage.getItem('tierListData');
+            const savedImageData = localStorage.getItem('tierListImageData');
+            
+            if (savedData) {
+                const tierData = JSON.parse(savedData);
+                
+                // 恢复图片数据
+                if (savedImageData) {
+                    imageData = JSON.parse(savedImageData);
+                }
+                
+                // 恢复每个tier中的图片
+                for (let i = 1; i <= 5; i++) {
+                    if (tierData[i]) {
+                        tierData[i].forEach(imgData => {
+                            // 查找对应的放置区域
+                            const dropZones = document.querySelectorAll(`.tier-dropzone[data-tier="${i}"], .horizontal-tier-dropzone[data-tier="${i}"]`);
+                            if (dropZones.length > 0) {
+                                const dropZone = dropZones[0]; // 使用第一个找到的区域
+                                
+                                const newImg = document.createElement('img');
+                                newImg.src = imgData.src;
+                                newImg.dataset.id = imgData.id;
+                                newImg.dataset.src = imgData.src;
+                                newImg.dataset.name = imgData.name;
+                                newImg.className = 'draggable-image';
+                                newImg.draggable = true;
+                                
+                                newImg.addEventListener('dragstart', handleDragStart);
+                                newImg.addEventListener('dragend', handleDragEnd);
+                                
+                                // 添加触摸事件处理
+                                newImg.addEventListener('touchstart', handleTouchStart);
+                                newImg.addEventListener('touchmove', handleTouchMove);
+                                newImg.addEventListener('touchend', handleTouchEnd);
+                                newImg.addEventListener('contextmenu', handleContextMenu);
+                                
+                                dropZone.appendChild(newImg);
+                            }
+                        });
+                    }
+                }
+            }
+            
+            renderGallery();
+        }
+        
+        // 切换横屏模式
+        function toggleLandscapeMode() {
+            document.body.classList.add('landscape-mode');
+            document.getElementById('landscape-btn').style.display = 'none';
+            document.getElementById('portrait-btn').style.display = 'block';
+        }
+        
+        // 切换竖屏模式
+        function togglePortraitMode() {
+            document.body.classList.remove('landscape-mode');
+            document.getElementById('landscape-btn').style.display = 'block';
+            document.getElementById('portrait-btn').style.display = 'none';
         }
     </script>
 </body>
