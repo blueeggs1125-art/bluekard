@@ -977,8 +977,8 @@ function saveTierList() {
 }
 
 // 保存为图片的函数
-// 简化版移动端处理
 function saveAsImage() {
+    // 获取要保存的区域（整个tier-list）
     const tierList = document.querySelector('.tier-list');
     
     if (!tierList) {
@@ -986,6 +986,7 @@ function saveAsImage() {
         return;
     }
     
+    // 确保 html2canvas 已经加载
     if (typeof html2canvas === 'undefined') {
         alert('图片保存库未加载，请刷新页面重试');
         return;
@@ -993,44 +994,84 @@ function saveAsImage() {
     
     console.log('开始生成图片...');
     
+    // 使用 html2canvas 将 DOM 转换为图片
     html2canvas(tierList, {
         scale: 2,
         backgroundColor: '#f5f5f5',
         useCORS: true,
         logging: false
     }).then(canvas => {
-        const dataURL = canvas.toDataURL('image/png');
-        
-        // 检测移动设备
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
-        if (isMobile) {
-            // 移动端：在新窗口打开图片，用户可以长按保存
-            const newWindow = window.open();
-            newWindow.document.write(`
-                <html>
-                    <head><title>保存图片</title></head>
-                    <body style="margin: 0; padding: 20px; text-align: center;">
-                        <h2>长按图片保存到手机</h2>
-                        <img src="${dataURL}" style="max-width: 100%; height: auto;" />
-                        <p style="margin-top: 20px;"><button onclick="window.close()">关闭</button></p>
-                    </body>
-                </html>
-            `);
-            newWindow.document.close();
-        } else {
-            // 桌面端：直接下载
-            const link = document.createElement('a');
-            link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
-            link.href = dataURL;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        try {
+            // 将 canvas 转换为图片
+            const dataURL = canvas.toDataURL('image/png');
+            
+            // 检测是否为移动设备
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // 移动端处理方式
+                showMobileDownloadOptions(dataURL);
+            } else {
+                // 桌面端处理方式
+                downloadImage(dataURL);
+            }
+        } catch (error) {
+            console.error('保存图片时出错:', error);
+            alert('保存图片失败: ' + error.message);
         }
     }).catch(error => {
-        console.error('生成图片失败:', error);
+        console.error('生成图片时出错:', error);
         alert('生成图片失败: ' + error.message);
     });
+}
+
+// 桌面端下载函数
+function downloadImage(dataURL) {
+    const link = document.createElement('a');
+    link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
+    link.href = dataURL;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    console.log('图片保存完成');
+}
+
+// 移动端显示下载选项
+function showMobileDownloadOptions(dataURL) {
+    // 创建一个模态框显示图片和下载选项
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    `;
+    
+    modal.innerHTML = `
+        <div style="background: white; padding: 20px; border-radius: 10px; max-width: 90%; max-height: 80%; overflow: auto;">
+            <h3 style="margin-top: 0;">保存图片</h3>
+            <img src="${dataURL}" style="max-width: 100%; height: auto; margin: 10px 0;" />
+            <p>长按图片选择"保存图片"或"下载图片"</p>
+            <button id="close-modal" style="padding: 10px 20px; background: #1e90ff; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">关闭</button>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // 添加关闭按钮事件
+    document.getElementById('close-modal').addEventListener('click', function() {
+        document.body.removeChild(modal);
+    });
+    
+    console.log('图片生成完成，请长按图片保存');
 }
 
 // 在 DOMContentLoaded 事件中确保按钮正确绑定
