@@ -1014,47 +1014,41 @@ function saveAsImage() {
             // 检查是否为移动设备
             const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             
-            if (isMobile) {
-                // 移动端处理方式
-                handleMobileDownload(canvas);
-            } else {
-                // 桌面端处理方式
-                canvas.toBlob(function(blob) {
-                    if (blob) {
-                        // 首先尝试使用 FileSaver.js
-                        if (typeof saveAs !== 'undefined' && typeof saveAs === 'function') {
-                            saveAs(blob, 'kards-tier-list-' + new Date().getTime() + '.png');
-                        } else {
-                            // 备用方案：使用 createObjectURL
-                            try {
-                                const url = URL.createObjectURL(blob);
-                                const link = document.createElement('a');
-                                link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
-                                link.href = url;
-                                document.body.appendChild(link);
-                                link.click();
-                                document.body.removeChild(link);
-                                // 延迟释放URL，确保下载完成
-                                setTimeout(() => {
-                                    URL.revokeObjectURL(url);
-                                }, 100);
-                            } catch (urlError) {
-                                // 如果createObjectURL也失败，尝试data URL方案
-                                console.error('createObjectURL失败:', urlError);
-                                const dataUrl = canvas.toDataURL('image/png');
-                                const link = document.createElement('a');
-                                link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
-                                link.href = dataUrl;
-                                document.body.appendChild(link);
-                                link.click();
-                                document.body.removeChild(link);
-                            }
-                        }
+            canvas.toBlob(function(blob) {
+                if (blob) {
+                    // 首先尝试使用 FileSaver.js
+                    if (typeof saveAs !== 'undefined' && typeof saveAs === 'function') {
+                        saveAs(blob, 'kards-tier-list-' + new Date().getTime() + '.png');
                     } else {
-                        alert('图片生成失败');
+                        // 备用方案：使用 createObjectURL
+                        try {
+                            const url = URL.createObjectURL(blob);
+                            const link = document.createElement('a');
+                            link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
+                            link.href = url;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            // 延迟释放URL，确保下载完成
+                            setTimeout(() => {
+                                URL.revokeObjectURL(url);
+                            }, 100);
+                        } catch (urlError) {
+                            // 如果createObjectURL也失败，尝试data URL方案
+                            console.error('createObjectURL失败:', urlError);
+                            const dataUrl = canvas.toDataURL('image/png');
+                            const link = document.createElement('a');
+                            link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
+                            link.href = dataUrl;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }
                     }
-                }, 'image/png');
-            }
+                } else {
+                    alert('图片生成失败');
+                }
+            }, 'image/png');
         } catch (error) {
             console.error('保存图片时出错:', error);
             alert('保存图片失败: ' + error.message);
