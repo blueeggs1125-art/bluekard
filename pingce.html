@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOVE 1939</title>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -402,21 +403,18 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header-section">
-            <h1>KARDS</h1>
-            <div class="selector-group">
-                <label for="search-input">搜索图片:</label>
-                <input type="text" id="search-input" placeholder="输入关键词搜索图片...">
-            </div>
-            <a href="index.html" class="nav-link">返回素材库</a>
-            
-            <div class="controls">
-                <button class="control-btn" id="save-btn">保存评测</button>
-                <button class="control-btn" id="landscape-btn">横屏模式</button>
-                <button class="control-btn" id="portrait-btn" style="display: none;">竖屏模式</button>
-            </div>
+<div class="container">
+    <div class="header-section">
+        <h1>KARDS</h1>
+        <a href="index.html" class="nav-link">返回素材库</a>
+        
+        <div class="controls">
+            <button class="control-btn" id="save-btn">保存评测</button>
+            <button class="control-btn" id="save-image-btn">保存为图片</button>
+            <button class="control-btn" id="landscape-btn">横屏模式</button>
+            <button class="control-btn" id="portrait-btn" style="display: none;">竖屏模式</button>
         </div>
+    </div>
         
         <!-- 手机端横向滑动条 -->
         <div class="horizontal-scroll-container">
@@ -502,29 +500,61 @@
         let currentDropZone = null;
         let searchResults = []; // 存储搜索结果
 
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('file-input').addEventListener('change', handleFileSelect);
-            document.getElementById('search-input').addEventListener('input', handleSearch);
-            document.getElementById('save-btn').addEventListener('click', saveTierList);
-            document.getElementById('landscape-btn').addEventListener('click', toggleLandscapeMode);
-            document.getElementById('portrait-btn').addEventListener('click', togglePortraitMode);
+         function renderGallery() {
+            const gallery = document.getElementById('image-gallery');
+            gallery.innerHTML = '';
             
-            // 为所有拖拽区域添加事件监听（包括横向和纵向）
-            document.querySelectorAll('.tier-dropzone, .horizontal-tier-dropzone').forEach(zone => {
-                zone.addEventListener('dragover', handleDragOver);
-                zone.addEventListener('dragenter', handleDragEnter);
-                zone.addEventListener('dragleave', handleDragLeave);
-                zone.addEventListener('drop', handleDrop);
-                
-                // 添加触摸事件支持
-                zone.addEventListener('touchenter', handleTouchEnterZone);
-                zone.addEventListener('touchleave', handleTouchLeaveZone);
-                zone.addEventListener('touchend', handleTouchDropZone);
+            imageData.forEach(img => {
+                if (!isImageInAnyTier(img.id)) {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    item.draggable = true;
+                    item.innerHTML = `
+                        <img src="${img.src}" alt="${img.name}" data-id="${img.id}" data-src="${img.src}" data-name="${img.name}">
+                    `;
+                    
+                    const imgElement = item.querySelector('img');
+                    imgElement.addEventListener('dragstart', handleDragStart);
+                    imgElement.addEventListener('dragend', handleDragEnd);
+                    
+                    // 添加触摸事件处理
+                    imgElement.addEventListener('touchstart', handleTouchStart);
+                    imgElement.addEventListener('touchmove', handleTouchMove);
+                    imgElement.addEventListener('touchend', handleTouchEnd);
+                    imgElement.addEventListener('contextmenu', handleContextMenu);
+                    
+                    gallery.appendChild(item);
+                }
             });
-            
-            // 加载保存的数据
-            loadTierList();
-        });
+        }
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('file-input').addEventListener('change', handleFileSelect);
+    document.getElementById('search-input').addEventListener('input', handleSearch);
+    document.getElementById('save-btn').addEventListener('click', saveTierList);
+    document.getElementById('save-image-btn').addEventListener('click', function() {
+        saveAsImage();
+        alert('图片已保存！');
+    });
+    document.getElementById('landscape-btn').addEventListener('click', toggleLandscapeMode);
+    document.getElementById('portrait-btn').addEventListener('click', togglePortraitMode);
+    
+    // 为所有拖拽区域添加事件监听（包括横向和纵向）
+    document.querySelectorAll('.tier-dropzone, .horizontal-tier-dropzone').forEach(zone => {
+        zone.addEventListener('dragover', handleDragOver);
+        zone.addEventListener('dragenter', handleDragEnter);
+        zone.addEventListener('dragleave', handleDragLeave);
+        zone.addEventListener('drop', handleDrop);
+        
+        // 添加触摸事件支持
+        zone.addEventListener('touchenter', handleTouchEnterZone);
+        zone.addEventListener('touchleave', handleTouchLeaveZone);
+        zone.addEventListener('touchend', handleTouchDropZone);
+    });
+    
+    // 加载保存的数据
+    loadTierList();
+});
 
         function handleFileSelect(event) {
             const files = event.target.files;
@@ -569,7 +599,12 @@
             renderSearchResults();
         }
 
-        function renderGallery() {
+// 修改 renderGallery 函数，使其可以接受数据源参数
+
+// 然后修改 renderSearchResults
+
+    renderGallery(searchResults);
+
             const gallery = document.getElementById('image-gallery');
             gallery.innerHTML = '';
             
@@ -595,36 +630,38 @@
                     gallery.appendChild(item);
                 }
             });
-        }
+        
 
         // 渲染搜索结果
-        function renderSearchResults() {
-            const gallery = document.getElementById('image-gallery');
-            gallery.innerHTML = '';
+// 渲染搜索结果
+function renderSearchResults() {
+    const gallery = document.getElementById('image-gallery');
+    gallery.innerHTML = '';
+    
+    searchResults.forEach(img => {
+        if (!isImageInAnyTier(img.id)) {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            item.draggable = true;
+            item.innerHTML = `
+                <img src="${img.src}" alt="${img.name}" data-id="${img.id}" data-src="${img.src}" data-name="${img.name}">
+            `;
             
-            searchResults.forEach(img => {
-                if (!isImageInAnyTier(img.id)) {
-                    const item = document.createElement('div');
-                    item.className = 'gallery-item';
-                    item.draggable = true;
-                    item.innerHTML = `
-                        <img src="${img.src}" alt="${img.name}" data-id="${img.id}" data-src="${img.src}" data-name="${img.name}">
-                    `;
-                    
-                    const imgElement = item.querySelector('img');
-                    imgElement.addEventListener('dragstart', handleDragStart);
-                    imgElement.addEventListener('dragend', handleDragEnd);
-                    
-                    // 添加触摸事件处理
-                    imgElement.addEventListener('touchstart', handleTouchStart);
-                    imgElement.addEventListener('touchmove', handleTouchMove);
-                    imgElement.addEventListener('touchend', handleTouchEnd);
-                    imgElement.addEventListener('contextmenu', handleContextMenu);
-                    
-                    gallery.appendChild(item);
-                }
-            });
+            const imgElement = item.querySelector('img');
+            // 为搜索结果图片绑定拖拽事件
+            imgElement.addEventListener('dragstart', handleDragStart);
+            imgElement.addEventListener('dragend', handleDragEnd);
+            
+            // 添加触摸事件处理
+            imgElement.addEventListener('touchstart', handleTouchStart);
+            imgElement.addEventListener('touchmove', handleTouchMove);
+            imgElement.addEventListener('touchend', handleTouchEnd);
+            imgElement.addEventListener('contextmenu', handleContextMenu);
+            
+            gallery.appendChild(item);
         }
+    });
+}
 
         function isImageInAnyTier(imageId) {
             // 检查纵向层级
@@ -910,32 +947,141 @@
         }
         
         // 保存评测列表
-        function saveTierList() {
-            const tierData = {};
-            
-            // 收集所有tier中的图片
-            for (let i = 1; i <= 5; i++) {
-                const tierZones = document.querySelectorAll(`.tier-dropzone[data-tier="${i}"], .horizontal-tier-dropzone[data-tier="${i}"]`);
-                tierData[i] = [];
-                
-                tierZones.forEach(zone => {
-                    const images = zone.querySelectorAll('img');
-                    images.forEach(img => {
-                        tierData[i].push({
-                            id: img.dataset.id,
-                            src: img.dataset.src,
-                            name: img.dataset.name
-                        });
-                    });
+// 保存评测列表
+// 保存评测列表
+function saveTierList() {
+    const tierData = {};
+    
+    // 收集所有tier中的图片
+    for (let i = 1; i <= 5; i++) {
+        const tierZones = document.querySelectorAll(`.tier-dropzone[data-tier="${i}"], .horizontal-tier-dropzone[data-tier="${i}"]`);
+        tierData[i] = [];
+        
+        tierZones.forEach(zone => {
+            const images = zone.querySelectorAll('img');
+            images.forEach(img => {
+                tierData[i].push({
+                    id: img.dataset.id,
+                    src: img.dataset.src,
+                    name: img.dataset.name
                 });
-            }
+            });
+        });
+    }
+    
+    // 保存到localStorage
+    localStorage.setItem('tierListData', JSON.stringify(tierData));
+    localStorage.setItem('tierListImageData', JSON.stringify(imageData));
+    
+    alert('评测列表已保存！');
+}
+
+// 保存为图片的函数
+function saveAsImage() {
+    // 获取要保存的区域（整个tier-list）
+    const tierList = document.querySelector('.tier-list');
+    
+    if (!tierList) {
+        alert('未找到评测区域');
+        return;
+    }
+    
+    // 确保 html2canvas 已经加载
+    if (typeof html2canvas === 'undefined') {
+        alert('图片保存库未加载，请刷新页面重试');
+        return;
+    }
+    
+    console.log('开始生成图片...');
+    
+    // 使用 html2canvas 将 DOM 转换为图片
+    html2canvas(tierList, {
+        scale: 2,
+        backgroundColor: '#f5f5f5',
+        useCORS: true,
+        logging: false
+    }).then(canvas => {
+        // 将 canvas 转换为图片并下载
+        const link = document.createElement('a');
+        link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
+        link.href = canvas.toDataURL('image/png');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        console.log('图片保存完成');
+    }).catch(error => {
+        console.error('生成图片失败:', error);
+        alert('生成图片失败: ' + error.message);
+    });
+}
+
+// 在 DOMContentLoaded 事件中确保按钮正确绑定
+document.addEventListener('DOMContentLoaded', function() {
+    // 确保按钮存在再绑定事件
+    const saveBtn = document.getElementById('save-btn');
+    const saveImageBtn = document.getElementById('save-image-btn');
+    
+    if (saveBtn) {
+        saveBtn.addEventListener('click', saveTierList);
+    }
+    
+    if (saveImageBtn) {
+        saveImageBtn.addEventListener('click', function() {
+            saveAsImage();
+        });
+    }
+    
+    // 其他事件监听器...
+});
+// 添加保存为图片的函数
+// 保存为图片的函数
+function saveAsImage() {
+    // 获取要保存的区域（整个tier-list）
+    const tierList = document.querySelector('.tier-list');
+    
+    if (!tierList) {
+        alert('未找到评测区域');
+        return;
+    }
+    
+    // 确保 html2canvas 已经加载
+    if (typeof html2canvas === 'undefined') {
+        alert('图片保存库未加载，请刷新页面重试');
+        return;
+    }
+    
+    // 显示正在保存的提示
+    console.log('开始保存图片...');
+    
+    // 使用 html2canvas 将 DOM 转换为图片
+    html2canvas(tierList, {
+        scale: 2, // 提高图片质量
+        backgroundColor: '#f5f5f5',
+        useCORS: true,
+        logging: false
+    }).then(canvas => {
+        try {
+            // 将 canvas 转换为图片
+            const dataURL = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
+            link.href = dataURL;
             
-            // 保存到localStorage
-            localStorage.setItem('tierListData', JSON.stringify(tierData));
-            localStorage.setItem('tierListImageData', JSON.stringify(imageData));
+            // 确保链接被添加到DOM中再点击
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
             
-            alert('评测列表已保存！');
+            console.log('图片保存成功');
+        } catch (error) {
+            console.error('保存图片时出错:', error);
+            alert('保存图片失败: ' + error.message);
         }
+    }).catch(error => {
+        console.error('生成图片时出错:', error);
+        alert('生成图片失败: ' + error.message);
+    });
+}
         
         // 加载评测列表
         function loadTierList() {
@@ -999,6 +1145,8 @@
             document.getElementById('landscape-btn').style.display = 'block';
             document.getElementById('portrait-btn').style.display = 'none';
         }
+
+        
     </script>
 </body>
 </html>
