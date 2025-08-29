@@ -1266,8 +1266,8 @@ function saveAsImage() {
         const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         
         if (isMobile) {
-            // 移动端显示预览
-            showMobilePreview(dataUrl);
+            // 移动端显示预览并提供保存指导
+            showMobileSaveInstructions(dataUrl);
         } else {
             // 桌面端直接下载
             downloadImageDirectly(dataUrl);
@@ -1288,9 +1288,9 @@ function downloadImageDirectly(dataUrl) {
     document.body.removeChild(link);
 }
 
-// 移动端显示预览
-function showMobilePreview(dataUrl) {
-    // 创建预览模态框
+// 移动端保存指导
+function showMobileSaveInstructions(dataUrl) {
+    // 创建指导模态框
     const modal = document.createElement('div');
     modal.style.cssText = `
         position: fixed;
@@ -1306,14 +1306,21 @@ function showMobilePreview(dataUrl) {
         align-items: center;
         padding: 20px;
         color: white;
+        text-align: center;
     `;
     
     modal.innerHTML = `
-        <div style="background: #333; padding: 20px; border-radius: 10px; max-width: 90%; text-align: center;">
-            <h2>图片已生成</h2>
-            <p>长按下方图片保存到手机</p>
-            <img src="${dataUrl}" style="max-width: 100%; height: auto; margin: 15px 0; border: 2px solid #666;" />
-            <button id="close-preview" style="padding: 10px 20px; background: #1e90ff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        <div style="background: #333; padding: 20px; border-radius: 10px; max-width: 90%;">
+            <h2>保存图片到手机</h2>
+            <div style="margin: 20px 0; padding: 10px; background: #444; border-radius: 5px;">
+                <p>1. 点击下方"显示图片"按钮</p>
+                <p>2. 在新页面长按图片</p>
+                <p>3. 选择"保存图片"或"下载图片"</p>
+            </div>
+            <button id="show-image-btn" style="padding: 12px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 10px;">
+                显示图片
+            </button>
+            <button id="close-modal" style="padding: 12px 20px; background: #1e90ff; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 10px;">
                 关闭
             </button>
         </div>
@@ -1321,8 +1328,31 @@ function showMobilePreview(dataUrl) {
     
     document.body.appendChild(modal);
     
+    // 显示图片按钮事件
+    document.getElementById('show-image-btn').addEventListener('click', function() {
+        // 在新窗口打开图片，让用户手动保存
+        const newWindow = window.open();
+        newWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>保存图片</title>
+            </head>
+            <body style="margin: 0; padding: 20px; background: #000;">
+                <div style="text-align: center; color: white;">
+                    <h2>长按图片保存到手机</h2>
+                    <img src="${dataUrl}" style="max-width: 100%; height: auto; border: 2px solid #666;" />
+                    <p style="margin-top: 20px;">长按上方图片，选择"保存图片"或"下载图片"</p>
+                </div>
+            </body>
+            </html>
+        `);
+        newWindow.document.close();
+    });
+    
     // 关闭按钮事件
-    document.getElementById('close-preview').addEventListener('click', function() {
+    document.getElementById('close-modal').addEventListener('click', function() {
         document.body.removeChild(modal);
     });
     
@@ -1333,7 +1363,6 @@ function showMobilePreview(dataUrl) {
         }
     });
 }
-// 保存为图片的函数（只保留这一个定义）
 
         // 切换横屏模式
         function toggleLandscapeMode() {
