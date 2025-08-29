@@ -402,11 +402,12 @@
         let draggedElement = null;
         let draggedFromGallery = false;
         let draggedFromTier = null;
-        let dragStartX, dragStartY;
         let isDragging = false;
+        let dragImage = null;
+        let touchStartX, touchStartY;
+        let currentDropZone = null;
 
         document.addEventListener('DOMContentLoaded', function() {
-
             document.getElementById('file-input').addEventListener('change', handleFileSelect);
             
             // 为所有拖拽区域添加事件监听（包括横向和纵向）
@@ -417,12 +418,11 @@
                 zone.addEventListener('drop', handleDrop);
                 
                 // 添加触摸事件支持
-                zone.addEventListener('touchstart', handleTouchStartZone);
-                zone.addEventListener('touchmove', handleTouchMoveZone);
-                zone.addEventListener('touchend', handleTouchEndZone);
+                zone.addEventListener('touchenter', handleTouchEnterZone);
+                zone.addEventListener('touchleave', handleTouchLeaveZone);
+                zone.addEventListener('touchend', handleTouchDropZone);
             });
         });
-
 
         function handleFileSelect(event) {
             const files = event.target.files;
@@ -444,17 +444,14 @@
                 reader.readAsDataURL(file);
             }
             
-
             event.target.value = '';
         }
-
 
         function renderGallery() {
             const gallery = document.getElementById('image-gallery');
             gallery.innerHTML = '';
             
             imageData.forEach(img => {
-
                 if (!isImageInAnyTier(img.id)) {
                     const item = document.createElement('div');
                     item.className = 'gallery-item';
@@ -463,7 +460,6 @@
                         <img src="${img.src}" alt="${img.name}" data-id="${img.id}">
                     `;
                     
-
                     const imgElement = item.querySelector('img');
                     imgElement.addEventListener('dragstart', handleDragStart);
                     imgElement.addEventListener('dragend', handleDragEnd);
@@ -478,7 +474,6 @@
                 }
             });
         }
-
 
         function isImageInAnyTier(imageId) {
             // 检查纵向层级
@@ -505,7 +500,6 @@
             return false;
         }
 
-
         function handleDragStart(e) {
             draggedElement = e.target;
             draggedFromGallery = !draggedElement.closest('.tier-dropzone, .horizontal-tier-dropzone');
@@ -520,12 +514,10 @@
             e.dataTransfer.setData('text/html', draggedElement.outerHTML);
             e.dataTransfer.setData('image-id', draggedElement.dataset.id);
             
-
             setTimeout(() => {
                 draggedElement.style.opacity = '0.4';
             }, 0);
         }
-
 
         function handleDragEnd(e) {
             draggedElement.style.opacity = '1';
@@ -534,12 +526,10 @@
             });
         }
 
-
         function handleDragOver(e) {
             e.preventDefault();
             e.dataTransfer.dropEffect = 'move';
         }
-
 
         function handleDragEnter(e) {
             e.preventDefault();
@@ -550,7 +540,6 @@
             this.classList.remove('drag-over');
         }
 
-
         function handleDrop(e) {
             e.preventDefault();
             this.classList.remove('drag-over');
@@ -558,9 +547,7 @@
             if (draggedElement) {
                 const imageId = draggedElement.dataset.id;
                 
-
                 if (draggedFromGallery) {
-
                     const newImg = document.createElement('img');
                     newImg.src = draggedElement.src;
                     newImg.dataset.id = imageId;
@@ -578,8 +565,7 @@
                     
                     this.appendChild(newImg);
                     renderGallery(); 
-                } 
-                else {
+                } else {
                     this.appendChild(draggedElement);
                     
                     if (draggedFromTier != this.dataset.tier) {
@@ -591,18 +577,31 @@
         
         // 触摸开始事件（图片）
         function handleTouchStart(e) {
-            // 阻止默认行为
             e.preventDefault();
+            e.stopPropagation();
             
             // 获取触摸点
             const touch = e.touches[0];
-            dragStartX = touch.clientX;
-            dragStartY = touch.clientY;
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
             
             // 设置拖拽元素
             draggedElement = e.target;
             draggedFromGallery = true;
             isDragging = true;
+            
+            // 创建拖拽图像
+            dragImage = draggedElement.cloneNode(true);
+            dragImage.style.position = 'fixed';
+            dragImage.style.width = '100px';
+            dragImage.style.height = 'auto';
+            dragImage.style.pointerEvents = 'none';
+            dragImage.style.zIndex = '9999';
+            dragImage.style.opacity = '0.8';
+            document.body.appendChild(dragImage);
+            
+            // 更新拖拽图像位置
+            updateDragImagePosition(touch.clientX, touch.clientY);
             
             // 添加视觉反馈
             draggedElement.style.opacity = '0.4';
@@ -610,42 +609,72 @@
         
         // 触摸移动事件（图片）
         function handleTouchMove(e) {
-            if (!isDragging) return;
+            if (!isDragging || !dragImage) return;
             
-            // 阻止默认滚动行为
             e.preventDefault();
+            e.stopPropagation();
+            
+            const touch = e.touches[0];
+            
+            // 更新拖拽图像位置
+            updateDragImagePosition(touch.clientX, touch.clientY);
+            
+            // 检查是否在放置区域上
+            const elementUnderTouch = document.elementFromPoint(touch.clientX, touch.clientY);
+            const dropZone = elementUnderTouch.closest('.tier-dropzone, .horizontal-tier-dropzone');
+            
+            // 更新当前放置区域的高亮状态
+            if (currentDropZone && currentDropZone !== dropZone) {
+                currentDropZone.classList.remove('drag-over');
+            }
+            
+            if (dropZone) {
+                dropZone.classList.add('drag-over');
+                currentDropZone = dropZone;
+            } else {
+                currentDropZone = null;
+            }
         }
         
         // 触摸结束事件（图片）
         function handleTouchEnd(e) {
             if (!isDragging) return;
             
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // 移除拖拽图像
+            if (dragImage && dragImage.parentNode) {
+                dragImage.parentNode.removeChild(dragImage);
+            }
+            
             // 恢复视觉效果
             draggedElement.style.opacity = '1';
+            
+            // 如果当前在放置区域上，执行放置操作
+            if (currentDropZone) {
+                currentDropZone.classList.remove('drag-over');
+                handleTouchDrop(currentDropZone);
+            }
+            
+            // 重置状态
             isDragging = false;
+            draggedElement = null;
+            dragImage = null;
+            currentDropZone = null;
         }
         
-        // 触摸开始事件（放置区域）
-        function handleTouchStartZone(e) {
-            if (!isDragging) return;
-            
-            e.preventDefault();
-            this.classList.add('drag-over');
+        // 更新拖拽图像位置
+        function updateDragImagePosition(x, y) {
+            if (dragImage) {
+                dragImage.style.left = (x - 50) + 'px';
+                dragImage.style.top = (y - 50) + 'px';
+            }
         }
         
-        // 触摸移动事件（放置区域）
-        function handleTouchMoveZone(e) {
-            if (!isDragging) return;
-            
-            e.preventDefault();
-        }
-        
-        // 触摸结束事件（放置区域）
-        function handleTouchEndZone(e) {
-            if (!isDragging || !draggedElement) return;
-            
-            e.preventDefault();
-            this.classList.remove('drag-over');
+        // 处理触摸放置
+        function handleTouchDrop(dropZone) {
+            if (!draggedElement) return;
             
             const imageId = draggedElement.dataset.id;
             
@@ -665,13 +694,33 @@
                 newImg.addEventListener('touchend', handleTouchEnd);
                 newImg.addEventListener('contextmenu', handleContextMenu);
                 
-                this.appendChild(newImg);
+                dropZone.appendChild(newImg);
                 renderGallery();
             }
-            
-            // 重置状态
-            draggedElement = null;
-            isDragging = false;
+        }
+        
+        // 区域触摸进入事件
+        function handleTouchEnterZone(e) {
+            if (isDragging) {
+                this.classList.add('drag-over');
+                currentDropZone = this;
+            }
+        }
+        
+        // 区域触摸离开事件
+        function handleTouchLeaveZone(e) {
+            this.classList.remove('drag-over');
+            if (currentDropZone === this) {
+                currentDropZone = null;
+            }
+        }
+        
+        // 区域触摸放置事件
+        function handleTouchDropZone(e) {
+            if (isDragging && draggedElement) {
+                this.classList.remove('drag-over');
+                handleTouchDrop(this);
+            }
         }
         
         // 右键菜单事件（防止右键下载）
