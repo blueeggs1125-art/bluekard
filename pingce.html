@@ -1267,7 +1267,7 @@ function saveAsImage() {
         
         if (isMobile) {
             // 移动端显示预览并提供保存指导
-            showMobileSaveInstructions(dataUrl);
+            showMobilePreview(dataUrl);
         } else {
             // 桌面端直接下载
             downloadImageDirectly(dataUrl);
@@ -1288,17 +1288,18 @@ function downloadImageDirectly(dataUrl) {
     document.body.removeChild(link);
 }
 
-// 移动端保存指导
-function showMobileSaveInstructions(dataUrl) {
-    // 创建指导模态框
+// 移动端预览和保存指导
+function showMobilePreview(dataUrl) {
+    // 创建预览模态框
     const modal = document.createElement('div');
+    modal.id = 'mobile-preview-modal';
     modal.style.cssText = `
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0,0,0,0.9);
+        background: rgba(0,0,0,0.95);
         z-index: 10000;
         display: flex;
         flex-direction: column;
@@ -1310,45 +1311,31 @@ function showMobileSaveInstructions(dataUrl) {
     `;
     
     modal.innerHTML = `
-        <div style="background: #333; padding: 20px; border-radius: 10px; max-width: 90%;">
-            <h2>保存图片到手机</h2>
-            <div style="margin: 20px 0; padding: 10px; background: #444; border-radius: 5px;">
-                <p>1. 点击下方"显示图片"按钮</p>
-                <p>2. 在新页面长按图片</p>
-                <p>3. 选择"保存图片"或"下载图片"</p>
+        <div style="background: #333; padding: 20px; border-radius: 15px; max-width: 95%; width: 100%; max-height: 95%; overflow: auto;">
+            <h2 style="margin-top: 0; color: #fff;">保存图片到手机</h2>
+            <div style="margin: 15px 0; padding: 15px; background: #444; border-radius: 8px; text-align: left;">
+                <p style="margin: 8px 0;"><strong>保存步骤：</strong></p>
+                <p style="margin: 8px 0;">1. 长按下方图片</p>
+                <p style="margin: 8px 0;">2. 选择"保存图片"或"下载图片"</p>
+                <p style="margin: 8px 0;">3. 图片将保存到您的相册</p>
             </div>
-            <button id="show-image-btn" style="padding: 12px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 10px;">
-                显示图片
-            </button>
-            <button id="close-modal" style="padding: 12px 20px; background: #1e90ff; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 10px;">
-                关闭
-            </button>
+            <img src="${dataUrl}" id="preview-image" style="max-width: 100%; height: auto; margin: 15px 0; border: 2px solid #666; border-radius: 8px;" />
+            <div style="display: flex; gap: 10px; width: 100%; justify-content: center; flex-wrap: wrap; margin-top: 15px;">
+                <button id="save-instruction" style="padding: 12px 25px; background: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                    保存说明
+                </button>
+                <button id="close-modal" style="padding: 12px 25px; background: #1e90ff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                    关闭
+                </button>
+            </div>
         </div>
     `;
     
     document.body.appendChild(modal);
     
-    // 显示图片按钮事件
-    document.getElementById('show-image-btn').addEventListener('click', function() {
-        // 在新窗口打开图片，让用户手动保存
-        const newWindow = window.open();
-        newWindow.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>保存图片</title>
-            </head>
-            <body style="margin: 0; padding: 20px; background: #000;">
-                <div style="text-align: center; color: white;">
-                    <h2>长按图片保存到手机</h2>
-                    <img src="${dataUrl}" style="max-width: 100%; height: auto; border: 2px solid #666;" />
-                    <p style="margin-top: 20px;">长按上方图片，选择"保存图片"或"下载图片"</p>
-                </div>
-            </body>
-            </html>
-        `);
-        newWindow.document.close();
+    // 保存说明按钮事件
+    document.getElementById('save-instruction').addEventListener('click', function() {
+        alert('保存图片方法：\n\n1. 长按上方图片\n2. 在弹出菜单中选择"保存图片"或"下载图片"\n3. 图片将保存到您的手机相册中\n\n提示：如果长按无反应，可以尝试点击图片后再长按');
     });
     
     // 关闭按钮事件
@@ -1361,6 +1348,15 @@ function showMobileSaveInstructions(dataUrl) {
         if (e.target === modal) {
             document.body.removeChild(modal);
         }
+    });
+    
+    // 图片点击效果增强
+    const previewImage = document.getElementById('preview-image');
+    previewImage.addEventListener('click', function() {
+        this.style.transform = 'scale(1.02)';
+        setTimeout(() => {
+            this.style.transform = 'scale(1)';
+        }, 150);
     });
 }
 
