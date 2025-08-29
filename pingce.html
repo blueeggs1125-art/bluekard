@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" filetype="width=device-width, initial-scale=1.0">
     <title>LOVE 1939</title>
     <style>
         * {
@@ -163,6 +163,12 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            -webkit-touch-callout: none; /* 防止iOS长按菜单 */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent; /* 移除点击高亮 */
         }
 
         .draggable-image {
@@ -170,6 +176,12 @@
             height: auto;
             cursor: move;
             border-radius: 4px;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .instructions {
@@ -268,6 +280,10 @@
         let draggedElement = null;
         let draggedFromGallery = false;
         let draggedFromTier = null;
+        let touchStartTime = 0;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let isTouchMoved = false;
 
         document.addEventListener('DOMContentLoaded', function() {
 
@@ -326,6 +342,12 @@
                     const imgElement = item.querySelector('img');
                     imgElement.addEventListener('dragstart', handleDragStart);
                     imgElement.addEventListener('dragend', handleDragEnd);
+                    
+                    // 添加触摸事件处理
+                    imgElement.addEventListener('touchstart', handleTouchStart);
+                    imgElement.addEventListener('touchmove', handleTouchMove);
+                    imgElement.addEventListener('touchend', handleTouchEnd);
+                    imgElement.addEventListener('contextmenu', handleContextMenu);
                     
                     gallery.appendChild(item);
                 }
@@ -406,6 +428,12 @@
                     newImg.addEventListener('dragstart', handleDragStart);
                     newImg.addEventListener('dragend', handleDragEnd);
                     
+                    // 添加触摸事件处理
+                    newImg.addEventListener('touchstart', handleTouchStart);
+                    newImg.addEventListener('touchmove', handleTouchMove);
+                    newImg.addEventListener('touchend', handleTouchEnd);
+                    newImg.addEventListener('contextmenu', handleContextMenu);
+                    
                     this.appendChild(newImg);
                     renderGallery(); 
                 } 
@@ -417,6 +445,45 @@
                     }
                 }
             }
+        }
+        
+        // 触摸开始事件
+        function handleTouchStart(e) {
+            touchStartTime = Date.now();
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            isTouchMoved = false;
+        }
+        
+        // 触摸移动事件
+        function handleTouchMove(e) {
+            isTouchMoved = true;
+            const touchX = e.touches[0].clientX;
+            const touchY = e.touches[0].clientY;
+            
+            // 如果移动距离超过阈值，认为是拖动而不是长按
+            const moveThreshold = 5;
+            if (Math.abs(touchX - touchStartX) > moveThreshold || 
+                Math.abs(touchY - touchStartY) > moveThreshold) {
+                isTouchMoved = true;
+            }
+        }
+        
+        // 触摸结束事件
+        function handleTouchEnd(e) {
+            const touchEndTime = Date.now();
+            const touchDuration = touchEndTime - touchStartTime;
+            
+            // 如果触摸时间长于500ms且没有移动，阻止默认行为（防止长按菜单）
+            if (touchDuration > 500 && !isTouchMoved) {
+                e.preventDefault();
+            }
+        }
+        
+        // 右键菜单事件（防止右键下载）
+        function handleContextMenu(e) {
+            e.preventDefault();
+            return false;
         }
     </script>
 </body>
