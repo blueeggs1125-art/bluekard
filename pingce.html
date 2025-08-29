@@ -620,6 +620,7 @@
 
     // 保存为图片的函数
 // 保存为图片的函数 - 修复移动端下载问题
+// 保存为图片的函数 - 修复移动端下载问题
 function saveAsImage() {
     const tierList = document.querySelector('.tier-list');
     
@@ -632,48 +633,52 @@ function saveAsImage() {
         scale: 2,
         backgroundColor: '#f5f5f5'
     }).then(canvas => {
-        // 转换为blob格式
-        canvas.toBlob(function(blob) {
-            // 创建文件名
-            const filename = 'kards-tier-list-' + new Date().getTime() + '.png';
-            
-            // 检查是否为移动设备
-            const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
-            if (isMobile) {
-                // 移动端处理
-                const url = URL.createObjectURL(blob);
+        // 渲染到页面的临时图片
+        const imgPreview = document.createElement('img');
+        imgPreview.src = canvas.toDataURL('image/png');
+        imgPreview.style.display = 'none';
+        document.body.appendChild(imgPreview);
+        
+        // 将图像加载到页面后，再触发下载
+        imgPreview.onload = function() {
+            // 转换为blob格式
+            canvas.toBlob(function(blob) {
+                const filename = 'kards-tier-list-' + new Date().getTime() + '.png';
+                const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
                 
-                // 创建一个隐藏的下载链接
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = filename;
-                link.style.display = 'none';
-                
-                // 添加到页面并触发点击
-                document.body.appendChild(link);
-                link.click();
-                
-                // 延迟清理
-                setTimeout(() => {
+                if (isMobile) {
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = filename;
+                    link.style.display = 'none';
+                    
+                    document.body.appendChild(link);
+                    link.click();
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                    }, 100);
+                } else {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = canvas.toDataURL('image/png');
+                    document.body.appendChild(link);
+                    link.click();
                     document.body.removeChild(link);
-                    URL.revokeObjectURL(url);
-                }, 100);
-            } else {
-                // 桌面端处理
-                const link = document.createElement('a');
-                link.download = filename;
-                link.href = canvas.toDataURL('image/png');
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
-        }, 'image/png');
+                }
+                
+                // 清理临时图片
+                document.body.removeChild(imgPreview);
+            }, 'image/png');
+        };
     }).catch(error => {
         console.error('生成图片失败:', error);
         alert('生成图片失败: ' + error.message);
     });
 }
+
     
     // 切换横屏模式
     function toggleLandscapeMode() {
