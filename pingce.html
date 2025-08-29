@@ -1186,6 +1186,13 @@ function saveAsImage() {
         alert('未找到评测区域');
         return;
     }
+
+    if (typeof html2canvas === 'undefined') {
+        alert('图片保存库未加载，请刷新页面重试');
+        return;
+    }
+
+    console.log('开始生成图片...');
     
     html2canvas(tierList, {
         scale: 2,
@@ -1193,23 +1200,93 @@ function saveAsImage() {
         useCORS: true,
         logging: false
     }).then(canvas => {
-        canvas.toBlob(function(blob) {
-            try {
-                // 使用 FileSaver.js 进行保存
-                saveAs(blob, 'kards-tier-list-' + new Date().getTime() + '.png');
-            } catch (error) {
-                console.error('保存图片时出错:', error);
-                alert('保存图片失败: ' + error.message);
+        try {
+            // 检查是否为移动设备
+            const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // 移动端处理方式 - 直接显示图片供用户手动保存
+                const dataUrl = canvas.toDataURL('image/png');
+                handleMobileDownload(dataUrl);
+            } else {
+                // 桌面端处理方式
+                canvas.toBlob(function(blob) {
+                    if (blob) {
+                        // 首先尝试使用 FileSaver.js
+                        if (typeof saveAs !== 'undefined' && typeof saveAs === 'function') {
+                            saveAs(blob, 'kards-tier-list-' + new Date().getTime() + '.png');
+                        } else {
+                            // 备用方案：使用 createObjectURL
+                            try {
+                                const url = URL.createObjectURL(blob);
+                                const link = document.createElement('a');
+                                link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
+                                link.href = url;
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                                // 延迟释放URL，确保下载完成
+                                setTimeout(() => {
+                                    URL.revokeObjectURL(url);
+                                }, 100);
+                            } catch (urlError) {
+                                // 如果createObjectURL也失败，尝试data URL方案
+                                console.error('createObjectURL失败:', urlError);
+                                const dataUrl = canvas.toDataURL('image/png');
+                                const link = document.createElement('a');
+                                link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
+                                link.href = dataUrl;
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                            }
+                        }
+                    } else {
+                        alert('图片生成失败');
+                    }
+                }, 'image/png');
             }
-        }, 'image/png');
+        } catch (error) {
+            console.error('保存图片时出错:', error);
+            alert('保存图片失败: ' + error.message);
+        }
     }).catch(error => {
         console.error('生成图片时出错:', error);
         alert('生成图片失败: ' + error.message);
     });
 }
-
-
-
+function handleMobileDownload(dataUrl) {
+    // 创建一个模态框让用户手动保存
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.9);
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        color: white;
+        text-align: center;
+    `;
+    
+    modal.innerHTML = `
+        <div style="background: #333; padding: 20px; border-radius: 15px; max-width: 90%; max-height: 90%; overflow: auto;">
+            <h2 style="margin-top: 0; color: #fff;">保存图片</h2>
+            <p>长按下方图片，选择"保存图片"或"下载图片"</p>
+            <img src="${dataUrl}" style="max-width: 100%; height: auto; margin: 15px 0; border: 1px solid #666;" />
+            <div style="display: flex; gap: 10px; width: 100%; justify-content: center; flex-wrap: wrap;">
+                <button id="close-modal" style="padding: 12px 25px; background: #1e90ff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                    关闭
+                </button>
+            </div>
+        </div>
+    `;
     
     document.body.appendChild(modal);
     
@@ -1218,8 +1295,13 @@ function saveAsImage() {
         document.body.removeChild(modal);
     });
     
-    console.log('请长按图片保存');
-
+    // 点击模态框背景也关闭
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            document.body.removeChild(modal);
+        }
+    });
+}
         // 切换横屏模式
         function toggleLandscapeMode() {
             document.body.classList.add('landscape-mode');
