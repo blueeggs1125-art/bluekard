@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOVE 1939</title>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
     <style>
         * {
@@ -981,7 +981,7 @@ function saveTierList() {
 // 保存为图片的函数
 function saveAsImage() {
     const tierList = document.querySelector('.tier-list');
-
+    
     if (!tierList) {
         alert('未找到评测区域');
         return;
@@ -993,7 +993,7 @@ function saveAsImage() {
     }
 
     console.log('开始生成图片...');
-
+    
     html2canvas(tierList, {
         scale: 2,
         backgroundColor: '#f5f5f5',
@@ -1001,8 +1001,9 @@ function saveAsImage() {
         logging: false
     }).then(canvas => {
         try {
-            // 将 canvas 转换为 Blob 并使用 FileSaver.js 直接保存
+            // 将 canvas 转换为 Blob
             canvas.toBlob(function(blob) {
+                // 使用 FileSaver.js 保存 Blob
                 saveAs(blob, 'kards-tier-list-' + new Date().getTime() + '.png');
             }, 'image/png');
         } catch (error) {
@@ -1016,7 +1017,54 @@ function saveAsImage() {
 }
 
 
-
+// 为浏览器显示下载选项
+function showChineseBrowserDownloadOptions(blobUrl) {
+    // 创建提示模态框
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.9);
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        color: white;
+        text-align: center;
+    `;
+    
+    modal.innerHTML = `
+        <div style="background: #333; padding: 30px; border-radius: 15px; max-width: 90%;">
+            <h2 style="margin-top: 0; color: #fff;">保存图片说明</h2>
+            <p>由于您使用的浏览器限制，请按以下步骤保存图片：</p>
+            <div style="background: #444; padding: 15px; margin: 15px 0; border-radius: 10px;">
+                <p>1. 点击下方按钮在新窗口打开图片</p>
+                <p>2. 在新页面长按图片</p>
+                <p>3. 选择"保存图片"或"下载图片"</p>
+            </div>
+            <a href="${blobUrl}" target="_blank" style="display: inline-block; padding: 12px 25px; background: #1e90ff; color: white; text-decoration: none; border-radius: 8px; margin: 10px 0; font-weight: bold;">
+                在新窗口打开图片
+            </a>
+            <button id="close-modal" style="display: block; width: 100%; padding: 12px; background: #666; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 15px;">
+                我知道了
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // 添加关闭按钮事件
+    document.getElementById('close-modal').addEventListener('click', function() {
+        document.body.removeChild(modal);
+    });
+    
+    console.log('请在新窗口中打开图片并长按保存');
+}
 
 
 // 桌面端下载函数
