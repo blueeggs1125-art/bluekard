@@ -528,13 +528,13 @@
             });
         }
 
+// 只保留这一个 DOMContentLoaded 事件监听器，删除其他的
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('file-input').addEventListener('change', handleFileSelect);
     document.getElementById('search-input').addEventListener('input', handleSearch);
     document.getElementById('save-btn').addEventListener('click', saveTierList);
     document.getElementById('save-image-btn').addEventListener('click', function() {
         saveAsImage();
-        alert('图片已保存！');
     });
     document.getElementById('landscape-btn').addEventListener('click', toggleLandscapeMode);
     document.getElementById('portrait-btn').addEventListener('click', togglePortraitMode);
