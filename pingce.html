@@ -587,7 +587,14 @@
             
             // 设置拖拽元素
             draggedElement = e.target;
-            draggedFromGallery = true;
+            draggedFromGallery = !draggedElement.closest('.tier-dropzone, .horizontal-tier-dropzone');
+            if (!draggedFromGallery) {
+                const parentZone = draggedElement.closest('.tier-dropzone, .horizontal-tier-dropzone');
+                if (parentZone) {
+                    draggedFromTier = parentZone.dataset.tier;
+                }
+            }
+            
             isDragging = true;
             
             // 创建拖拽图像
@@ -621,7 +628,7 @@
             
             // 检查是否在放置区域上
             const elementUnderTouch = document.elementFromPoint(touch.clientX, touch.clientY);
-            const dropZone = elementUnderTouch.closest('.tier-dropzone, .horizontal-tier-dropzone');
+            const dropZone = elementUnderTouch ? elementUnderTouch.closest('.tier-dropzone, .horizontal-tier-dropzone') : null;
             
             // 更新当前放置区域的高亮状态
             if (currentDropZone && currentDropZone !== dropZone) {
@@ -649,7 +656,9 @@
             }
             
             // 恢复视觉效果
-            draggedElement.style.opacity = '1';
+            if (draggedElement) {
+                draggedElement.style.opacity = '1';
+            }
             
             // 如果当前在放置区域上，执行放置操作
             if (currentDropZone) {
@@ -679,6 +688,7 @@
             const imageId = draggedElement.dataset.id;
             
             if (draggedFromGallery) {
+                // 从画廊拖拽来的图片
                 const newImg = document.createElement('img');
                 newImg.src = draggedElement.src;
                 newImg.dataset.id = imageId;
@@ -696,6 +706,15 @@
                 
                 dropZone.appendChild(newImg);
                 renderGallery();
+            } else {
+                // 从一个tier移动到另一个tier
+                // 直接移动元素而不是复制
+                dropZone.appendChild(draggedElement);
+                
+                // 如果是从不同tier移动过来的，需要重新渲染画廊
+                if (draggedFromTier && draggedFromTier != dropZone.dataset.tier) {
+                    renderGallery();
+                }
             }
         }
         
