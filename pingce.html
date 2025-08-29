@@ -989,6 +989,7 @@ function saveTierList() {
 
 // 保存为图片的函数
 // 保存为图片的函数（只保留这一个定义）
+// 保存为图片的函数（只保留这一个定义）
 function saveAsImage() {
     const tierList = document.querySelector('.tier-list');
     
@@ -1004,73 +1005,125 @@ function saveAsImage() {
 
     console.log('开始生成图片...');
     
-    html2canvas(tierList, {
-        scale: 2,
-        backgroundColor: '#f5f5f5',
-        useCORS: true,
-        logging: false
-    }).then(canvas => {
-        try {
-            // 检查是否为移动设备
-            const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
-            canvas.toBlob(function(blob) {
-                if (blob) {
-                    // 首先尝试使用 FileSaver.js
-                    if (typeof saveAs !== 'undefined' && typeof saveAs === 'function') {
-                        saveAs(blob, 'kards-tier-list-' + new Date().getTime() + '.png');
-                    } else {
-                        // 备用方案：使用 createObjectURL
-                        try {
-                            const url = URL.createObjectURL(blob);
-                            const link = document.createElement('a');
-                            link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
-                            link.href = url;
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                            // 延迟释放URL，确保下载完成
-                            setTimeout(() => {
-                                URL.revokeObjectURL(url);
-                            }, 100);
-                        } catch (urlError) {
-                            // 如果createObjectURL也失败，尝试data URL方案
-                            console.error('createObjectURL失败:', urlError);
-                            const dataUrl = canvas.toDataURL('image/png');
-                            const link = document.createElement('a');
-                            link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
-                            link.href = dataUrl;
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                        }
-                    }
-                } else {
-                    alert('图片生成失败');
+    // 在开始处理前显示加载提示
+    const originalHTML = tierList.innerHTML;
+    tierList.innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">图片生成中...</div>';
+    
+    // 确保所有图片都加载完成后再进行截图
+    const images = tierList.querySelectorAll('img');
+    let loadedCount = 0;
+    const totalImages = images.length;
+    
+    if (totalImages === 0) {
+        captureCanvas();
+        return;
+    }
+    
+    let allImagesLoaded = true;
+    images.forEach(img => {
+        if (!img.complete || img.naturalWidth === 0) {
+            allImagesLoaded = false;
+            img.onload = function() {
+                loadedCount++;
+                if (loadedCount === totalImages) {
+                    captureCanvas();
                 }
-            }, 'image/png');
-        } catch (error) {
-            console.error('保存图片时出错:', error);
-            alert('保存图片失败: ' + error.message);
+            };
+            img.onerror = function() {
+                loadedCount++;
+                if (loadedCount === totalImages) {
+                    captureCanvas();
+                }
+            };
         }
-    }).catch(error => {
-        console.error('生成图片时出错:', error);
-        alert('生成图片失败: ' + error.message);
     });
+    
+    if (allImagesLoaded) {
+        captureCanvas();
+    }
+    
+    function captureCanvas() {
+        // 恢复原始内容
+        tierList.innerHTML = originalHTML;
+        
+        html2canvas(tierList, {
+            scale: 2,
+            backgroundColor: '#f5f5f5',
+            useCORS: true,
+            logging: false,
+            allowTaint: true,
+            foreignObjectRendering: false
+        }).then(canvas => {
+            try {
+                // 检查是否为移动设备
+                const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                
+                if (isMobile) {
+                    // 移动端处理方式 - 显示模态框供用户手动保存
+                    handleMobileDownload(canvas);
+                } else {
+                    // 桌面端处理方式
+                    handleDesktopDownload(canvas);
+                }
+            } catch (error) {
+                console.error('保存图片时出错:', error);
+                alert('保存图片失败: ' + error.message);
+                tierList.innerHTML = originalHTML;
+            }
+        }).catch(error => {
+            console.error('生成图片时出错:', error);
+            alert('生成图片失败: ' + error.message);
+            tierList.innerHTML = originalHTML;
+        });
+    }
 }
 
+// 桌面端下载处理
+function handleDesktopDownload(canvas) {
+    canvas.toBlob(function(blob) {
+        if (blob) {
+            // 首先尝试使用 FileSaver.js
+            if (typeof saveAs !== 'undefined' && typeof saveAs === 'function') {
+                saveAs(blob, 'kards-tier-list-' + new Date().getTime() + '.png');
+            } else {
+                // 备用方案：使用 createObjectURL
+                try {
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
+                    link.href = url;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    // 延迟释放URL，确保下载完成
+                    setTimeout(() => {
+                        URL.revokeObjectURL(url);
+                    }, 1000);
+                } catch (urlError) {
+                    console.error('createObjectURL失败:', urlError);
+                    alert('下载失败，请尝试右键保存图片');
+                }
+            }
+        } else {
+            alert('图片生成失败');
+        }
+    }, 'image/png');
+}
 
-// 为浏览器显示下载选项
-function showChineseBrowserDownloadOptions(blobUrl) {
-    // 创建提示模态框
+// 移动端特殊处理 - 显示图片供手动保存
+function handleMobileDownload(canvas) {
+    const dataUrl = canvas.toDataURL('image/png', 0.9);
+    
+    // 创建一个模态框让用户手动保存
     const modal = document.createElement('div');
+    modal.id = 'mobile-download-modal';
     modal.style.cssText = `
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0,0,0,0.9);
+        background: rgba(0,0,0,0.95);
         z-index: 10000;
         display: flex;
         flex-direction: column;
@@ -1079,23 +1132,27 @@ function showChineseBrowserDownloadOptions(blobUrl) {
         padding: 20px;
         color: white;
         text-align: center;
+        overflow: auto;
     `;
     
     modal.innerHTML = `
-        <div style="background: #333; padding: 30px; border-radius: 15px; max-width: 90%;">
-            <h2 style="margin-top: 0; color: #fff;">保存图片说明</h2>
-            <p>由于您使用的浏览器限制，请按以下步骤保存图片：</p>
-            <div style="background: #444; padding: 15px; margin: 15px 0; border-radius: 10px;">
-                <p>1. 点击下方按钮在新窗口打开图片</p>
-                <p>2. 在新页面长按图片</p>
-                <p>3. 选择"保存图片"或"下载图片"</p>
+        <div style="background: #333; padding: 20px; border-radius: 15px; max-width: 95%; width: 100%; max-height: 95%; overflow: auto;">
+            <h2 style="margin-top: 0; color: #fff;">保存图片</h2>
+            <p style="font-size: 16px; margin: 10px 0;">请按以下步骤保存图片：</p>
+            <ol style="text-align: left; margin: 15px 0; padding-left: 20px;">
+                <li style="margin-bottom: 10px;">长按下方图片</li>
+                <li style="margin-bottom: 10px;">在弹出菜单中选择"保存图片"或"下载图片"</li>
+                <li>图片将保存到您的相册中</li>
+            </ol>
+            <img src="${dataUrl}" id="download-image" style="max-width: 100%; height: auto; margin: 15px 0; border: 2px solid #666; border-radius: 8px;" />
+            <div style="display: flex; gap: 10px; width: 100%; justify-content: center; flex-wrap: wrap; margin-top: 15px;">
+                <button id="close-modal" style="padding: 12px 25px; background: #1e90ff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; min-width: 100px;">
+                    关闭
+                </button>
             </div>
-            <a href="${blobUrl}" target="_blank" style="display: inline-block; padding: 12px 25px; background: #1e90ff; color: white; text-decoration: none; border-radius: 8px; margin: 10px 0; font-weight: bold;">
-                在新窗口打开图片
-            </a>
-            <button id="close-modal" style="display: block; width: 100%; padding: 12px; background: #666; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 15px;">
-                我知道了
-            </button>
+            <p style="font-size: 14px; margin-top: 15px; color: #ccc;">
+                提示：如果长按无反应，请尝试点击图片后再长按
+            </p>
         </div>
     `;
     
@@ -1106,19 +1163,22 @@ function showChineseBrowserDownloadOptions(blobUrl) {
         document.body.removeChild(modal);
     });
     
-    console.log('请在新窗口中打开图片并长按保存');
-}
-
-
-// 桌面端下载函数
-function downloadImage(dataURL) {
-    const link = document.createElement('a');
-    link.download = 'kards-tier-list-' + new Date().getTime() + '.png';
-    link.href = dataURL;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    console.log('图片保存完成');
+    // 点击模态框背景也关闭
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            document.body.removeChild(modal);
+        }
+    });
+    
+    // 添加图片点击事件，增强移动端体验
+    const downloadImage = document.getElementById('download-image');
+    downloadImage.addEventListener('click', function() {
+        // 在某些浏览器中，点击图片后再长按可能更容易触发保存菜单
+        this.style.transform = 'scale(1.02)';
+        setTimeout(() => {
+            this.style.transform = 'scale(1)';
+        }, 100);
+    });
 }
 
 // 移动端显示下载选项
