@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" filetype="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOVE 1939</title>
     <style>
         * {
@@ -163,6 +163,7 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            -webkit-user-drag: none; /* 禁用默认拖拽 */
             -webkit-touch-callout: none; /* 防止iOS长按菜单 */
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -176,6 +177,7 @@
             height: auto;
             cursor: move;
             border-radius: 4px;
+            -webkit-user-drag: none;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -191,6 +193,40 @@
             font-style: italic;
         }
 
+        /* 添加横向滑动条容器 */
+        .horizontal-scroll-container {
+            overflow-x: auto;
+            margin-bottom: 10px;
+            padding: 5px 0;
+            display: none;
+        }
+
+        /* 横向滑动条内容 */
+        .horizontal-scroll-content {
+            display: flex;
+            flex-direction: column;
+            min-width: 800px; /* 确保内容足够宽以启用滚动 */
+        }
+
+        /* 横向滚动条样式 */
+        .horizontal-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .horizontal-scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .horizontal-scroll-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .horizontal-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
         @media (max-width: 768px) {
             .tier-row {
                 min-height: 80px;
@@ -204,6 +240,15 @@
             .gallery {
                 grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
                 gap: 10px;
+            }
+            
+            /* 手机端显示横向滑动条 */
+            .horizontal-scroll-container {
+                display: block;
+            }
+            
+            .tier-list {
+                display: none;
             }
         }
 
@@ -223,6 +268,51 @@
                 gap: 8px;
             }
         }
+        
+        /* 横向层级条目样式 */
+        .horizontal-tier-item {
+            display: flex;
+            min-height: 80px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 5px;
+            min-width: 700px;
+        }
+        
+        .horizontal-tier-label {
+            width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            padding: 10px;
+            color: white;
+            writing-mode: horizontal-tb;
+        }
+        
+        .horizontal-tier-dropzone {
+            flex: 1;
+            background-color: #e0e0e0;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            padding: 10px;
+            gap: 10px;
+            min-height: 80px;
+        }
+        
+        .horizontal-tier-dropzone.drag-over {
+            background-color: #c0c0c0;
+        }
+        
+        .horizontal-tier-1 .horizontal-tier-label { background-color: #ff0000; }
+        .horizontal-tier-2 .horizontal-tier-label { background-color: #ff8000; }
+        .horizontal-tier-3 .horizontal-tier-label { background-color: #ffff00; color: #333; }
+        .horizontal-tier-4 .horizontal-tier-label { background-color: #ffcc99; color: #333; }
+        .horizontal-tier-5 .horizontal-tier-label { background-color: #ffffff; color: #333; }
     </style>
 </head>
 <body>
@@ -233,6 +323,38 @@
     <input type="text" id="search-input" placeholder="输入关键词搜索图片...">
 </div>
         <a href="index.html" class="nav-link">返回素材库</a>
+        
+        <!-- 手机端横向滑动条 -->
+        <div class="horizontal-scroll-container">
+            <div class="horizontal-scroll-content">
+                <div class="horizontal-tier-item horizontal-tier-1" data-tier="1">
+                    <div class="horizontal-tier-label">夯</div>
+                    <div class="horizontal-tier-dropzone" data-tier="1"></div>
+                </div>
+                
+                <div class="horizontal-tier-item horizontal-tier-2" data-tier="2">
+                    <div class="horizontal-tier-label">顶级</div>
+                    <div class="horizontal-tier-dropzone" data-tier="2"></div>
+                </div>
+                
+                <div class="horizontal-tier-item horizontal-tier-3" data-tier="3">
+                    <div class="horizontal-tier-label">人上人</div>
+                    <div class="horizontal-tier-dropzone" data-tier="3"></div>
+                </div>
+                
+                <div class="horizontal-tier-item horizontal-tier-4" data-tier="4">
+                    <div class="horizontal-tier-label">NPC</div>
+                    <div class="horizontal-tier-dropzone" data-tier="4"></div>
+                </div>
+                
+                <div class="horizontal-tier-item horizontal-tier-5" data-tier="5">
+                    <div class="horizontal-tier-label">拉完了</div>
+                    <div class="horizontal-tier-dropzone" data-tier="5"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- PC端正常显示 -->
         <div class="tier-list">
             <div class="tier-row tier-1" data-tier="1">
                 <div class="tier-label">夯</div>
@@ -280,21 +402,24 @@
         let draggedElement = null;
         let draggedFromGallery = false;
         let draggedFromTier = null;
-        let touchStartTime = 0;
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let isTouchMoved = false;
+        let dragStartX, dragStartY;
+        let isDragging = false;
 
         document.addEventListener('DOMContentLoaded', function() {
 
             document.getElementById('file-input').addEventListener('change', handleFileSelect);
             
-
-            document.querySelectorAll('.tier-dropzone').forEach(zone => {
+            // 为所有拖拽区域添加事件监听（包括横向和纵向）
+            document.querySelectorAll('.tier-dropzone, .horizontal-tier-dropzone').forEach(zone => {
                 zone.addEventListener('dragover', handleDragOver);
                 zone.addEventListener('dragenter', handleDragEnter);
                 zone.addEventListener('dragleave', handleDragLeave);
                 zone.addEventListener('drop', handleDrop);
+                
+                // 添加触摸事件支持
+                zone.addEventListener('touchstart', handleTouchStartZone);
+                zone.addEventListener('touchmove', handleTouchMoveZone);
+                zone.addEventListener('touchend', handleTouchEndZone);
             });
         });
 
@@ -356,11 +481,25 @@
 
 
         function isImageInAnyTier(imageId) {
+            // 检查纵向层级
             for (let i = 1; i <= 5; i++) {
                 const tierZone = document.querySelector(`.tier-dropzone[data-tier="${i}"]`);
-                const images = tierZone.querySelectorAll(`img[data-id="${imageId}"]`);
-                if (images.length > 0) {
-                    return true;
+                if (tierZone) {
+                    const images = tierZone.querySelectorAll(`img[data-id="${imageId}"]`);
+                    if (images.length > 0) {
+                        return true;
+                    }
+                }
+            }
+            
+            // 检查横向层级
+            for (let i = 1; i <= 5; i++) {
+                const tierZone = document.querySelector(`.horizontal-tier-dropzone[data-tier="${i}"]`);
+                if (tierZone) {
+                    const images = tierZone.querySelectorAll(`img[data-id="${imageId}"]`);
+                    if (images.length > 0) {
+                        return true;
+                    }
                 }
             }
             return false;
@@ -369,9 +508,12 @@
 
         function handleDragStart(e) {
             draggedElement = e.target;
-            draggedFromGallery = !draggedElement.closest('.tier-dropzone');
+            draggedFromGallery = !draggedElement.closest('.tier-dropzone, .horizontal-tier-dropzone');
             if (!draggedFromGallery) {
-                draggedFromTier = draggedElement.closest('.tier-dropzone').dataset.tier;
+                const parentZone = draggedElement.closest('.tier-dropzone, .horizontal-tier-dropzone');
+                if (parentZone) {
+                    draggedFromTier = parentZone.dataset.tier;
+                }
             }
             
             e.dataTransfer.effectAllowed = 'move';
@@ -387,7 +529,7 @@
 
         function handleDragEnd(e) {
             draggedElement.style.opacity = '1';
-            document.querySelectorAll('.tier-dropzone').forEach(zone => {
+            document.querySelectorAll('.tier-dropzone, .horizontal-tier-dropzone').forEach(zone => {
                 zone.classList.remove('drag-over');
             });
         }
@@ -447,37 +589,89 @@
             }
         }
         
-        // 触摸开始事件
+        // 触摸开始事件（图片）
         function handleTouchStart(e) {
-            touchStartTime = Date.now();
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            isTouchMoved = false;
+            // 阻止默认行为
+            e.preventDefault();
+            
+            // 获取触摸点
+            const touch = e.touches[0];
+            dragStartX = touch.clientX;
+            dragStartY = touch.clientY;
+            
+            // 设置拖拽元素
+            draggedElement = e.target;
+            draggedFromGallery = true;
+            isDragging = true;
+            
+            // 添加视觉反馈
+            draggedElement.style.opacity = '0.4';
         }
         
-        // 触摸移动事件
+        // 触摸移动事件（图片）
         function handleTouchMove(e) {
-            isTouchMoved = true;
-            const touchX = e.touches[0].clientX;
-            const touchY = e.touches[0].clientY;
+            if (!isDragging) return;
             
-            // 如果移动距离超过阈值，认为是拖动而不是长按
-            const moveThreshold = 5;
-            if (Math.abs(touchX - touchStartX) > moveThreshold || 
-                Math.abs(touchY - touchStartY) > moveThreshold) {
-                isTouchMoved = true;
-            }
+            // 阻止默认滚动行为
+            e.preventDefault();
         }
         
-        // 触摸结束事件
+        // 触摸结束事件（图片）
         function handleTouchEnd(e) {
-            const touchEndTime = Date.now();
-            const touchDuration = touchEndTime - touchStartTime;
+            if (!isDragging) return;
             
-            // 如果触摸时间长于500ms且没有移动，阻止默认行为（防止长按菜单）
-            if (touchDuration > 500 && !isTouchMoved) {
-                e.preventDefault();
+            // 恢复视觉效果
+            draggedElement.style.opacity = '1';
+            isDragging = false;
+        }
+        
+        // 触摸开始事件（放置区域）
+        function handleTouchStartZone(e) {
+            if (!isDragging) return;
+            
+            e.preventDefault();
+            this.classList.add('drag-over');
+        }
+        
+        // 触摸移动事件（放置区域）
+        function handleTouchMoveZone(e) {
+            if (!isDragging) return;
+            
+            e.preventDefault();
+        }
+        
+        // 触摸结束事件（放置区域）
+        function handleTouchEndZone(e) {
+            if (!isDragging || !draggedElement) return;
+            
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            
+            const imageId = draggedElement.dataset.id;
+            
+            if (draggedFromGallery) {
+                const newImg = document.createElement('img');
+                newImg.src = draggedElement.src;
+                newImg.dataset.id = imageId;
+                newImg.className = 'draggable-image';
+                newImg.draggable = true;
+                
+                newImg.addEventListener('dragstart', handleDragStart);
+                newImg.addEventListener('dragend', handleDragEnd);
+                
+                // 添加触摸事件处理
+                newImg.addEventListener('touchstart', handleTouchStart);
+                newImg.addEventListener('touchmove', handleTouchMove);
+                newImg.addEventListener('touchend', handleTouchEnd);
+                newImg.addEventListener('contextmenu', handleContextMenu);
+                
+                this.appendChild(newImg);
+                renderGallery();
             }
+            
+            // 重置状态
+            draggedElement = null;
+            isDragging = false;
         }
         
         // 右键菜单事件（防止右键下载）
