@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOVE 1939</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .tier-list {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 30px;
+        }
+
+        .tier-row {
+            display: flex;
+            min-height: 120px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tier-label {
+            width: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            padding: 10px;
+            color: white;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        .tier-dropzone {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            padding: 10px;
+            gap: 10px;
+            min-height: 100px;
+        }
+
+        .tier-dropzone.drag-over {
+            background-color: rgba(200, 200, 255, 0.8);
+        }
+
+        .tier-1 .tier-label { background-color: #ff0000; }
+        .tier-2 .tier-label { background-color: #ff8000; }
+        .tier-3 .tier-label { background-color: #ffff00; color: #333; }
+        .tier-4 .tier-label { background-color: #ffcc99; color: #333; }
+        .tier-5 .tier-label { background-color: #ffffff; color: #333; }
+
+        .upload-section {
+            margin: 30px 0;
+        }
+
+
+        .tier-label {
+    width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 24px;
+    text-align: center;
+    padding: 10px;
+    color: white;
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
+}
+.tier-dropzone.drag-over {
+    background-color: #c0c0c0;
+}
+.instructions {
+    text-align: center;
+    margin: 20px 0;
+    color: #666;
+    font-style: italic;
+    font-size: 18px;
+}
+
+        .upload-btn {
+            display: block;
+            width: 200px;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            margin: 0 auto 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .upload-btn:hover {
+            background-color: #45a049;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .nav-link {
+    display: block;
+    text-align: center;
+    margin: 15px 0;
+    color: #1e90ff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            background-color: white;
+            aspect-ratio: 2/3;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .draggable-image {
+            width: 100px;
+            height: auto;
+            cursor: move;
+            border-radius: 4px;
+        }
+
+        .instructions {
+            text-align: center;
+            margin: 20px 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .tier-row {
+                min-height: 80px;
+            }
+            
+            .tier-label {
+                width: 50px;
+                font-size: 14px;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tier-row {
+                min-height: 60px;
+            }
+            
+            .tier-label {
+                width: 40px;
+                font-size: 12px;
+                padding: 5px;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>KARDS</h1>
+<div class="selector-group">
+    <label for="search-input">搜索图片:</label>
+    <input type="text" id="search-input" placeholder="输入关键词搜索图片...">
+</div>
+        <a href="index.html" class="nav-link">返回素材库</a>
+        <div class="tier-list">
+            <div class="tier-row tier-1" data-tier="1">
+                <div class="tier-label">夯</div>
+                <div class="tier-dropzone" data-tier="1"></div>
+            </div>
+            
+            <div class="tier-row tier-2" data-tier="2">
+                <div class="tier-label">顶级</div>
+                <div class="tier-dropzone" data-tier="2"></div>
+            </div>
+            
+            <div class="tier-row tier-3" data-tier="3">
+                <div class="tier-label">人上人</div>
+                <div class="tier-dropzone" data-tier="3"></div>
+            </div>
+            
+            <div class="tier-row tier-4" data-tier="4">
+                <div class="tier-label">NPC</div>
+                <div class="tier-dropzone" data-tier="4"></div>
+            </div>
+            
+            <div class="tier-row tier-5" data-tier="5">
+                <div class="tier-label">拉完了</div>
+                <div class="tier-dropzone" data-tier="5"></div>
+            </div>
+        </div>
+        
+        <div class="upload-section">
+            <div class="upload-btn" onclick="document.getElementById('file-input').click()">
+                上传图片
+            </div>
+            <input type="file" id="file-input" accept="image/*" multiple>
+            
+            <div class="instructions">
+                
+            </div>
+            
+            <div class="gallery" id="image-gallery"></div>
+        </div>
+        <script src="js/picserc.js"></script>
+    </div>
+
+    <script>
+        let imageData = [];
+        let draggedElement = null;
+        let draggedFromGallery = false;
+        let draggedFromTier = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            document.getElementById('file-input').addEventListener('change', handleFileSelect);
+            
+
+            document.querySelectorAll('.tier-dropzone').forEach(zone => {
+                zone.addEventListener('dragover', handleDragOver);
+                zone.addEventListener('dragenter', handleDragEnter);
+                zone.addEventListener('dragleave', handleDragLeave);
+                zone.addEventListener('drop', handleDrop);
+            });
+        });
+
+
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (!file.type.match('image.*')) continue;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const id = 'img-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+                    imageData.push({
+                        id: id,
+                        src: e.target.result,
+                        name: file.name
+                    });
+                    renderGallery();
+                };
+                reader.readAsDataURL(file);
+            }
+            
+
+            event.target.value = '';
+        }
+
+
+        function renderGallery() {
+            const gallery = document.getElementById('image-gallery');
+            gallery.innerHTML = '';
+            
+            imageData.forEach(img => {
+
+                if (!isImageInAnyTier(img.id)) {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    item.draggable = true;
+                    item.innerHTML = `
+                        <img src="${img.src}" alt="${img.name}" data-id="${img.id}">
+                    `;
+                    
+
+                    const imgElement = item.querySelector('img');
+                    imgElement.addEventListener('dragstart', handleDragStart);
+                    imgElement.addEventListener('dragend', handleDragEnd);
+                    
+                    gallery.appendChild(item);
+                }
+            });
+        }
+
+
+        function isImageInAnyTier(imageId) {
+            for (let i = 1; i <= 5; i++) {
+                const tierZone = document.querySelector(`.tier-dropzone[data-tier="${i}"]`);
+                const images = tierZone.querySelectorAll(`img[data-id="${imageId}"]`);
+                if (images.length > 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        function handleDragStart(e) {
+            draggedElement = e.target;
+            draggedFromGallery = !draggedElement.closest('.tier-dropzone');
+            if (!draggedFromGallery) {
+                draggedFromTier = draggedElement.closest('.tier-dropzone').dataset.tier;
+            }
+            
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', draggedElement.outerHTML);
+            e.dataTransfer.setData('image-id', draggedElement.dataset.id);
+            
+
+            setTimeout(() => {
+                draggedElement.style.opacity = '0.4';
+            }, 0);
+        }
+
+
+        function handleDragEnd(e) {
+            draggedElement.style.opacity = '1';
+            document.querySelectorAll('.tier-dropzone').forEach(zone => {
+                zone.classList.remove('drag-over');
+            });
+        }
+
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            this.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            this.classList.remove('drag-over');
+        }
+
+
+        function handleDrop(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            
+            if (draggedElement) {
+                const imageId = draggedElement.dataset.id;
+                
+
+                if (draggedFromGallery) {
+
+                    const newImg = document.createElement('img');
+                    newImg.src = draggedElement.src;
+                    newImg.dataset.id = imageId;
+                    newImg.className = 'draggable-image';
+                    newImg.draggable = true;
+                    
+                    newImg.addEventListener('dragstart', handleDragStart);
+                    newImg.addEventListener('dragend', handleDragEnd);
+                    
+                    this.appendChild(newImg);
+                    renderGallery(); 
+                } 
+                else {
+                    this.appendChild(draggedElement);
+                    
+                    if (draggedFromTier != this.dataset.tier) {
+                        renderGallery();
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
