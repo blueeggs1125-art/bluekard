@@ -1,0 +1,5 @@
+D:\DESKTOP\pyzhenghuo\KARDS素材\icon
+python -m http.server 8080
+http://127.0.0.1:8080
+根据这个mewimages.json的格式，这个py脚本再写一个，目录是\image 生成到D:\DESKTOP\pyzhenghuo\KARDS素材\icon
+名字是newimages.json
