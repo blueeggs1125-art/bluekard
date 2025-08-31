@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" sizes="16x16" href="icon/16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icon/32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="icon/48x48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="icon/64x64.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="icon/128x128.png">
+    <link rel="icon" type="image/png" sizes="256x256" href="icon/256x256.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon/512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon/180x180.png">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>FUCK 1939</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+        }
+        
+        .selector-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: white;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .image-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .image-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            background-color: white;
+            aspect-ratio: 2/3; 
+        }
+        
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            -webkit-touch-callout: default; /* 允许iOS上的长按菜单 */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .image-item .image-name {
+            padding: 5px;
+            font-size: 11px;
+            text-align: center;
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .no-images {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-style: italic;
+            grid-column: 1 / -1;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+        
+        /* 添加导航链接样式 */
+        .nav-link {
+            display: block;
+            text-align: center;
+            margin: 15px 0;
+            color: #1e90ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .image-container {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+                gap: 8px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .image-container {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                gap: 5px;
+            }
+            
+            .image-item .image-name {
+                font-size: 8px;
+                padding: 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="https://space.bilibili.com/596035099" target="_blank" style="display: block; text-align: center; margin-top: 20px; color: #1e90ff; text-decoration: none;">blueeggs</a>
+    <div class="container">
+        <h1>KARDS素材库 - 图标</h1>
+        
+        <!-- 添加返回素材库的链接 -->
+        <a href="index.html" class="nav-link">返回素材库</a>
+        
+        <div class="selector-group">
+            <label for="folder-select">选择文件夹:</label>
+            <select id="folder-select">
+                <option value="">请选择...</option>
+            </select>
+        </div>
+        
+        <div id="image-display">
+            <div class="no-images">请先选择文件夹</div>
+        </div>
+    </div>
+
+    <script>
+        // 添加一个新函数用于处理包含中文的图片路径
+        function encodeImagePath(path) {
+            // 将路径中的每个部分进行编码，但保持分隔符不变
+            return path.split('/').map(part => encodeURIComponent(part)).join('/');
+        }
+
+        const folderSelect = document.getElementById('folder-select');
+        const imageDisplay = document.getElementById('image-display');
+        
+        // 页面加载时获取文件夹列表
+        window.addEventListener('DOMContentLoaded', function() {
+            loadFolderList();
+        });
+        
+        folderSelect.addEventListener('change', function() {
+            const folder = this.value;
+            if (folder) {
+                displayImages(folder);
+            } else {
+                imageDisplay.innerHTML = '<div class="no-images">请先选择文件夹</div>';
+            }
+        });
+        
+        // 加载文件夹列表
+        async function loadFolderList() {
+            try {
+                const response = await fetch('data/newimages2.json');
+                if (!response.ok) {
+                    throw new Error('data/newimages2.json 网络响应错误');
+                }
+                const imagesData = await response.json();
+                
+                // 清空现有选项
+                folderSelect.innerHTML = '<option value="">请选择...</option>';
+                
+                // 提取所有文件夹名称
+                const folders = new Set();
+                imagesData.forEach(imagePath => {
+                    const parts = imagePath.split('/');
+                    if (parts.length > 1) {
+                        folders.add(parts[1]); // 第二个部分是文件夹名
+                    }
+                });
+                
+                // 添加文件夹选项
+                folders.forEach(folder => {
+                    const option = document.createElement('option');
+                    option.value = folder;
+                    option.textContent = folder;
+                    folderSelect.appendChild(option);
+                });
+                
+                if (folders.size === 0) {
+                    imageDisplay.innerHTML = '<div class="no-images">未找到文件夹</div>';
+                }
+                
+            } catch (error) {
+                console.error('加载文件夹列表出错:', error);
+                imageDisplay.innerHTML = '<div class="no-images">加载文件夹列表失败</div>';
+            }
+        }
+        
+        // 显示特定文件夹中的图片
+        async function displayImages(folder) {
+            imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
+            
+            try {
+                const response = await fetch('data/newimages2.json');
+                if (!response.ok) {
+                    throw new Error('data/newimages2.json 网络响应错误');
+                }
+                const imagesData = await response.json();
+                
+                // 筛选指定文件夹中的图片
+                const filteredImages = imagesData.filter(imagePath => {
+                    const parts = imagePath.split('/');
+                    return parts.length > 1 && parts[1] === folder;
+                });
+                
+                if (filteredImages.length === 0) {
+                    imageDisplay.innerHTML = '<div class="no-images">该文件夹中暂无图片</div>';
+                    return;
+                }
+                
+                renderImages(filteredImages);
+                
+            } catch (error) {
+                console.error('加载图片出错:', error);
+                imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
+            }
+        }
+        
+        // 渲染图片列表
+        function renderImages(images) {
+            let html = '<div class="image-container">';
+            images.forEach(imagePath => {
+                // 对整个路径进行编码以支持中文
+                const encodedImagePath = encodeImagePath(imagePath);
+                const fileName = imagePath.split('/').pop();
+                const displayName = fileName;
+                
+                // 对文件名进行编码用于下载
+                const encodedFileName = encodeURIComponent(fileName);
+                
+                html += `
+                    <div class="image-item">
+                        <img src="${encodedImagePath}" alt="${displayName}" 
+                             data-url="${encodedImagePath}"
+                             data-filename="${encodedFileName}"
+                             onload="this.parentNode.classList.add('loaded')">
+                        <div class="image-name">${displayName}</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            imageDisplay.innerHTML = html;
+            
+            // 为所有图片添加触摸事件
+            document.querySelectorAll('.image-item img').forEach(img => {
+                new ImageTouchHandler(img);
+            });
+        }
+        
+        // 图片触摸处理类
+        class ImageTouchHandler {
+            constructor(element) {
+                this.element = element;
+                this.touchStartTime = 0;
+                this.touchTimer = null;
+                this.touchHandled = false;
+                
+                this.init();
+            }
+            
+            init() {
+                // 添加触摸事件监听器
+                this.element.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
+                this.element.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false });
+                this.element.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
+                this.element.addEventListener('contextmenu', (e) => this.handleContextMenu(e));
+            }
+            
+            handleTouchStart(event) {
+                this.touchStartTime = Date.now();
+                this.touchHandled = false;
+                clearTimeout(this.touchTimer);
+                
+                // 长按800ms后触发下载
+                this.touchTimer = setTimeout(() => {
+                    if (!this.touchHandled) {
+                        this.downloadImage();
+                        this.touchHandled = true;
+                    }
+                }, 800);
+                
+                // 阻止默认行为和事件冒泡
+                // 注意：不要完全阻止，否则可能影响长按菜单
+                // event.preventDefault();
+                // event.stopPropagation();
+            }
+            
+            handleTouchMove(event) {
+                // 如果用户移动手指，取消长按下载
+                clearTimeout(this.touchTimer);
+                this.touchHandled = true;
+            }
+            
+            handleTouchEnd(event) {
+                // 如果用户提前结束触摸，取消长按下载
+                clearTimeout(this.touchTimer);
+                this.touchHandled = true;
+            }
+            
+            handleContextMenu(event) {
+                // 右键菜单触发下载
+                event.preventDefault();
+                this.downloadImage();
+            }
+            
+            downloadImage() {
+                const url = this.element.dataset.url;
+                const filename = decodeURIComponent(this.element.dataset.filename);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+        
+        // 为了兼容性，也保留全局函数
+        function downloadImage(event, url, filename) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
