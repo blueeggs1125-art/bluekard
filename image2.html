@@ -170,9 +170,17 @@
         <a href="index.html" class="nav-link">返回素材库</a>
         
         <div class="selector-group">
-            <label for="folder-select">选择文件夹:</label>
+            <label for="folder-select">选种类:</label>
             <select id="folder-select">
                 <option value="">请选择...</option>
+            </select>
+        </div>
+        
+        <div class="selector-group" id="subfolder-group" style="display: none;">
+            <label for="subfolder-select">选子项目:</label>
+            <select id="subfolder-select">
+                <option value="">请选择...</option>
+                <option value="__direct__">直接图片</option>
             </select>
         </div>
         
@@ -182,13 +190,13 @@
     </div>
 
     <script>
-        // 添加一个新函数用于处理包含中文的图片路径
         function encodeImagePath(path) {
-            // 将路径中的每个部分进行编码，但保持分隔符不变
             return path.split('/').map(part => encodeURIComponent(part)).join('/');
         }
 
         const folderSelect = document.getElementById('folder-select');
+        const subfolderGroup = document.getElementById('subfolder-group');
+        const subfolderSelect = document.getElementById('subfolder-select');
         const imageDisplay = document.getElementById('image-display');
         
         // 页面加载时获取文件夹列表
@@ -199,9 +207,24 @@
         folderSelect.addEventListener('change', function() {
             const folder = this.value;
             if (folder) {
-                displayImages(folder);
+                handleFolderSelection(folder);
             } else {
-                imageDisplay.innerHTML = '<div class="no-images">请先选择文件夹</div>';
+                subfolderGroup.style.display = 'none';
+                imageDisplay.innerHTML = '<div class="no-images">请先选择主文件夹</div>';
+            }
+        });
+        
+        subfolderSelect.addEventListener('change', function() {
+            const folder = folderSelect.value;
+            const subfolder = this.value;
+            if (folder) {
+                if (subfolder === '__direct__') {
+                    displayDirectImages(folder);
+                } else {
+                    displayImages(folder, subfolder);
+                }
+            } else {
+                imageDisplay.innerHTML = '<div class="no-images">请选择子文件夹</div>';
             }
         });
         
@@ -217,12 +240,12 @@
                 // 清空现有选项
                 folderSelect.innerHTML = '<option value="">请选择...</option>';
                 
-                // 提取所有文件夹名称
+                // 提取所有主文件夹名称
                 const folders = new Set();
                 imagesData.forEach(imagePath => {
                     const parts = imagePath.split('/');
                     if (parts.length > 1) {
-                        folders.add(parts[1]); // 第二个部分是文件夹名
+                        folders.add(parts[1]); // 第二个部分是主文件夹名
                     }
                 });
                 
@@ -235,7 +258,7 @@
                 });
                 
                 if (folders.size === 0) {
-                    imageDisplay.innerHTML = '<div class="no-images">未找到文件夹</div>';
+                    imageDisplay.innerHTML = '<div class="no-images">未找到主文件夹</div>';
                 }
                 
             } catch (error) {
@@ -244,8 +267,112 @@
             }
         }
         
-        // 显示特定文件夹中的图片
-        async function displayImages(folder) {
+        // 处理文件夹选择
+        function handleFolderSelection(folder) {
+            fetch('data/newimages2.json')
+                .then(response => response.json())
+                .then(imagesData => {
+                    // 获取该文件夹下的所有路径
+                    const folderPaths = imagesData.filter(imagePath => {
+                        const parts = imagePath.split('/');
+                        return parts.length > 1 && parts[1] === folder;
+                    });
+                    
+                    // 分析文件夹结构
+                    const subfolders = new Set();
+                    const directImages = [];
+                    
+                    folderPaths.forEach(imagePath => {
+                        const parts = imagePath.split('/');
+                        if (parts.length === 3) {
+                            // 直接在主文件夹下的图片
+                            directImages.push(imagePath);
+                        } else if (parts.length > 3) {
+                            // 子文件夹
+                            subfolders.add(parts[2]);
+                        }
+                    });
+                    
+                    // 根据结构决定显示方式
+                    if (subfolders.size > 0) {
+                        // 有子文件夹，显示子文件夹下拉框
+                        subfolderGroup.style.display = 'block';
+                        updateSubfolderOptions(subfolders, directImages.length > 0);
+                        
+                        // 如果同时有直接图片和子文件夹，先显示直接图片
+                        if (directImages.length > 0) {
+                            renderImages(directImages);
+                        } else {
+                            imageDisplay.innerHTML = '<div class="no-images">请选择子文件夹</div>';
+                        }
+                    } else if (directImages.length > 0) {
+                        // 没有子文件夹，直接显示图片
+                        subfolderGroup.style.display = 'none';
+                        renderImages(directImages);
+                    } else {
+                        // 没有内容
+                        subfolderGroup.style.display = 'none';
+                        imageDisplay.innerHTML = '<div class="no-images">该文件夹中暂无图片</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('处理文件夹选择出错:', error);
+                    imageDisplay.innerHTML = '<div class="no-images">加载内容失败</div>';
+                });
+        }
+        
+        // 更新子文件夹选项
+        function updateSubfolderOptions(subfolders, hasDirectImages) {
+            subfolderSelect.innerHTML = '<option value="">请选择...</option>';
+            
+            // 如果有直接图片，添加"直接图片"选项
+            if (hasDirectImages) {
+                const directOption = document.createElement('option');
+                directOption.value = '__direct__';
+                directOption.textContent = '直接图片';
+                subfolderSelect.appendChild(directOption);
+            }
+            
+            subfolders.forEach(subfolder => {
+                const option = document.createElement('option');
+                option.value = subfolder;
+                option.textContent = subfolder;
+                subfolderSelect.appendChild(option);
+            });
+        }
+        
+        // 显示主文件夹中的直接图片
+        async function displayDirectImages(folder) {
+            imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
+            
+            try {
+                const response = await fetch('data/newimages2.json');
+                if (!response.ok) {
+                    throw new Error('data/newimages2.json 网络响应错误');
+                }
+                const imagesData = await response.json();
+                
+                // 筛选主文件夹中的直接图片
+                const filteredImages = imagesData.filter(imagePath => {
+                    const parts = imagePath.split('/');
+                    return parts.length === 3 && parts[1] === folder;
+                });
+                
+                if (filteredImages.length === 0) {
+                    imageDisplay.innerHTML = '<div class="no-images">该文件夹中暂无直接图片</div>';
+                    return;
+                }
+                
+                renderImages(filteredImages);
+                
+            } catch (error) {
+                console.error('加载图片出错:', error);
+                imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
+            }
+        }
+        
+        // 显示特定子文件夹中的图片
+        async function displayImages(folder, subfolder) {
             imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
             
             try {
@@ -258,7 +385,7 @@
                 // 筛选指定文件夹中的图片
                 const filteredImages = imagesData.filter(imagePath => {
                     const parts = imagePath.split('/');
-                    return parts.length > 1 && parts[1] === folder;
+                    return parts.length > 2 && parts[1] === folder && parts[2] === subfolder;
                 });
                 
                 if (filteredImages.length === 0) {
@@ -373,19 +500,6 @@
                 link.click();
                 document.body.removeChild(link);
             }
-        }
-        
-        // 为了兼容性，也保留全局函数
-        function downloadImage(event, url, filename) {
-            event.preventDefault();
-            event.stopPropagation();
-            
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
     </script>
 </body>

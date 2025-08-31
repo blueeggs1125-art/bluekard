@@ -2,9 +2,19 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>制作库 - KARDS素材</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="icon/16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icon/32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="icon/48x48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="icon/64x64.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="icon/128x128.png">
+    <link rel="icon" type="image/png" sizes="256x256" href="icon/256x256.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon/512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon/180x180.png">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>开车动画</title>
     <style>
         * {
             margin: 0;
@@ -30,6 +40,104 @@
             font-size: 24px;
         }
         
+        .selector-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: white;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .video-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .video-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            background-color: white;
+            aspect-ratio: 16/9;
+        }
+        
+.video-item video {
+    width: 100%;
+    height: auto;
+    object-fit: contain; 
+}
+
+        
+        .video-controls {
+            position: absolute;
+            bottom: 25px;
+            left: 0;
+            right: 0;
+            background-color: rgba(0,0,0,0.7);
+            padding: 5px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .video-controls button {
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .video-item .video-name {
+            padding: 5px;
+            font-size: 11px;
+            text-align: center;
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .no-videos {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-style: italic;
+            grid-column: 1 / -1;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+        
         .nav-link {
             display: block;
             text-align: center;
@@ -43,1406 +151,209 @@
             text-decoration: underline;
         }
         
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        @media (min-width: 768px) {
-            .main-content {
-                flex-direction: row;
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 5px;
+            }
+            
+            .video-container {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 8px;
+            }
+            
+            h1 {
+                font-size: 20px;
             }
         }
         
-        .sidebar {
-            background: white;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            flex: 1;
-            max-width: 300px;
-        }
+@media (max-width: 480px) {
+    .video-container {
+        grid-template-columns: 1fr; 
+        gap: 10px;
+    }
+    .video-item {
+        aspect-ratio: 16/9;
+    }
+    .video-item .video-name {
+        position: relative; /* 不再绝对定位 */
+        font-size: 12px;
+        padding: 5px 0;
+        background: none;
+        color: #333;
+    }
+    .video-controls {
+        position: relative; /* 不再绝对定位 */
+        bottom: auto;
+        background: none;
+        justify-content: flex-start;
+        padding: 5px 0;
+    }
+    .video-controls button {
+        width: 30px;
+        height: 30px;
+    }
+}
+
         
-        .canvas-container {
-            flex: 2;
-            background: white;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .sidebar-title, .canvas-title {
-            font-size: 18px;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            color: #333;
-        }
-        
-        .library-images {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 10px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        
-        .library-item {
-            border-radius: 4px;
-            overflow: hidden;
-            aspect-ratio: 2/3;
-            cursor: grab;
-            position: relative;
-        }
-        
-        .library-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        
-        .library-item .image-name {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            font-size: 10px;
-            padding: 2px;
-            text-align: center;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        
-        .empty-library {
-            text-align: center;
-            padding: 20px;
-            color: #999;
-            font-style: italic;
-        }
-        
-        #canvas {
-            background: #eee;
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-            min-height: 300px;
-            border: 1px solid #ddd;
-            margin-bottom: 15px;
-            touch-action: none;
-        }
-        
-        .canvas-image {
-            position: absolute;
-            cursor: move;
-            -webkit-user-drag: none;
-            user-drag: none;
-        }
-        
-        .canvas-image.selected {
-            outline: 2px dashed #1e90ff;
-        }
-        
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            min-width: 150px;
-        }
-        
-        label {
-            font-size: 14px;
-            margin-bottom: 5px;
-            color: #555;
-        }
-        
-        input[type="range"] {
-            width: 100%;
-        }
-        
-        .buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        button {
-            padding: 10px 15px;
-            background: #1e90ff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            flex: 1;
-            min-width: 100px;
-        }
-        
-        button:hover {
-            background: #0077ff;
-        }
-        
-        button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        
-        .tool-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .tool-button {
-            padding: 8px 12px;
-            background: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        
-        .tool-button.active {
-            background: #1e90ff;
-            color: white;
-        }
-        
-        .canvas-size-controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .size-input {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
-        
-        .size-input input {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        
-        /* 裁剪遮罩 */
-        .crop-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            pointer-events: none;
-            z-index: 100;
-        }
-        
-        .crop-selection {
-            position: absolute;
-            border: 2px dashed white;
-            background: rgba(255, 255, 255, 0.2);
-            pointer-events: none;
-            z-index: 101;
-        }
-        
-        .crop-handle {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border: 2px solid #333;
-            border-radius: 50%;
-            pointer-events: all;
-            z-index: 102;
-            transform: translate(-50%, -50%);
-        }
-        
-        .crop-handle-nw { cursor: nw-resize; }
-        .crop-handle-ne { cursor: ne-resize; }
-        .crop-handle-sw { cursor: sw-resize; }
-        .crop-handle-se { cursor: se-resize; }
-        
-        .crop-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .crop-button {
-            padding: 8px 12px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        
-        .crop-cancel {
-            background: #f44336;
-        }
-        
-        /* 长按提示 */
-        .long-press-hint {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            z-index: 1000;
-            display: none;
-        }
-        
-        /* 缩放控制 */
-        .scale-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .scale-controls input[type="range"] {
-            flex: 1;
-        }
-        
-        .scale-value {
-            min-width: 50px;
-            text-align: center;
+        @media (max-width: 320px) {
+            .video-item .video-name {
+                font-size: 9px;
+                padding: 2px;
+            }
         }
     </style>
 </head>
 <body>
+    <a href="https://space.bilibili.com/596035099" target="_blank" style="display: block; text-align: center; margin-top: 20px; color: #1e90ff; text-decoration: none;">blueeggs</a>
     <div class="container">
-        <h1>制作库</h1>
+        <h1>开车动画</h1>
         
-        <a href="index.html" class="nav-link">返回素材库</a>
+        <!-- 添加跳转到图片页面的链接 -->
+        <a href="index.html" class="nav-link">返回主界面</a>
         
-        <div class="main-content">
-            <div class="sidebar">
-                <h2 class="sidebar-title">素材库</h2>
-                <div class="library-images" id="library-images">
-                    <!-- 图片将通过JavaScript加载 -->
-                </div>
-            </div>
-            
-            <div class="canvas-container">
-                <h2 class="canvas-title">编辑画布</h2>
-                
-                <div class="canvas-size-controls">
-                    <div class="size-input">
-                        <label for="canvas-width">宽度 (px)</label>
-                        <input type="number" id="canvas-width" min="200" max="2000" value="800">
-                    </div>
-                    <div class="size-input">
-                        <label for="canvas-height">高度 (px)</label>
-                        <input type="number" id="canvas-height" min="200" max="2000" value="600">
-                    </div>
-                    <button id="apply-size" style="align-self: flex-end;">应用</button>
-                </div>
-                
-                <div class="tool-buttons">
-                    <div class="tool-button active" data-tool="move">移动</div>
-                    <div class="tool-button" data-tool="crop">裁剪</div>
-                    <div class="tool-button" data-tool="erase">橡皮擦</div>
-                </div>
-                
-                <div class="scale-controls">
-                    <label for="scale-slider">图片缩放:</label>
-                    <input type="range" id="scale-slider" min="10" max="200" value="100">
-                    <span class="scale-value" id="scale-value">100%</span>
-                </div>
-                
-                <div id="canvas"></div>
-                
-                <div class="controls">
-                    <div class="control-group">
-                        <label for="brush-size">橡皮擦大小: <span id="brush-size-value">20</span>px</label>
-                        <input type="range" id="brush-size" min="5" max="100" value="20">
-                    </div>
-                </div>
-                
-                <div class="crop-buttons" id="crop-buttons" style="display: none;">
-                    <button class="crop-button" id="apply-crop">应用裁剪</button>
-                    <button class="crop-button crop-cancel" id="cancel-crop">取消</button>
-                </div>
-                
-                <div class="buttons">
-                    <button id="download-btn">保存并下载</button>
-                    <button id="clear-btn">清空画布</button>
-                </div>
-            </div>
+        <div id="video-display">
+            <div class="no-videos">加载中...</div>
         </div>
-    </div>
-    
-    <div class="long-press-hint" id="long-press-hint">
-        长按图片可拖动
     </div>
 
     <script>
-        // 全局变量
-        let creationLibrary = JSON.parse(localStorage.getItem('creationLibrary') || '[]');
-        let canvasImages = [];
-        let selectedImage = null;
-        let currentTool = 'move';
-        let isDragging = false;
-        let dragOffset = { x: 0, y: 0 };
-        let isDrawing = false;
-        let brushSize = 20;
-        let cropStart = null;
-        let cropRect = null;
-        let cropOverlay = null;
-        let cropSelection = null;
-        let isCropping = false;
-        let cropHandles = [];
-        let isResizing = false;
-        let resizeHandle = null;
-        let originalCropRect = null;
-        let touchStartTime = 0;
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let isLongPress = false;
-        let longPressTimer = null;
-        let initialImageWidth = 0;
-        let scaleValue = 100;
-        
-        // DOM 元素
-        const libraryImagesEl = document.getElementById('library-images');
-        const canvasEl = document.getElementById('canvas');
-        const brushSizeSlider = document.getElementById('brush-size');
-        const brushSizeValue = document.getElementById('brush-size-value');
-        const downloadBtn = document.getElementById('download-btn');
-        const clearBtn = document.getElementById('clear-btn');
-        const toolButtons = document.querySelectorAll('.tool-button');
-        const canvasWidthInput = document.getElementById('canvas-width');
-        const canvasHeightInput = document.getElementById('canvas-height');
-        const applySizeBtn = document.getElementById('apply-size');
-        const cropButtons = document.getElementById('crop-buttons');
-        const applyCropBtn = document.getElementById('apply-crop');
-        const cancelCropBtn = document.getElementById('cancel-crop');
-        const longPressHint = document.getElementById('long-press-hint');
-        const scaleSlider = document.getElementById('scale-slider');
-        const scaleValueEl = document.getElementById('scale-value');
-        
-        // 初始化
-        function init() {
-            loadLibraryImages();
-            setupEventListeners();
-            updateBrushSizeDisplay();
-        }
-        
-        // 加载制作库图片
-        function loadLibraryImages() {
-            libraryImagesEl.innerHTML = '';
-            
-            if (creationLibrary.length === 0) {
-                libraryImagesEl.innerHTML = '<div class="empty-library">暂无图片，请先从素材库导入</div>';
-                return;
+        class VideoTouchHandler {
+            constructor(element) {
+                this.element = element;
+                this.touchStartTime = 0;
+                this.touchTimer = null;
+                this.touchHandled = false;
+                
+                this.init();
             }
             
-            creationLibrary.forEach((item, index) => {
-                const imageItem = document.createElement('div');
-                imageItem.className = 'library-item';
-                imageItem.draggable = true;
-                imageItem.innerHTML = `
-                    <img src="${item.url}" alt="${item.filename}" data-index="${index}">
-                    <div class="image-name">${item.filename}</div>
-                `;
+            init() {
+                // 添加触摸事件监听器
+                this.element.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
+                this.element.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false });
+                this.element.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
+                this.element.addEventListener('contextmenu', (e) => this.handleContextMenu(e));
+            }
+            
+            handleTouchStart(event) {
+                this.touchStartTime = Date.now();
+                this.touchHandled = false;
+                clearTimeout(this.touchTimer);
                 
-                imageItem.addEventListener('dragstart', handleDragStart);
-                libraryImagesEl.appendChild(imageItem);
-            });
-        }
-        
-        // 设置事件监听器
-        function setupEventListeners() {
-            // 工具按钮
-            toolButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    toolButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    currentTool = button.dataset.tool;
-                    
-                    if (currentTool === 'crop') {
-                        enterCropMode();
-                    } else {
-                        exitCropMode();
+                // 长按800ms后触发下载
+                this.touchTimer = setTimeout(() => {
+                    if (!this.touchHandled) {
+                        this.downloadVideo();
+                        this.touchHandled = true;
                     }
-                });
-            });
+                }, 800);
+            }
             
-            // 画布事件
-            canvasEl.addEventListener('dragover', handleDragOver);
-            canvasEl.addEventListener('drop', handleDrop);
-            canvasEl.addEventListener('mousedown', handleCanvasMouseDown);
-            canvasEl.addEventListener('mousemove', handleCanvasMouseMove);
-            canvasEl.addEventListener('mouseup', handleCanvasMouseUp);
-            canvasEl.addEventListener('mouseleave', handleCanvasMouseUp);
+            handleTouchMove(event) {
+                clearTimeout(this.touchTimer);
+                this.touchHandled = true;
+            }
             
-            // 移动端触摸事件
-            canvasEl.addEventListener('touchstart', handleTouchStart);
-            canvasEl.addEventListener('touchmove', handleTouchMove);
-            canvasEl.addEventListener('touchend', handleTouchEnd);
+            handleTouchEnd(event) {
+                clearTimeout(this.touchTimer);
+                this.touchHandled = true;
+            }
             
-            // 橡皮擦大小控制
-            brushSizeSlider.addEventListener('input', () => {
-                brushSize = parseInt(brushSizeSlider.value);
-                updateBrushSizeDisplay();
-            });
+            handleContextMenu(event) {
+                event.preventDefault();
+                this.downloadVideo();
+            }
             
-            // 缩放控制
-            scaleSlider.addEventListener('input', handleScaleChange);
-            
-            // 按钮事件
-            downloadBtn.addEventListener('click', downloadCanvas);
-            clearBtn.addEventListener('click', clearCanvas);
-            
-            // 画布尺寸控制
-            applySizeBtn.addEventListener('click', updateCanvasSize);
-            
-            // 裁剪按钮事件
-            applyCropBtn.addEventListener('click', applyCrop);
-            cancelCropBtn.addEventListener('click', cancelCrop);
-        }
-        
-        // 处理缩放变化
-        function handleScaleChange() {
-            scaleValue = parseInt(scaleSlider.value);
-            scaleValueEl.textContent = scaleValue + '%';
-            
-            if (selectedImage) {
-                const newWidth = (initialImageWidth * scaleValue) / 100;
-                selectedImage.style.width = newWidth + 'px';
+            downloadVideo() {
+                const source = this.element.querySelector('source');
+                const url = source ? source.src : this.element.src;
+                const filename = this.element.dataset.filename || 'video.mp4';
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             }
         }
         
-        // 更新画布尺寸
-        function updateCanvasSize() {
-            const width = parseInt(canvasWidthInput.value) || 800;
-            const height = parseInt(canvasHeightInput.value) || 600;
-            
-            canvasEl.style.width = width + 'px';
-            canvasEl.style.height = height + 'px';
-        }
-        
-        // 更新橡皮擦大小显示
-        function updateBrushSizeDisplay() {
-            brushSizeValue.textContent = brushSize;
-        }
-        
-        // 处理拖拽开始
-        function handleDragStart(e) {
-            const img = e.target.querySelector('img') || e.target;
-            e.dataTransfer.setData('text/plain', img.dataset.index);
-        }
-        
-        // 处理拖拽悬停
-        function handleDragOver(e) {
-            e.preventDefault();
-        }
-        
-        // 处理拖拽放置
-        function handleDrop(e) {
-            e.preventDefault();
-            const index = e.dataTransfer.getData('text/plain');
-            const item = creationLibrary[index];
-            
-            if (item) {
-                addImageToCanvas(item.url, item.filename);
+        function togglePlay(video) {
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
             }
         }
         
-        // 添加图片到画布
-        function addImageToCanvas(url, filename) {
-            const img = document.createElement('img');
-            img.src = url;
-            img.className = 'canvas-image';
-            img.dataset.filename = filename;
-            img.draggable = false;
-            
-            img.onload = function() {
-                // 设置初始位置为画布中心
-                const canvasRect = canvasEl.getBoundingClientRect();
-                const imgWidth = Math.min(img.naturalWidth, 150);
-                const imgHeight = Math.min(img.naturalHeight, 150 * (img.naturalHeight / img.naturalWidth));
+        function initVideoControls() {
+            document.querySelectorAll('.video-item').forEach(item => {
+                const video = item.querySelector('video');
+                const playBtn = item.querySelector('.play-btn');
                 
-                img.style.width = imgWidth + 'px';
-                img.style.left = (canvasRect.width / 2 - imgWidth / 2) + 'px';
-                img.style.top = (canvasRect.height / 2 - imgHeight / 2) + 'px';
-                
-                canvasEl.appendChild(img);
-                canvasImages.push(img);
-                
-                // 添加触摸事件
-                img.addEventListener('touchstart', handleImageTouchStart);
-                img.addEventListener('touchmove', handleImageTouchMove);
-                img.addEventListener('touchend', handleImageTouchEnd);
-            };
-        }
-        
-        // 处理图片触摸开始
-        function handleImageTouchStart(e) {
-            if (currentTool !== 'move') return;
-            
-            const touch = e.touches[0];
-            touchStartTime = Date.now();
-            touchStartX = touch.clientX;
-            touchStartY = touch.clientY;
-            isLongPress = false;
-            
-            // 长按定时器
-            longPressTimer = setTimeout(() => {
-                if (!isLongPress) {
-                    isLongPress = true;
-                    selectImage(e);
-                    startDrag(touch.clientX, touch.clientY);
+                if (video && playBtn) {
+                    new VideoTouchHandler(video);
                     
-                    // 显示长按提示
-                    longPressHint.style.display = 'block';
-                    setTimeout(() => {
-                        longPressHint.style.display = 'none';
-                    }, 1000);
+                    playBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        togglePlay(video);
+                    });
+                    
+                    // 点击视频任意位置也可以播放/暂停
+                    item.addEventListener('click', () => togglePlay(video));
                 }
-            }, 500);
-            
-            e.preventDefault();
+            });
         }
         
-        // 处理图片触摸移动
-        function handleImageTouchMove(e) {
-            if (currentTool !== 'move') return;
+        function renderVideos(videos) {
+            let html = '<div class="video-container">';
+            videos.forEach(video => {
+                const videoPath = typeof video === 'object' ? video.path : video;
+                const fileName = videoPath.split('/').pop();
+                const displayName = fileName.replace('.mp4', '');
+                // 正确处理包含中文的路径
+                const encodedVideoPath = videoPath.split('/').map(part => encodeURIComponent(part)).join('/');
+                
+                html += `
+                    <div class="video-item">
+                        <video data-filename="${fileName}">
+                            <source src="${encodedVideoPath}" type="video/mp4">
+                            您的浏览器不支持视频播放。
+                        </video>
+                        <div class="video-controls">
+                            <button class="play-btn">▶</button>
+                        </div>
+                        <div class="video-name">${displayName}</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
             
-            const touch = e.touches[0];
+            document.getElementById('video-display').innerHTML = html;
             
-            // 检查是否移动超过阈值，取消长按
-            if (!isLongPress && (Math.abs(touch.clientX - touchStartX) > 10 || Math.abs(touch.clientY - touchStartY) > 10)) {
-                clearTimeout(longPressTimer);
-                return;
-            }
-            
-            if (isLongPress && isDragging && selectedImage) {
-                moveImage(touch.clientX, touch.clientY);
-            }
-            
-            e.preventDefault();
+            // 确保DOM更新后再初始化控件
+            setTimeout(initVideoControls, 100);
         }
         
-        // 处理图片触摸结束
-        function handleImageTouchEnd(e) {
-            if (currentTool !== 'move') return;
-            
-            clearTimeout(longPressTimer);
-            
-            if (isLongPress) {
-                isDragging = false;
-            }
-            
-            e.preventDefault();
-        }
-        
-        // 选择图片
-        function selectImage(e) {
-            // 取消之前选中的图片
-            canvasImages.forEach(img => img.classList.remove('selected'));
-            
-            // 选中当前图片
-            selectedImage = e.target || e.currentTarget;
-            selectedImage.classList.add('selected');
-            
-            // 保存初始宽度用于缩放
-            initialImageWidth = selectedImage.offsetWidth;
-            
-            // 重置缩放滑块
-            scaleValue = 100;
-            scaleSlider.value = 100;
-            scaleValueEl.textContent = '100%';
-            
-            // 阻止事件冒泡
-            e.stopPropagation();
-        }
-        
-        // 进入裁剪模式
-        function enterCropMode() {
-            if (!selectedImage) {
-                alert('请先选择一张图片进行裁剪');
-                // 重置工具按钮为移动模式
-                toolButtons.forEach(btn => btn.classList.remove('active'));
-                document.querySelector('[data-tool="move"]').classList.add('active');
-                currentTool = 'move';
-                return;
-            }
-            
-            isCropping = true;
-            cropButtons.style.display = 'flex';
-            
-            // 创建裁剪遮罩
-            createCropOverlay();
-            
-            // 创建初始裁剪区域（图片的50%中心区域）
-            const imgRect = selectedImage.getBoundingClientRect();
-            const canvasRect = canvasEl.getBoundingClientRect();
-            
-            const imgLeft = imgRect.left - canvasRect.left;
-            const imgTop = imgRect.top - canvasRect.top;
-            
-            cropRect = {
-                x: imgLeft + imgRect.width * 0.25,
-                y: imgTop + imgRect.height * 0.25,
-                width: imgRect.width * 0.5,
-                height: imgRect.height * 0.5
-            };
-            
-            createCropSelection();
-        }
-        
-        // 退出裁剪模式
-        function exitCropMode() {
-            isCropping = false;
-            cropButtons.style.display = 'none';
-            
-            if (cropOverlay) {
-                cropOverlay.remove();
-                cropOverlay = null;
-            }
-            
-            if (cropSelection) {
-                cropSelection.remove();
-                cropSelection = null;
-            }
-            
-            cropHandles.forEach(handle => handle.remove());
-            cropHandles = [];
-            cropRect = null;
-        }
-        
-        // 创建裁剪遮罩
-        function createCropOverlay() {
-            if (cropOverlay) return;
-            
-            cropOverlay = document.createElement('div');
-            cropOverlay.className = 'crop-overlay';
-            canvasEl.appendChild(cropOverlay);
-        }
-        
-        // 创建裁剪选择区域
-        function createCropSelection() {
-            if (cropSelection) {
-                cropSelection.remove();
-            }
-            
-            cropHandles.forEach(handle => handle.remove());
-            cropHandles = [];
-            
-            cropSelection = document.createElement('div');
-            cropSelection.className = 'crop-selection';
-            cropSelection.style.left = cropRect.x + 'px';
-            cropSelection.style.top = cropRect.y + 'px';
-            cropSelection.style.width = cropRect.width + 'px';
-            cropSelection.style.height = cropRect.height + 'px';
-            canvasEl.appendChild(cropSelection);
-            
-            // 创建调整手柄
-            createCropHandles();
-        }
-        
-        // 创建裁剪手柄
-        function createCropHandles() {
-            const positions = [
-                { pos: 'nw', x: cropRect.x, y: cropRect.y },
-                { pos: 'ne', x: cropRect.x + cropRect.width, y: cropRect.y },
-                { pos: 'sw', x: cropRect.x, y: cropRect.y + cropRect.height },
-                { pos: 'se', x: cropRect.x + cropRect.width, y: cropRect.y + cropRect.height }
+        function loadVideos() {
+            const videos = [
+                { path: 'video/冬季战争2021_.mp4' },
+                { path: 'video/冬季战争2021_noLights.mp4' },
+                { path: 'video/海战.mp4' },
+                { path: 'video/军团背景.mp4' },
+                { path: 'video/突破.mp4' },
+                { path: 'video/突破_ios.mp4' },
+                { path: 'video/血与铁2024.mp4' },
+                { path: 'video/战区2022.mp4' },
+                { path: 'video/战区2022_2.mp4' },
             ];
             
-            positions.forEach(pos => {
-                const handle = document.createElement('div');
-                handle.className = `crop-handle crop-handle-${pos.pos}`;
-                handle.dataset.position = pos.pos;
-                handle.addEventListener('touchstart', handleHandleTouchStart);
-                handle.addEventListener('mousedown', handleHandleMouseDown);
-                canvasEl.appendChild(handle);
-                cropHandles.push(handle);
-            });
-            
-            updateCropHandlesPosition();
+            renderVideos(videos);
         }
         
-        // 处理手柄触摸开始
-        function handleHandleTouchStart(e) {
-            e.stopPropagation();
-            isResizing = true;
-            resizeHandle = e.target;
-            originalCropRect = { ...cropRect };
-            
-            const touch = e.touches[0];
-            const canvasRect = canvasEl.getBoundingClientRect();
-            const startX = touch.clientX - canvasRect.left;
-            const startY = touch.clientY - canvasRect.top;
-            
-            // 保存起始位置
-            resizeHandle.startX = startX;
-            resizeHandle.startY = startY;
-            
-            e.preventDefault();
-        }
-        
-        // 处理手柄鼠标按下
-        function handleHandleMouseDown(e) {
-            e.stopPropagation();
-            isResizing = true;
-            resizeHandle = e.target;
-            originalCropRect = { ...cropRect };
-            
-            const canvasRect = canvasEl.getBoundingClientRect();
-            const startX = e.clientX - canvasRect.left;
-            const startY = e.clientY - canvasRect.top;
-            
-            // 保存起始位置
-            resizeHandle.startX = startX;
-            resizeHandle.startY = startY;
-        }
-        
-        // 更新裁剪手柄位置
-        function updateCropHandlesPosition() {
-            if (cropHandles.length < 4) return;
-            
-            cropHandles[0].style.left = cropRect.x + 'px';           // nw
-            cropHandles[0].style.top = cropRect.y + 'px';
-            
-            cropHandles[1].style.left = (cropRect.x + cropRect.width) + 'px';  // ne
-            cropHandles[1].style.top = cropRect.y + 'px';
-            
-            cropHandles[2].style.left = cropRect.x + 'px';           // sw
-            cropHandles[2].style.top = (cropRect.y + cropRect.height) + 'px';
-            
-            cropHandles[3].style.left = (cropRect.x + cropRect.width) + 'px';  // se
-            cropHandles[3].style.top = (cropRect.y + cropRect.height) + 'px';
-        }
-        
-        // 应用裁剪
-        function applyCrop() {
-            if (!selectedImage || !cropRect) return;
-            
-            // 创建临时canvas进行裁剪
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            // 计算裁剪区域相对于图片的坐标
-            const imgRect = selectedImage.getBoundingClientRect();
-            const canvasRect = canvasEl.getBoundingClientRect();
-            
-            const cropX = cropRect.x - (imgRect.left - canvasRect.left);
-            const cropY = cropRect.y - (imgRect.top - canvasRect.top);
-            const cropWidth = cropRect.width;
-            const cropHeight = cropRect.height;
-            
-            // 设置canvas尺寸为裁剪区域尺寸
-            canvas.width = cropWidth;
-            canvas.height = cropHeight;
-            
-            // 绘制裁剪区域
-            ctx.drawImage(
-                selectedImage,
-                cropX * (selectedImage.naturalWidth / imgRect.width),
-                cropY * (selectedImage.naturalHeight / imgRect.height),
-                cropWidth * (selectedImage.naturalWidth / imgRect.width),
-                cropHeight * (selectedImage.naturalHeight / imgRect.height),
-                0,
-                0,
-                cropWidth,
-                cropHeight
-            );
-            
-            // 更新图片源
-            selectedImage.src = canvas.toDataURL('image/png');
-            
-            // 重置图片位置和尺寸
-            selectedImage.style.width = cropWidth + 'px';
-            selectedImage.style.left = cropRect.x + 'px';
-            selectedImage.style.top = cropRect.y + 'px';
-            
-            // 更新初始宽度
-            initialImageWidth = cropWidth;
-            scaleSlider.value = 100;
-            scaleValue = 100;
-            scaleValueEl.textContent = '100%';
-            
-            // 退出裁剪模式
-            exitCropMode();
-            
-            // 重新选择工具为移动
-            toolButtons.forEach(btn => btn.classList.remove('active'));
-            document.querySelector('[data-tool="move"]').classList.add('active');
-            currentTool = 'move';
-        }
-        
-        // 取消裁剪
-        function cancelCrop() {
-            exitCropMode();
-            
-            // 重新选择工具为移动
-            toolButtons.forEach(btn => btn.classList.remove('active'));
-            document.querySelector('[data-tool="move"]').classList.add('active');
-            currentTool = 'move';
-        }
-        
-        // 处理画布鼠标按下
-        function handleCanvasMouseDown(e) {
-            if (e.target === canvasEl) {
-                // 取消选中图片
-                canvasImages.forEach(img => img.classList.remove('selected'));
-                selectedImage = null;
-                return;
-            }
-            
-            if (currentTool === 'move' && e.target.classList.contains('canvas-image')) {
-                selectImage(e);
-                startDrag(e.clientX, e.clientY);
-            } else if (currentTool === 'erase' && e.target.classList.contains('canvas-image')) {
-                selectImage(e);
-                startErasing(e);
-            } else if (isCropping && e.target === cropSelection) {
-                startMovingCrop(e);
-            } else if (isCropping && !cropHandles.includes(e.target) && e.target !== cropSelection) {
-                startCreatingCrop(e);
-            }
-        }
-        
-        // 开始移动裁剪区域
-        function startMovingCrop(e) {
-            if (!cropRect) return;
-            
-            isDragging = true;
-            const canvasRect = canvasEl.getBoundingClientRect();
-            dragOffset.x = e.clientX - canvasRect.left - cropRect.x;
-            dragOffset.y = e.clientY - canvasRect.top - cropRect.y;
-        }
-        
-        // 开始创建裁剪区域
-        function startCreatingCrop(e) {
-            const canvasRect = canvasEl.getBoundingClientRect();
-            cropStart = {
-                x: e.clientX - canvasRect.left,
-                y: e.clientY - canvasRect.top
-            };
-        }
-        
-        // 处理触摸开始
-        function handleTouchStart(e) {
-            const touch = e.touches[0];
-            
-            if (e.target === canvasEl) {
-                canvasImages.forEach(img => img.classList.remove('selected'));
-                selectedImage = null;
-                return;
-            }
-            
-            if (currentTool === 'move' && e.target.classList.contains('canvas-image')) {
-                selectImage(e);
-                startDrag(touch.clientX, touch.clientY);
-            } else if (currentTool === 'erase' && e.target.classList.contains('canvas-image')) {
-                selectImage(e);
-                startErasingFromTouch(touch);
-            } else if (isCropping && e.target === cropSelection) {
-                startMovingCropFromTouch(touch);
-            } else if (isCropping && !cropHandles.includes(e.target) && e.target !== cropSelection) {
-                startCreatingCropFromTouch(touch);
-            }
-            
-            e.preventDefault();
-        }
-        
-        // 从触摸开始移动裁剪区域
-        function startMovingCropFromTouch(touch) {
-            if (!cropRect) return;
-            
-            isDragging = true;
-            const canvasRect = canvasEl.getBoundingClientRect();
-            dragOffset.x = touch.clientX - canvasRect.left - cropRect.x;
-            dragOffset.y = touch.clientY - canvasRect.top - cropRect.y;
-        }
-        
-        // 从触摸开始创建裁剪区域
-        function startCreatingCropFromTouch(touch) {
-            const canvasRect = canvasEl.getBoundingClientRect();
-            cropStart = {
-                x: touch.clientX - canvasRect.left,
-                y: touch.clientY - canvasRect.top
-            };
-        }
-        
-        // 开始拖拽
-        function startDrag(clientX, clientY) {
-            if (!selectedImage) return;
-            
-            isDragging = true;
-            const rect = selectedImage.getBoundingClientRect();
-            dragOffset.x = clientX - rect.left;
-            dragOffset.y = clientY - rect.top;
-        }
-        
-        // 开始橡皮擦
-        function startErasing(e) {
-            if (!selectedImage) return;
-            
-            isDrawing = true;
-            const canvasRect = canvasEl.getBoundingClientRect();
-            const imgRect = selectedImage.getBoundingClientRect();
-            
-            // 计算相对于图片的坐标
-            const x = e.clientX - imgRect.left;
-            const y = e.clientY - imgRect.top;
-            
-            eraseAt(x, y);
-        }
-        
-        // 从触摸开始橡皮擦
-        function startErasingFromTouch(touch) {
-            if (!selectedImage) return;
-            
-            isDrawing = true;
-            const imgRect = selectedImage.getBoundingClientRect();
-            
-            // 计算相对于图片的坐标
-            const x = touch.clientX - imgRect.left;
-            const y = touch.clientY - imgRect.top;
-            
-            eraseAt(x, y);
-        }
-        
-        // 处理画布鼠标移动
-        function handleCanvasMouseMove(e) {
-            if (currentTool === 'move' && isDragging && selectedImage) {
-                moveImage(e.clientX, e.clientY);
-            } else if (currentTool === 'erase' && isDrawing && selectedImage) {
-                const imgRect = selectedImage.getBoundingClientRect();
-                const x = e.clientX - imgRect.left;
-                const y = e.clientY - imgRect.top;
-                eraseAt(x, y);
-            } else if (isCropping && isDragging && cropRect) {
-                moveCrop(e);
-            } else if (isCropping && cropStart) {
-                updateCropPreview(e);
-            } else if (isResizing && resizeHandle) {
-                resizeCrop(e);
-            }
-        }
-        
-        // 处理触摸移动
-        function handleTouchMove(e) {
-            const touch = e.touches[0];
-            const canvasRect = canvasEl.getBoundingClientRect();
-            
-            if (currentTool === 'move' && isDragging && selectedImage) {
-                moveImage(touch.clientX, touch.clientY);
-            } else if (currentTool === 'erase' && isDrawing && selectedImage) {
-                const imgRect = selectedImage.getBoundingClientRect();
-                const x = touch.clientX - imgRect.left;
-                const y = touch.clientY - imgRect.top;
-                eraseAt(x, y);
-            } else if (isCropping && isDragging && cropRect) {
-                const x = touch.clientX - canvasRect.left - dragOffset.x;
-                const y = touch.clientY - canvasRect.top - dragOffset.y;
-                
-                // 限制裁剪区域在图片内
-                const imgRect = selectedImage.getBoundingClientRect();
-                const canvasLeft = imgRect.left - canvasRect.left;
-                const canvasTop = imgRect.top - canvasRect.top;
-                
-                cropRect.x = Math.max(canvasLeft, Math.min(x, canvasLeft + imgRect.width - cropRect.width));
-                cropRect.y = Math.max(canvasTop, Math.min(y, canvasTop + imgRect.height - cropRect.height));
-                
-                cropSelection.style.left = cropRect.x + 'px';
-                cropSelection.style.top = cropRect.y + 'px';
-                updateCropHandlesPosition();
-            } else if (isCropping && cropStart) {
-                updateCropPreviewFromTouch(touch);
-            } else if (isResizing && resizeHandle) {
-                const mouseX = touch.clientX - canvasRect.left;
-                const mouseY = touch.clientY - canvasRect.top;
-                
-                const deltaX = mouseX - resizeHandle.startX;
-                const deltaY = mouseY - resizeHandle.startY;
-                
-                const imgRect = selectedImage.getBoundingClientRect();
-                const canvasLeft = imgRect.left - canvasRect.left;
-                const canvasTop = imgRect.top - canvasRect.top;
-                
-                switch (resizeHandle.dataset.position) {
-                    case 'nw':
-                        cropRect.x = Math.max(canvasLeft, originalCropRect.x + deltaX);
-                        cropRect.y = Math.max(canvasTop, originalCropRect.y + deltaY);
-                        cropRect.width = Math.max(20, originalCropRect.width - deltaX);
-                        cropRect.height = Math.max(20, originalCropRect.height - deltaY);
-                        break;
-                    case 'ne':
-                        cropRect.x = originalCropRect.x;
-                        cropRect.y = Math.max(canvasTop, originalCropRect.y + deltaY);
-                        cropRect.width = Math.max(20, originalCropRect.width + deltaX);
-                        cropRect.height = Math.max(20, originalCropRect.height - deltaY);
-                        break;
-                    case 'sw':
-                        cropRect.x = Math.max(canvasLeft, originalCropRect.x + deltaX);
-                        cropRect.y = originalCropRect.y;
-                        cropRect.width = Math.max(20, originalCropRect.width - deltaX);
-                        cropRect.height = Math.max(20, originalCropRect.height + deltaY);
-                        break;
-                    case 'se':
-                        cropRect.width = Math.max(20, originalCropRect.width + deltaX);
-                        cropRect.height = Math.max(20, originalCropRect.height + deltaY);
-                        break;
-                }
-                
-                // 确保裁剪区域不超过图片边界
-                if (cropRect.x + cropRect.width > canvasLeft + imgRect.width) {
-                    cropRect.width = canvasLeft + imgRect.width - cropRect.x;
-                }
-                
-                if (cropRect.y + cropRect.height > canvasTop + imgRect.height) {
-                    cropRect.height = canvasTop + imgRect.height - cropRect.y;
-                }
-                
-                cropSelection.style.left = cropRect.x + 'px';
-                cropSelection.style.top = cropRect.y + 'px';
-                cropSelection.style.width = cropRect.width + 'px';
-                cropSelection.style.height = cropRect.height + 'px';
-                updateCropHandlesPosition();
-            }
-            
-            e.preventDefault();
-        }
-        
-        // 移动裁剪区域
-        function moveCrop(e) {
-            if (!cropRect) return;
-            
-            const canvasRect = canvasEl.getBoundingClientRect();
-            const x = e.clientX - canvasRect.left - dragOffset.x;
-            const y = e.clientY - canvasRect.top - dragOffset.y;
-            
-            // 限制裁剪区域在图片内
-            const imgRect = selectedImage.getBoundingClientRect();
-            const canvasLeft = imgRect.left - canvasRect.left;
-            const canvasTop = imgRect.top - canvasRect.top;
-            
-            cropRect.x = Math.max(canvasLeft, Math.min(x, canvasLeft + imgRect.width - cropRect.width));
-            cropRect.y = Math.max(canvasTop, Math.min(y, canvasTop + imgRect.height - cropRect.height));
-            
-            cropSelection.style.left = cropRect.x + 'px';
-            cropSelection.style.top = cropRect.y + 'px';
-            updateCropHandlesPosition();
-        }
-        
-        // 调整裁剪区域大小
-        function resizeCrop(e) {
-            if (!resizeHandle || !originalCropRect) return;
-            
-            const canvasRect = canvasEl.getBoundingClientRect();
-            const mouseX = e.clientX - canvasRect.left;
-            const mouseY = e.clientY - canvasRect.top;
-            
-            const deltaX = mouseX - resizeHandle.startX;
-            const deltaY = mouseY - resizeHandle.startY;
-            
-            const imgRect = selectedImage.getBoundingClientRect();
-            const canvasLeft = imgRect.left - canvasRect.left;
-            const canvasTop = imgRect.top - canvasRect.top;
-            
-            switch (resizeHandle.dataset.position) {
-                case 'nw':
-                    cropRect.x = Math.max(canvasLeft, originalCropRect.x + deltaX);
-                    cropRect.y = Math.max(canvasTop, originalCropRect.y + deltaY);
-                    cropRect.width = Math.max(20, originalCropRect.width - deltaX);
-                    cropRect.height = Math.max(20, originalCropRect.height - deltaY);
-                    break;
-                case 'ne':
-                    cropRect.x = originalCropRect.x;
-                    cropRect.y = Math.max(canvasTop, originalCropRect.y + deltaY);
-                    cropRect.width = Math.max(20, originalCropRect.width + deltaX);
-                    cropRect.height = Math.max(20, originalCropRect.height - deltaY);
-                    break;
-                case 'sw':
-                    cropRect.x = Math.max(canvasLeft, originalCropRect.x + deltaX);
-                    cropRect.y = originalCropRect.y;
-                    cropRect.width = Math.max(20, originalCropRect.width - deltaX);
-                    cropRect.height = Math.max(20, originalCropRect.height + deltaY);
-                    break;
-                case 'se':
-                    cropRect.width = Math.max(20, originalCropRect.width + deltaX);
-                    cropRect.height = Math.max(20, originalCropRect.height + deltaY);
-                    break;
-            }
-            
-            // 确保裁剪区域不超过图片边界
-            if (cropRect.x + cropRect.width > canvasLeft + imgRect.width) {
-                cropRect.width = canvasLeft + imgRect.width - cropRect.x;
-            }
-            
-            if (cropRect.y + cropRect.height > canvasTop + imgRect.height) {
-                cropRect.height = canvasTop + imgRect.height - cropRect.y;
-            }
-            
-            cropSelection.style.left = cropRect.x + 'px';
-            cropSelection.style.top = cropRect.y + 'px';
-            cropSelection.style.width = cropRect.width + 'px';
-            cropSelection.style.height = cropRect.height + 'px';
-            updateCropHandlesPosition();
-        }
-        
-        // 更新裁剪预览
-        function updateCropPreview(e) {
-            if (!cropStart) return;
-            
-            const canvasRect = canvasEl.getBoundingClientRect();
-            const mouseX = e.clientX - canvasRect.left;
-            const mouseY = e.clientY - canvasRect.top;
-            
-            if (!cropSelection) {
-                cropSelection = document.createElement('div');
-                cropSelection.className = 'crop-selection';
-                canvasEl.appendChild(cropSelection);
-            }
-            
-            const x = Math.min(cropStart.x, mouseX);
-            const y = Math.min(cropStart.y, mouseY);
-            const width = Math.abs(mouseX - cropStart.x);
-            const height = Math.abs(mouseY - cropStart.y);
-            
-            // 限制裁剪区域在选中图片内
-            if (selectedImage) {
-                const imgRect = selectedImage.getBoundingClientRect();
-                const canvasLeft = imgRect.left - canvasRect.left;
-                const canvasTop = imgRect.top - canvasRect.top;
-                
-                const boundedX = Math.max(canvasLeft, Math.min(x, canvasLeft + imgRect.width));
-                const boundedY = Math.max(canvasTop, Math.min(y, canvasTop + imgRect.height));
-                const boundedWidth = Math.min(width, canvasLeft + imgRect.width - boundedX);
-                const boundedHeight = Math.min(height, canvasTop + imgRect.height - boundedY);
-                
-                cropSelection.style.left = boundedX + 'px';
-                cropSelection.style.top = boundedY + 'px';
-                cropSelection.style.width = boundedWidth + 'px';
-                cropSelection.style.height = boundedHeight + 'px';
-            } else {
-                cropSelection.style.left = x + 'px';
-                cropSelection.style.top = y + 'px';
-                cropSelection.style.width = width + 'px';
-                cropSelection.style.height = height + 'px';
-            }
-        }
-        
-        // 从触摸更新裁剪预览
-        function updateCropPreviewFromTouch(touch) {
-            if (!cropStart) return;
-            
-            const canvasRect = canvasEl.getBoundingClientRect();
-            const mouseX = touch.clientX - canvasRect.left;
-            const mouseY = touch.clientY - canvasRect.top;
-            
-            if (!cropSelection) {
-                cropSelection = document.createElement('div');
-                cropSelection.className = 'crop-selection';
-                canvasEl.appendChild(cropSelection);
-            }
-            
-            const x = Math.min(cropStart.x, mouseX);
-            const y = Math.min(cropStart.y, mouseY);
-            const width = Math.abs(mouseX - cropStart.x);
-            const height = Math.abs(mouseY - cropStart.y);
-            
-            // 限制裁剪区域在选中图片内
-            if (selectedImage) {
-                const imgRect = selectedImage.getBoundingClientRect();
-                const canvasLeft = imgRect.left - canvasRect.left;
-                const canvasTop = imgRect.top - canvasRect.top;
-                
-                const boundedX = Math.max(canvasLeft, Math.min(x, canvasLeft + imgRect.width));
-                const boundedY = Math.max(canvasTop, Math.min(y, canvasTop + imgRect.height));
-                const boundedWidth = Math.min(width, canvasLeft + imgRect.width - boundedX);
-                const boundedHeight = Math.min(height, canvasTop + imgRect.height - boundedY);
-                
-                cropSelection.style.left = boundedX + 'px';
-                cropSelection.style.top = boundedY + 'px';
-                cropSelection.style.width = boundedWidth + 'px';
-                cropSelection.style.height = boundedHeight + 'px';
-            } else {
-                cropSelection.style.left = x + 'px';
-                cropSelection.style.top = y + 'px';
-                cropSelection.style.width = width + 'px';
-                cropSelection.style.height = height + 'px';
-            }
-        }
-        
-        // 移动图片
-        function moveImage(clientX, clientY) {
-            const canvasRect = canvasEl.getBoundingClientRect();
-            const x = clientX - canvasRect.left - dragOffset.x;
-            const y = clientY - canvasRect.top - dragOffset.y;
-            
-            // 限制图片在画布内
-            const imgRect = selectedImage.getBoundingClientRect();
-            const maxX = canvasRect.width - imgRect.width;
-            const maxY = canvasRect.height - imgRect.height;
-            
-            selectedImage.style.left = Math.max(0, Math.min(x, maxX)) + 'px';
-            selectedImage.style.top = Math.max(0, Math.min(y, maxY)) + 'px';
-        }
-        
-        // 橡皮擦功能
-        function eraseAt(x, y) {
-            if (!selectedImage) return;
-            
-            const ctx = getOrCreateCanvasContext(selectedImage);
-            ctx.globalCompositeOperation = 'destination-out';
-            
-            // 根据图片实际尺寸和显示尺寸的比例调整橡皮擦大小
-            const scaleX = selectedImage.naturalWidth / selectedImage.offsetWidth;
-            const scaleY = selectedImage.naturalHeight / selectedImage.offsetHeight;
-            
-            ctx.beginPath();
-            ctx.arc(x * scaleX, y * scaleY, (brushSize / 2) * scaleX, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        
-        // 获取或创建图片的canvas上下文（用于橡皮擦）
-        function getOrCreateCanvasContext(img) {
-            let canvas = img.canvasOverlay;
-            
-            if (!canvas) {
-                canvas = document.createElement('canvas');
-                canvas.width = img.naturalWidth;
-                canvas.height = img.naturalHeight;
-                canvas.style.position = 'absolute';
-                canvas.style.left = img.style.left;
-                canvas.style.top = img.style.top;
-                canvas.style.width = img.style.width;
-                canvas.style.pointerEvents = 'none';
-                
-                img.canvasOverlay = canvas;
-                img.parentNode.insertBefore(canvas, img.nextSibling);
-            }
-            
-            return canvas.getContext('2d');
-        }
-        
-        // 处理画布鼠标抬起
-        function handleCanvasMouseUp() {
-            isDragging = false;
-            isDrawing = false;
-            
-            if (cropStart && cropSelection) {
-                // 保存裁剪区域
-                cropRect = {
-                    x: parseFloat(cropSelection.style.left),
-                    y: parseFloat(cropSelection.style.top),
-                    width: parseFloat(cropSelection.style.width),
-                    height: parseFloat(cropSelection.style.height)
-                };
-                
-                // 添加调整手柄
-                createCropHandles();
-                cropStart = null;
-            }
-            
-            isResizing = false;
-            resizeHandle = null;
-            originalCropRect = null;
-        }
-        
-        // 处理触摸结束
-        function handleTouchEnd(e) {
-            isDragging = false;
-            isDrawing = false;
-            
-            if (cropStart && cropSelection) {
-                // 保存裁剪区域
-                cropRect = {
-                    x: parseFloat(cropSelection.style.left),
-                    y: parseFloat(cropSelection.style.top),
-                    width: parseFloat(cropSelection.style.width),
-                    height: parseFloat(cropSelection.style.height)
-                };
-                
-                // 添加调整手柄
-                createCropHandles();
-                cropStart = null;
-            }
-            
-            isResizing = false;
-            resizeHandle = null;
-            originalCropRect = null;
-        }
-        
-        // 下载画布
-        function downloadCanvas() {
-            if (canvasImages.length === 0) {
-                alert('画布为空，请先添加图片');
-                return;
-            }
-            
-            // 创建一个临时画布用于导出
-            const exportCanvas = document.createElement('canvas');
-            const canvasRect = canvasEl.getBoundingClientRect();
-            exportCanvas.width = canvasRect.width;
-            exportCanvas.height = canvasRect.height;
-            
-            const ctx = exportCanvas.getContext('2d');
-            
-            // 绘制所有图片
-            canvasImages.forEach(img => {
-                const imgRect = img.getBoundingClientRect();
-                const x = imgRect.left - canvasRect.left;
-                const y = imgRect.top - canvasRect.top;
-                const width = imgRect.width;
-                const height = imgRect.height;
-                
-                ctx.drawImage(img, x, y, width, height);
-                
-                // 如果有橡皮擦效果，也绘制上去
-                if (img.canvasOverlay) {
-                    ctx.drawImage(img.canvasOverlay, x, y, width, height);
-                }
-            });
-            
-            // 下载图片
-            const link = document.createElement('a');
-            link.download = '制作库作品.png';
-            link.href = exportCanvas.toDataURL('image/png');
-            link.click();
-        }
-        
-        // 清空画布
-        function clearCanvas() {
-            if (confirm('确定要清空画布吗？')) {
-                canvasImages.forEach(img => {
-                    if (img.canvasOverlay) {
-                        img.canvasOverlay.remove();
-                    }
-                    img.remove();
-                });
-                
-                canvasImages = [];
-                selectedImage = null;
-                exitCropMode();
-            }
-        }
-        
-        // 初始化应用
-        init();
+        document.addEventListener('DOMContentLoaded', () => {
+            loadVideos();
+        });
     </script>
 </body>
 </html>
