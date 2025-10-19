@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/team", "destination": "/team.html" },
+    { "source": "/zaza", "destination": "/zaza.html" }
+    { "source": "/image2", "destination": "/image2.html" }
+    { "source": "/suck", "destination": "/suck.html" }
+  ]
+}
