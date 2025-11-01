@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>KARDS 小站</title>
+    <title>KARDS Wiki</title>
     <style>
         * {
             margin: 0;
@@ -59,7 +59,7 @@
         .card-image-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 70%;
+            padding-top: 70%; /* 2:3 宽高比 */
             overflow: hidden;
         }
         
@@ -100,6 +100,7 @@
             color: inherit;
         }
         
+        /* 底部导航栏 */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -120,6 +121,7 @@
             text-align: center;
         }
         
+        /* 页面载入动画 */
         @keyframes pageSlideIn {
             from {
                 opacity: 0;
@@ -206,11 +208,11 @@
         </div>
     </div>
     
+    <!-- 底部导航栏 -->
     <div class="bottom-nav">
         <a href="index.html" class="nav-link">主页</a>
         <a href="meie.html" class="nav-link">我的</a>
         <a href="team.html" class="nav-link">关于</a>
     </div>
 </body>
-
 </html>
