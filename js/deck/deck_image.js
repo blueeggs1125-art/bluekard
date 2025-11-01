@@ -1,1 +1,492 @@
-function encodeImagePath(amyzkUN$Y1){return amyzkUN$Y1['\x73\x70\x6c\x69\x74']('\x2f')['\x6d\x61\x70'](part=>encodeURIComponent(part))['\x6a\x6f\x69\x6e']('\x2f')}const countrySelector=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x63\x6f\x75\x6e\x74\x72\x79\x2d\x73\x65\x6c\x65\x63\x74\x6f\x72');const subtypeSelect=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x73\x75\x62\x74\x79\x70\x65\x2d\x73\x65\x6c\x65\x63\x74');const raritySelect=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x72\x61\x72\x69\x74\x79\x2d\x73\x65\x6c\x65\x63\x74');const typeSelect=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x74\x79\x70\x65\x2d\x73\x65\x6c\x65\x63\x74');const commandPointsSelect=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x63\x6f\x6d\x6d\x61\x6e\x64\x2d\x70\x6f\x69\x6e\x74\x2d\x73\x65\x6c\x65\x63\x74');const statusSelect=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x73\x74\x61\x74\x75\x73\x2d\x73\x65\x6c\x65\x63\x74');const searchInput=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x73\x65\x61\x72\x63\x68\x2d\x69\x6e\x70\x75\x74');const cardsContainer=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x63\x61\x72\x64\x73\x2d\x63\x6f\x6e\x74\x61\x69\x6e\x65\x72');const derivedSelect=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x64\x65\x72\x69\x76\x65\x64\x2d\x73\x65\x6c\x65\x63\x74');const mobileDerivedSelect=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x6d\x6f\x62\x69\x6c\x65\x2d\x64\x65\x72\x69\x76\x65\x64\x2d\x73\x65\x6c\x65\x63\x74');const countries=[{id:1,name:'\u5fb7\u56fd',folder:'\u5fb7\u56fd',iconFolder:'\u56fd\u5bb6\u56fe\u6807\x2f\u5fb7\u56fd',iconFile:'\x46\x61\x63\x74\x69\x6f\x6e\x49\x63\x6f\x6e\x5f\x47\x45\x52\x5f\x32\x35\x36\x5f\x43\x6f\x6c\x6f\x72\x2e\x70\x6e\x67'},{id:2,name:'\u82f1\u56fd',folder:'\u82f1\u56fd',iconFolder:'\u56fd\u5bb6\u56fe\u6807\x2f\u82f1\u56fd',iconFile:'\x42\x72\x69\x74\x32\x2e\x70\x6e\x67'},{id:3,name:'\u65e5\u672c',folder:'\u65e5\u672c',iconFolder:'\u56fd\u5bb6\u56fe\u6807\x2f\u65e5\u672c',iconFile:'\x46\x61\x63\x74\x69\x6f\x6e\x49\x63\x6f\x6e\x5f\x4a\x41\x50\x5f\x32\x35\x36\x5f\x43\x6f\x6c\x6f\x72\x2e\x70\x6e\x67'},{id:4,name:'\u82cf\u8054',folder:'\u82cf\u8054',iconFolder:'\u56fd\u5bb6\u56fe\u6807\x2f\u82cf\u8054',iconFile:'\x46\x61\x63\x74\x69\x6f\x6e\x49\x63\x6f\x6e\x5f\x53\x4f\x56\x5f\x32\x35\x36\x5f\x43\x6f\x6c\x6f\x72\x2e\x70\x6e\x67'},{id:5,name:'\u7f8e\u56fd',folder:'\u7f8e\u56fd',iconFolder:'\u56fd\u5bb6\u56fe\u6807\x2f\u7f8e\u56fd',iconFile:'\x46\x61\x63\x74\x69\x6f\x6e\x49\x63\x6f\x6e\x5f\x55\x53\x41\x5f\x32\x35\x36\x5f\x43\x6f\x6c\x6f\x72\x2e\x70\x6e\x67'},{id:6,name:'\u6cd5\u56fd',folder:'\u6cd5\u56fd',iconFolder:'\u56fd\u5bb6\u56fe\u6807\x2f\u6cd5\u56fd',iconFile:'\x46\x61\x63\x74\x69\x6f\x6e\x49\x63\x6f\x6e\x5f\x46\x52\x41\x5f\x32\x35\x36\x5f\x43\x6f\x6c\x6f\x72\x2e\x70\x6e\x67'},{id:7,name:'\u610f\u5927\u5229',folder:'\u610f\u5927\u5229',iconFolder:'\u56fd\u5bb6\u56fe\u6807\x2f\u610f\u5927\u5229',iconFile:'\x46\x61\x63\x74\x69\x6f\x6e\x49\x63\x6f\x6e\x5f\x49\x54\x41\x5f\x32\x35\x36\x5f\x43\x6f\x6c\x6f\x72\x2e\x70\x6e\x67'},{id:8,name:'\u6ce2\u5170',folder:'\u6ce2\u5170',iconFolder:'\u56fd\u5bb6\u56fe\u6807\x2f\u6ce2\u5170',iconFile:'\x46\x61\x63\x74\x69\x6f\x6e\x49\x63\x6f\x6e\x5f\x50\x4f\x4c\x5f\x35\x31\x32\x5f\x43\x6f\x6c\x6f\x72\x2e\x70\x6e\x67'},{id:9,name:'\u82ac\u5170',folder:'\u82ac\u5170',iconFolder:'\u56fd\u5bb6\u56fe\u6807\x2f\u82ac\u5170',iconFile:'\x46\x61\x63\x74\x69\x6f\x6e\x49\x63\x6f\x6e\x5f\x46\x49\x4e\x5f\x31\x30\x32\x34\x5f\x43\x6f\x6c\x6f\x72\x2e\x70\x6e\x67'}];window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x44\x4f\x4d\x43\x6f\x6e\x74\x65\x6e\x74\x4c\x6f\x61\x64\x65\x64',function(){loadCountryIcons();setupEventListeners();const urlParams=new URLSearchParams(window['\x6c\x6f\x63\x61\x74\x69\x6f\x6e']['\x73\x65\x61\x72\x63\x68']);const code=urlParams['\x67\x65\x74']('\x63\x6f\x64\x65');if(code&&code['\x73\x74\x61\x72\x74\x73\x57\x69\x74\x68']('\x25\x25')){parseCountryCode(code)}initFilters()});function initFilters(){updateTypeSelector([]);commandPointsSelect['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']=`<option value="">全部指挥点</option><option value="\x30">0</option><option value="\x31">1</option><option value="\x32">2</option><option value="\x33">3</option><option value="\x34">4</option><option value="\x35">5</option><option value="\x36">6</option><option value="\x37\x2b">7+</option>`;statusSelect['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']=`<option value="">全部状态</option><option value="\x74\x72\x75\x65">活跃</option><option value="\x66\x61\x6c\x73\x65">预备</option>`;derivedSelect['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']=`<option value="">全部</option><option value="\x74\x72\x75\x65">真</option><option value="\x66\x61\x6b\x65">假</option>`;mobileDerivedSelect['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']=`<option value="">全部</option><option value="\x74\x72\x75\x65">真</option><option value="\x66\x61\x6b\x65">假</option>`}function loadCountryIcons(){const countryIconsContainer=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x63\x6f\x75\x6e\x74\x72\x79\x2d\x73\x65\x6c\x65\x63\x74\x6f\x72');countryIconsContainer['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']='';countries['\x66\x6f\x72\x45\x61\x63\x68'](country=>{const countryItem=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x63\x72\x65\x61\x74\x65\x45\x6c\x65\x6d\x65\x6e\x74']('\x64\x69\x76');countryItem['\x63\x6c\x61\x73\x73\x4e\x61\x6d\x65']='\x63\x6f\x75\x6e\x74\x72\x79\x2d\x6f\x70\x74\x69\x6f\x6e';countryItem['\x64\x61\x74\x61\x73\x65\x74']['\x63\x6f\x75\x6e\x74\x72\x79\x49\x64']=country['\x69\x64'];countryItem['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']=`<img src="\x69\x6d\x61\x67\x65\x32\x2f\x24\x7b\x63\x6f\x75\x6e\x74\x72\x79\x2e\x69\x63\x6f\x6e\x46\x6f\x6c\x64\x65\x72\x7d\x2f\x24\x7b\x63\x6f\x75\x6e\x74\x72\x79\x2e\x69\x63\x6f\x6e\x46\x69\x6c\x65\x7d"alt="\x24\x7b\x63\x6f\x75\x6e\x74\x72\x79\x2e\x6e\x61\x6d\x65\x7d"class="\x63\x6f\x75\x6e\x74\x72\x79\x2d\x69\x6d\x61\x67\x65"><div class="\x63\x6f\x75\x6e\x74\x72\x79\x2d\x6e\x61\x6d\x65">${country['\x6e\x61\x6d\x65']}</div>`;countryIconsContainer['\x61\x70\x70\x65\x6e\x64\x43\x68\x69\x6c\x64'](countryItem)})}function parseCountryCode(TtZkwOs2){const countryCode=TtZkwOs2['\x73\x75\x62\x73\x74\x72\x69\x6e\x67'](2,4);const mainCountryId=window["\x70\x61\x72\x73\x65\x49\x6e\x74"](countryCode['\x63\x68\x61\x72\x41\x74'](0));const secondaryCountryId=window["\x70\x61\x72\x73\x65\x49\x6e\x74"](countryCode['\x63\x68\x61\x72\x41\x74'](1));if(mainCountryId){const mainCountryElement=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x71\x75\x65\x72\x79\x53\x65\x6c\x65\x63\x74\x6f\x72'](`['\x63\x6f\x75\x6e\x74\x72\x79']-option[data-country-id="\x24\x7b\x6d\x61\x69\x6e\x43\x6f\x75\x6e\x74\x72\x79\x49\x64\x7d"]`);if(mainCountryElement){mainCountryElement['\x63\x6c\x61\x73\x73\x4c\x69\x73\x74']['\x61\x64\x64']('\x73\x65\x6c\x65\x63\x74\x65\x64');window['\x73\x65\x6c\x65\x63\x74\x65\x64\x4d\x61\x69\x6e\x43\x6f\x75\x6e\x74\x72\x79']=mainCountryId}}if(secondaryCountryId){const secondaryCountryElement=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x71\x75\x65\x72\x79\x53\x65\x6c\x65\x63\x74\x6f\x72'](`['\x63\x6f\x75\x6e\x74\x72\x79']-option[data-country-id="\x24\x7b\x73\x65\x63\x6f\x6e\x64\x61\x72\x79\x43\x6f\x75\x6e\x74\x72\x79\x49\x64\x7d"]`);if(secondaryCountryElement){secondaryCountryElement['\x63\x6c\x61\x73\x73\x4c\x69\x73\x74']['\x61\x64\x64']('\x73\x65\x6c\x65\x63\x74\x65\x64');window['\x73\x65\x6c\x65\x63\x74\x65\x64\x53\x65\x63\x6f\x6e\x64\x61\x72\x79\x43\x6f\x75\x6e\x74\x72\x79']=secondaryCountryId}}updateDisabledState();hideUnselectedCountries();if(window['\x73\x65\x6c\x65\x63\x74\x65\x64\x4d\x61\x69\x6e\x43\x6f\x75\x6e\x74\x72\x79']&&window['\x73\x65\x6c\x65\x63\x74\x65\x64\x53\x65\x63\x6f\x6e\x64\x61\x72\x79\x43\x6f\x75\x6e\x74\x72\x79']){loadCardsForCountries()}}function hideUnselectedCountries(){const countryItems=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x71\x75\x65\x72\x79\x53\x65\x6c\x65\x63\x74\x6f\x72\x41\x6c\x6c']('\x2e\x63\x6f\x75\x6e\x74\x72\x79\x2d\x6f\x70\x74\x69\x6f\x6e');countryItems['\x66\x6f\x72\x45\x61\x63\x68'](item=>{const countryId=window["\x70\x61\x72\x73\x65\x49\x6e\x74"](item['\x64\x61\x74\x61\x73\x65\x74']['\x63\x6f\x75\x6e\x74\x72\x79\x49\x64']);if(countryId!==window['\x73\x65\x6c\x65\x63\x74\x65\x64\x4d\x61\x69\x6e\x43\x6f\x75\x6e\x74\x72\x79']&&countryId!==window['\x73\x65\x6c\x65\x63\x74\x65\x64\x53\x65\x63\x6f\x6e\x64\x61\x72\x79\x43\x6f\x75\x6e\x74\x72\x79']){item['\x73\x74\x79\x6c\x65']['\x64\x69\x73\x70\x6c\x61\x79']='\x6e\x6f\x6e\x65'}})}function updateDisabledState(){const countryItems=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x71\x75\x65\x72\x79\x53\x65\x6c\x65\x63\x74\x6f\x72\x41\x6c\x6c']('\x2e\x63\x6f\x75\x6e\x74\x72\x79\x2d\x6f\x70\x74\x69\x6f\x6e');countryItems['\x66\x6f\x72\x45\x61\x63\x68'](item=>{const countryId=window["\x70\x61\x72\x73\x65\x49\x6e\x74"](item['\x64\x61\x74\x61\x73\x65\x74']['\x63\x6f\x75\x6e\x74\x72\x79\x49\x64']);if(window['\x73\x65\x6c\x65\x63\x74\x65\x64\x4d\x61\x69\x6e\x43\x6f\x75\x6e\x74\x72\x79']!==null&&countryId===window['\x73\x65\x6c\x65\x63\x74\x65\x64\x4d\x61\x69\x6e\x43\x6f\x75\x6e\x74\x72\x79']){item['\x63\x6c\x61\x73\x73\x4c\x69\x73\x74']['\x61\x64\x64']('\x64\x69\x73\x61\x62\x6c\x65\x64')}else{item['\x63\x6c\x61\x73\x73\x4c\x69\x73\x74']['\x72\x65\x6d\x6f\x76\x65']('\x64\x69\x73\x61\x62\x6c\x65\x64')}})}function setupEventListeners(){raritySelect['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x63\x68\x61\x6e\x67\x65',filterCards);typeSelect['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x63\x68\x61\x6e\x67\x65',filterCards);commandPointsSelect['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x63\x68\x61\x6e\x67\x65',filterCards);statusSelect['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x63\x68\x61\x6e\x67\x65',filterCards);derivedSelect['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x63\x68\x61\x6e\x67\x65',filterCards);mobileDerivedSelect['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x63\x68\x61\x6e\x67\x65',filterCards);searchInput['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x69\x6e\x70\x75\x74',filterCards);if(typeSelect){typeSelect['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x63\x68\x61\x6e\x67\x65',filterCards)}}async function loadCardsForCountries(){cardsContainer['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']='\x3c\x64\x69\x76 \x63\x6c\x61\x73\x73\x3d\x22\x6c\x6f\x61\x64\x69\x6e\x67\x22\x3e\u52a0\u8f7d\u4e2d\x2e\x2e\x2e\x3c\x2f\x64\x69\x76\x3e';try{const response=await fetch('\x64\x61\x74\x61\x2f\x6e\x65\x77\x6b\x2e\x6a\x73\x6f\x6e');if(!response['\x6f\x6b']){throw new window["\x45\x72\x72\x6f\x72"]('\x6e\x65\x77\x6b\x2e\x6a\x73\x6f\x6e \u7f51\u7edc\u54cd\u5e94\u9519\u8bef');}const cardsData=await response['\x6a\x73\x6f\x6e']();const imagesResponse=await fetch('\x64\x61\x74\x61\x2f\x6e\x65\x77\x69\x6d\x61\x67\x65\x73\x2e\x6a\x73\x6f\x6e');if(!imagesResponse['\x6f\x6b']){throw new window["\x45\x72\x72\x6f\x72"]('\x6e\x65\x77\x69\x6d\x61\x67\x65\x73\x2e\x6a\x73\x6f\x6e \u7f51\u7edc\u54cd\u5e94\u9519\u8bef');}const imagesData=await imagesResponse['\x6a\x73\x6f\x6e']();const selectedCountries=[];const mainCountryName=window['\x73\x65\x6c\x65\x63\x74\x65\x64\x4d\x61\x69\x6e\x43\x6f\x75\x6e\x74\x72\x79']?countries['\x66\x69\x6e\x64'](c=>c['\x69\x64']===window['\x73\x65\x6c\x65\x63\x74\x65\x64\x4d\x61\x69\x6e\x43\x6f\x75\x6e\x74\x72\x79'])?['\x6e\x61\x6d\x65']:null;const secondaryCountryName=window['\x73\x65\x6c\x65\x63\x74\x65\x64\x53\x65\x63\x6f\x6e\x64\x61\x72\x79\x43\x6f\x75\x6e\x74\x72\x79']?countries['\x66\x69\x6e\x64'](c=>c['\x69\x64']===window['\x73\x65\x6c\x65\x63\x74\x65\x64\x53\x65\x63\x6f\x6e\x64\x61\x72\x79\x43\x6f\x75\x6e\x74\x72\x79'])?['\x6e\x61\x6d\x65']:null;if(mainCountryName)selectedCountries['\x70\x75\x73\x68'](mainCountryName);if(secondaryCountryName)selectedCountries['\x70\x75\x73\x68'](secondaryCountryName);let filteredCards=cardsData['\x66\x69\x6c\x74\x65\x72'](card=>selectedCountries['\x69\x6e\x63\x6c\x75\x64\x65\x73'](card.国家));filteredCards=filteredCards['\x66\x69\x6c\x74\x65\x72'](card=>{if(window['\x73\x65\x6c\x65\x63\x74\x65\x64\x4d\x61\x69\x6e\x43\x6f\x75\x6e\x74\x72\x79']&&card.国家===mainCountryName){return true}if(window['\x73\x65\x6c\x65\x63\x74\x65\x64\x53\x65\x63\x6f\x6e\x64\x61\x72\x79\x43\x6f\x75\x6e\x74\x72\x79']&&card.国家===secondaryCountryName){const isGold=isGoldenCard(card,imagesData);const isElite=card.详细信息?.稀有度==='\u7cbe\u82f1';return!(isGold||isElite)}return true});if(filteredCards['\x6c\x65\x6e\x67\x74\x68']===0){cardsContainer['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']='\x3c\x64\x69\x76 \x63\x6c\x61\x73\x73\x3d\x22\x6e\x6f\x2d\x63\x61\x72\x64\x73\x22\x3e\u672a\u627e\u5230\u5339\u914d\u7684\u5361\u724c\x3c\x2f\x64\x69\x76\x3e';return}let cardImages=[];filteredCards['\x66\x6f\x72\x45\x61\x63\x68'](card=>{const country=card.国家;const cardName=card.名称;if(imagesData[country]){for(const subtype in imagesData[country]){const foundImage=imagesData[country][subtype]['\x66\x69\x6e\x64'](imgPath=>imgPath['\x69\x6e\x63\x6c\x75\x64\x65\x73'](cardName));if(foundImage){cardImages['\x70\x75\x73\x68']({path:foundImage,name:cardName,cardData:card});break}}}});cardImages=sortCardsByCommandPoint(cardImages);const types=getCardTypes(cardImages);updateTypeSelector(types);renderCards(cardImages);setTimeout(filterCards,0)}catch(error){console['\x65\x72\x72\x6f\x72']('\u52a0\u8f7d\u5361\u724c\u51fa\u9519\x3a',error);cardsContainer['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']='\x3c\x64\x69\x76 \x63\x6c\x61\x73\x73\x3d\x22\x6e\x6f\x2d\x63\x61\x72\x64\x73\x22\x3e\u52a0\u8f7d\u5361\u724c\u5931\u8d25\x3c\x2f\x64\x69\x76\x3e'}}function isGoldenCard(hqtRRrmWD3,T_geCk4){const country=hqtRRrmWD3.国家;const cardName=hqtRRrmWD3.名称;if(T_geCk4[country]&&T_geCk4[country]['\u91d1\u5361']){return T_geCk4[country]['\u91d1\u5361']['\x73\x6f\x6d\x65'](imgPath=>imgPath['\x69\x6e\x63\x6c\x75\x64\x65\x73'](cardName))}return false}function sortCardsByCommandPoint(cards){return cards['\x73\x6f\x72\x74']((a,b)=>{const cpA=window["\x70\x61\x72\x73\x65\x49\x6e\x74"](a['\x63\x61\x72\x64\x44\x61\x74\x61']?.详细信息?.["\u6307\u6325\u70b9"])||0;const cpB=window["\x70\x61\x72\x73\x65\x49\x6e\x74"](b['\x63\x61\x72\x64\x44\x61\x74\x61']?.详细信息?.["\u6307\u6325\u70b9"])||0;return cpA-cpB})}function getCardTypes(Yaq_Amsht5){const types=new Set();Yaq_Amsht5['\x66\x6f\x72\x45\x61\x63\x68'](card=>{const type=card['\x63\x61\x72\x64\x44\x61\x74\x61']?.详细信息?.类型;if(type){types['\x61\x64\x64'](type)}});return window["\x41\x72\x72\x61\x79"]['\x66\x72\x6f\x6d'](types)['\x73\x6f\x72\x74']()}function updateTypeSelector(UsppW6){typeSelect['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']='\x3c\x6f\x70\x74\x69\x6f\x6e \x76\x61\x6c\x75\x65\x3d\x22\x22\x3e\u5168\u90e8\u7c7b\u578b\x3c\x2f\x6f\x70\x74\x69\x6f\x6e\x3e';UsppW6['\x66\x6f\x72\x45\x61\x63\x68'](type=>{const option=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x63\x72\x65\x61\x74\x65\x45\x6c\x65\x6d\x65\x6e\x74']('\x6f\x70\x74\x69\x6f\x6e');option['\x76\x61\x6c\x75\x65']=type;option['\x74\x65\x78\x74\x43\x6f\x6e\x74\x65\x6e\x74']=type;typeSelect['\x61\x70\x70\x65\x6e\x64\x43\x68\x69\x6c\x64'](option)})}function renderCards(MQQbVjs7){if(MQQbVjs7['\x6c\x65\x6e\x67\x74\x68']===0){cardsContainer['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']='\x3c\x64\x69\x76 \x63\x6c\x61\x73\x73\x3d\x22\x6e\x6f\x2d\x63\x61\x72\x64\x73\x22\x3e\u672a\u627e\u5230\u5339\u914d\u7684\u5361\u724c\x3c\x2f\x64\x69\x76\x3e';return}let html='';MQQbVjs7['\x66\x6f\x72\x45\x61\x63\x68'](card=>{const imagePath=card['\x70\x61\x74\x68'];const encodedImagePath=encodeImagePath(imagePath);const fileName=imagePath['\x73\x70\x6c\x69\x74']('\x2f')['\x70\x6f\x70']();const displayName=card['\x6e\x61\x6d\x65']||fileName;const rarity=card['\x63\x61\x72\x64\x44\x61\x74\x61']?.详细信息?.稀有度||'\u672a\u77e5';const cardCode=card['\x63\x61\x72\x64\x44\x61\x74\x61']?.详细信息?.["\u5361\u724c\u4ee3\u7801"]||'';const isReserve=card['\x63\x61\x72\x64\x44\x61\x74\x61']?.详细信息?.活跃==="\x66\x61\x6c\x73\x65";const rarityLimits={'\u7cbe\u82f1':1,'\u7279\u6b8a':2,'\u9650\u5b9a':3,'\u666e\u901a':4};const maxClicks=rarityLimits[rarity]||1;if(card['\x6e\x61\x6d\x65']==="\u6b65\u5175\u7b2c\u4e03\u5341\u4e03\u8054\u961f"){console['\x6c\x6f\x67']("\u6b65\u5175\u7b2c\u4e03\u5341\u4e03\u8054\u961f\u5361\u724c\u4fe1\u606f\x3a",card);console['\x6c\x6f\x67']("\u7a00\u6709\u5ea6\x3a",rarity)}html+=`<div class="\x63\x61\x72\x64\x2d\x69\x74\x65\x6d"data-name="\x24\x7b\x63\x61\x72\x64\x2e\x6e\x61\x6d\x65\x7d"data-rarity="\x24\x7b\x72\x61\x72\x69\x74\x79\x7d"data-code="\x24\x7b\x63\x61\x72\x64\x43\x6f\x64\x65\x7d"data-card="\x24\x7b\x65\x6e\x63\x6f\x64\x65\x55\x52\x49\x43\x6f\x6d\x70\x6f\x6e\x65\x6e\x74\x28\x4a\x53\x4f\x4e\x2e\x73\x74\x72\x69\x6e\x67\x69\x66\x79\x28\x63\x61\x72\x64\x2e\x63\x61\x72\x64\x44\x61\x74\x61\x29\x29\x7d"><img src="\x24\x7b\x65\x6e\x63\x6f\x64\x65\x64\x49\x6d\x61\x67\x65\x50\x61\x74\x68\x7d"alt="\x24\x7b\x64\x69\x73\x70\x6c\x61\x79\x4e\x61\x6d\x65\x7d"><div class="\x63\x61\x72\x64\x2d\x69\x6e\x64\x69\x63\x61\x74\x6f\x72\x73"data-rarity="\x24\x7b\x72\x61\x72\x69\x74\x79\x7d"></div>${isReserve?`<img src="\x69\x6d\x61\x67\x65\x2f\x54\x5f\x6e\x75\x69\x2d\x69\x63\x6f\x6e\x2d\x52\x65\x73\x65\x72\x76\x65\x73\x2d\x67\x72\x69\x74\x74\x79\x2d\x32\x35\x36\x2e\x70\x6e\x67"alt="\u9884\u5907"style="\x70\x6f\x73\x69\x74\x69\x6f\x6e\x3a\x61\x62\x73\x6f\x6c\x75\x74\x65\x3b\x62\x6f\x74\x74\x6f\x6d\x3a\x35\x70\x78\x3b\x72\x69\x67\x68\x74\x3a\x32\x70\x78\x3b\x77\x69\x64\x74\x68\x3a\x31\x35\x70\x78\x3b\x68\x65\x69\x67\x68\x74\x3a\x31\x35\x70\x78\x3b\x7a\x2d\x69\x6e\x64\x65\x78\x3a\x31\x30\x3b">`:''}<div class="\x63\x61\x72\x64\x2d\x63\x6c\x69\x63\x6b\x73"style="\x70\x6f\x73\x69\x74\x69\x6f\x6e\x3a\x61\x62\x73\x6f\x6c\x75\x74\x65\x3b\x62\x6f\x74\x74\x6f\x6d\x3a\x35\x70\x78\x3b\x6c\x65\x66\x74\x3a\x35\x70\x78\x3b\x62\x61\x63\x6b\x67\x72\x6f\x75\x6e\x64\x2d\x63\x6f\x6c\x6f\x72\x3a\x72\x67\x62\x61\x28\x30\x2c\x30\x2c\x30\x2c\x30\x2e\x37\x29\x3b\x63\x6f\x6c\x6f\x72\x3a\x77\x68\x69\x74\x65\x3b\x66\x6f\x6e\x74\x2d\x73\x69\x7a\x65\x3a\x31\x32\x70\x78\x3b\x66\x6f\x6e\x74\x2d\x77\x65\x69\x67\x68\x74\x3a\x62\x6f\x6c\x64\x3b\x70\x61\x64\x64\x69\x6e\x67\x3a\x32\x70\x78 \x36\x70\x78\x3b\x62\x6f\x72\x64\x65\x72\x2d\x72\x61\x64\x69\x75\x73\x3a\x31\x30\x70\x78\x3b\x7a\x2d\x69\x6e\x64\x65\x78\x3a\x31\x30\x3b">${maxClicks}</div></div>`});cardsContainer['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']=html;setTimeout(filterCards,0)}function filterCards(){const rarity=raritySelect['\x76\x61\x6c\x75\x65'];const type=typeSelect['\x76\x61\x6c\x75\x65'];const commandPoints=commandPointsSelect['\x76\x61\x6c\x75\x65'];const status=statusSelect['\x76\x61\x6c\x75\x65'];const derived=derivedSelect['\x76\x61\x6c\x75\x65']||mobileDerivedSelect['\x76\x61\x6c\x75\x65'];const search=searchInput['\x76\x61\x6c\x75\x65']['\x74\x72\x69\x6d']()['\x74\x6f\x4c\x6f\x77\x65\x72\x43\x61\x73\x65']();const cardItems=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x71\x75\x65\x72\x79\x53\x65\x6c\x65\x63\x74\x6f\x72\x41\x6c\x6c']('\x2e\x63\x61\x72\x64\x2d\x69\x74\x65\x6d');cardItems['\x66\x6f\x72\x45\x61\x63\x68'](item=>{const cardName=item['\x64\x61\x74\x61\x73\x65\x74']['\x6e\x61\x6d\x65']['\x74\x6f\x4c\x6f\x77\x65\x72\x43\x61\x73\x65']();const cardData=JSON['\x70\x61\x72\x73\x65'](decodeURIComponent(item['\x64\x61\x74\x61\x73\x65\x74']['\x63\x61\x72\x64']));const cardRarity=cardData.详细信息?.稀有度||'';const cardType=cardData.详细信息?.类型||'';const cardCommandPoint=cardData.详细信息?.["\u6307\u6325\u70b9"]||'';const cardStatus=cardData.详细信息?.活跃||'\x74\x72\x75\x65';const cardDerived=cardData.详细信息?.衍生||'\x66\x61\x6b\x65';let show=true;if(rarity&&cardRarity!==rarity){show=false}if(type&&cardType!==type){show=false}if(commandPoints){if(commandPoints==="\x37\x2b"){if(window["\x70\x61\x72\x73\x65\x49\x6e\x74"](cardCommandPoint)<7){show=false}}else if(cardCommandPoint!==commandPoints){show=false}}if(status!==""&&status!==undefined){const statusStr=cardStatus===true||cardStatus==="\x74\x72\x75\x65"?"\x74\x72\x75\x65":"\x66\x61\x6c\x73\x65";if(statusStr!==status){show=false}}if(derived&&cardDerived!==derived){show=false}if(search&&!cardName['\x69\x6e\x63\x6c\x75\x64\x65\x73'](search)){show=false}if(item['\x64\x61\x74\x61\x73\x65\x74']['\x6e\x61\x6d\x65']==="\u6b65\u5175\u7b2c\u4e03\u5341\u4e03\u8054\u961f"){console['\x6c\x6f\x67']("\u6b65\u5175\u7b2c\u4e03\u5341\u4e03\u8054\u961f\u7b5b\u9009\u4fe1\u606f\x3a",{cardRarity,selectedRarity:rarity,show,statusMatch:status===""||status===undefined||(cardStatus===true||cardStatus==="\x74\x72\x75\x65"?"\x74\x72\x75\x65":"\x66\x61\x6c\x73\x65")===status})}item['\x73\x74\x79\x6c\x65']['\x64\x69\x73\x70\x6c\x61\x79']=show?'\x62\x6c\x6f\x63\x6b':'\x6e\x6f\x6e\x65'})}
+// js/deck/deck_image.js
+
+// 添加一个新函数用于处理包含中文的图片路径
+function encodeImagePath(path) {
+    // 将路径中的每个部分进行编码，但保持分隔符不变
+    return path.split('/').map(part => encodeURIComponent(part)).join('/');
+}
+
+// 获取所有元素引用
+const countrySelector = document.getElementById('country-selector');
+const subtypeSelect = document.getElementById('subtype-select');
+const raritySelect = document.getElementById('rarity-select');
+const typeSelect = document.getElementById('type-select');
+const commandPointsSelect = document.getElementById('command-point-select');
+const statusSelect = document.getElementById('status-select');
+const searchInput = document.getElementById('search-input');
+const cardsContainer = document.getElementById('cards-container');
+// 添加衍生筛选器引用
+const derivedSelect = document.getElementById('derived-select');
+const mobileDerivedSelect = document.getElementById('mobile-derived-select');
+
+// 国家信息
+const countries = [
+    { id: 1, name: '德国', folder: '德国', iconFolder: '国家图标/德国', iconFile: 'FactionIcon_GER_256_Color.png' },
+    { id: 2, name: '英国', folder: '英国', iconFolder: '国家图标/英国', iconFile: 'Brit2.png' },
+    { id: 3, name: '日本', folder: '日本', iconFolder: '国家图标/日本', iconFile: 'FactionIcon_JAP_256_Color.png' },
+    { id: 4, name: '苏联', folder: '苏联', iconFolder: '国家图标/苏联', iconFile: 'FactionIcon_SOV_256_Color.png' },
+    { id: 5, name: '美国', folder: '美国', iconFolder: '国家图标/美国', iconFile: 'FactionIcon_USA_256_Color.png' },
+    { id: 6, name: '法国', folder: '法国', iconFolder: '国家图标/法国', iconFile: 'FactionIcon_FRA_256_Color.png' },
+    { id: 7, name: '意大利', folder: '意大利', iconFolder: '国家图标/意大利', iconFile: 'FactionIcon_ITA_256_Color.png' },
+    { id: 8, name: '波兰', folder: '波兰', iconFolder: '国家图标/波兰', iconFile: 'FactionIcon_POL_512_Color.png' },
+    { id: 9, name: '芬兰', folder: '芬兰', iconFolder: '国家图标/芬兰', iconFile: 'FactionIcon_FIN_1024_Color.png' }
+];
+
+// 页面加载时初始化
+document.addEventListener('DOMContentLoaded', function() {
+    loadCountryIcons();
+    setupEventListeners();
+    
+    // 从URL参数获取国家代码
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    if (code && code.startsWith('%%')) {
+        parseCountryCode(code);
+    }
+    
+    // 初始化筛选器
+    initFilters();
+});
+
+// 初始化筛选器
+function initFilters() {
+    // 初始化类型筛选器
+    updateTypeSelector([]);
+    
+    // 初始化指挥点筛选器（保持和index.html一致）
+    commandPointsSelect.innerHTML = `
+        <option value="">全部指挥点</option>
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7+">7+</option>
+    `;
+    
+    // 初始化状态筛选器
+    statusSelect.innerHTML = `
+        <option value="">全部状态</option>
+        <option value="true">活跃</option>
+        <option value="false">预备</option>
+    `;
+    
+    // 初始化衍生筛选器
+    derivedSelect.innerHTML = `
+        <option value="">全部</option>
+        <option value="true">真</option>
+        <option value="fake">假</option>
+    `;
+    
+    // 初始化移动端衍生筛选器
+    mobileDerivedSelect.innerHTML = `
+        <option value="">全部</option>
+        <option value="true">真</option>
+        <option value="fake">假</option>
+    `;
+}
+
+// 加载国家图标
+function loadCountryIcons() {
+    const countryIconsContainer = document.getElementById('country-selector');
+    countryIconsContainer.innerHTML = '';
+    
+    countries.forEach(country => {
+        const countryItem = document.createElement('div');
+        countryItem.className = 'country-option';
+        countryItem.dataset.countryId = country.id;
+        
+        countryItem.innerHTML = `
+            <img src="image2/${country.iconFolder}/${country.iconFile}" alt="${country.name}" class="country-image">
+            <div class="country-name">${country.name}</div>
+        `;
+        
+        countryIconsContainer.appendChild(countryItem);
+    });
+}
+
+// 解析国家代码
+function parseCountryCode(code) {
+    // 格式: %%12|...
+    const countryCode = code.substring(2, 4);
+    const mainCountryId = parseInt(countryCode.charAt(0));
+    const secondaryCountryId = parseInt(countryCode.charAt(1));
+    
+    // 选择主国家
+    if (mainCountryId) {
+        const mainCountryElement = document.querySelector(`.country-option[data-country-id="${mainCountryId}"]`);
+        if (mainCountryElement) {
+            mainCountryElement.classList.add('selected');
+            window.selectedMainCountry = mainCountryId;
+        }
+    }
+    
+    // 选择盟国
+    if (secondaryCountryId) {
+        const secondaryCountryElement = document.querySelector(`.country-option[data-country-id="${secondaryCountryId}"]`);
+        if (secondaryCountryElement) {
+            secondaryCountryElement.classList.add('selected');
+            window.selectedSecondaryCountry = secondaryCountryId;
+        }
+    }
+    
+    // 更新禁用状态
+    updateDisabledState();
+    
+    // 隐藏其他未选择的国家图标
+    hideUnselectedCountries();
+    
+    // 加载卡牌
+    if (window.selectedMainCountry && window.selectedSecondaryCountry) {
+        loadCardsForCountries();
+    }
+}
+
+// 隐藏未选择的国家图标
+function hideUnselectedCountries() {
+    const countryItems = document.querySelectorAll('.country-option');
+    
+    countryItems.forEach(item => {
+        const countryId = parseInt(item.dataset.countryId);
+        
+        // 只显示选定的两个国家
+        if (countryId !== window.selectedMainCountry && countryId !== window.selectedSecondaryCountry) {
+            item.style.display = 'none';
+        }
+    });
+}
+
+// 更新禁用状态
+function updateDisabledState() {
+    const countryItems = document.querySelectorAll('.country-option');
+    
+    countryItems.forEach(item => {
+        const countryId = parseInt(item.dataset.countryId);
+        
+        if (window.selectedMainCountry !== null && countryId === window.selectedMainCountry) {
+            item.classList.add('disabled');
+        } else {
+            item.classList.remove('disabled');
+        }
+    });
+}
+
+// 设置事件监听器
+function setupEventListeners() {
+    // 国家图标点击事件 - 已在 HTML 中处理，这里留空或者删除
+    
+    // 筛选器事件
+    raritySelect.addEventListener('change', filterCards);
+    typeSelect.addEventListener('change', filterCards);
+    commandPointsSelect.addEventListener('change', filterCards);
+    statusSelect.addEventListener('change', filterCards);
+    // 添加衍生筛选器事件监听
+    derivedSelect.addEventListener('change', filterCards);
+    mobileDerivedSelect.addEventListener('change', filterCards);
+    searchInput.addEventListener('input', filterCards);
+    
+    // 添加类型选择器事件监听（修复之前的问题）
+    if (typeSelect) {
+        typeSelect.addEventListener('change', filterCards);
+    }
+}
+
+// 修改 loadCardsForCountries 函数，允许只选择一个国家
+async function loadCardsForCountries() {
+
+    
+    cardsContainer.innerHTML = '<div class="loading">加载中...</div>';
+    
+    try {
+        // 获取卡牌数据
+        const response = await fetch('data/newk.json');
+        if (!response.ok) {
+            throw new Error('newk.json 网络响应错误');
+        }
+        const cardsData = await response.json();
+        
+        // 获取图片数据
+        const imagesResponse = await fetch('data/newimages.json');
+        if (!imagesResponse.ok) {
+            throw new Error('newimages.json 网络响应错误');
+        }
+        const imagesData = await imagesResponse.json();
+        
+        // 获取选定国家的卡牌（允许只选择一个国家）
+        const selectedCountries = [];
+        const mainCountryName = window.selectedMainCountry ? countries.find(c => c.id === window.selectedMainCountry)?.name : null;
+        const secondaryCountryName = window.selectedSecondaryCountry ? countries.find(c => c.id === window.selectedSecondaryCountry)?.name : null;
+        
+        if (mainCountryName) selectedCountries.push(mainCountryName);
+        if (secondaryCountryName) selectedCountries.push(secondaryCountryName);
+        
+        // 筛选卡牌
+        let filteredCards = cardsData.filter(card => 
+            selectedCountries.includes(card.国家)
+        );
+        
+        // 对卡牌进行特殊处理：
+        // 1. 主国家可以使用所有卡牌
+        // 2. 盟国不能使用金卡和精英卡
+        filteredCards = filteredCards.filter(card => {
+            // 主国家可以使用所有卡牌
+            if (window.selectedMainCountry && card.国家 === mainCountryName) {
+                return true;
+            }
+            // 盟国不能使用金卡和精英卡
+            if (window.selectedSecondaryCountry && card.国家 === secondaryCountryName) {
+                // 检查这张卡是否是金卡
+                const isGold = isGoldenCard(card, imagesData);
+                // 检查是否是精英卡
+                const isElite = card.详细信息?.稀有度 === '精英';
+                // 如果是金卡或精英卡则排除，否则保留
+                return !(isGold || isElite);
+            }
+            return true;
+        });
+        
+        if (filteredCards.length === 0) {
+            cardsContainer.innerHTML = '<div class="no-cards">未找到匹配的卡牌</div>';
+            return;
+        }
+        
+        // 获取对应的图片路径
+        let cardImages = [];
+        filteredCards.forEach(card => {
+            const country = card.国家;
+            const cardName = card.名称;
+            
+            // 在图片数据中查找对应的图片
+            if (imagesData[country]) {
+                for (const subtype in imagesData[country]) {
+                    const foundImage = imagesData[country][subtype].find(imgPath => 
+                        imgPath.includes(cardName)
+                    );
+                    if (foundImage) {
+                        cardImages.push({
+                            path: foundImage,
+                            name: cardName,
+                            cardData: card
+                        });
+                        break;
+                    }
+                }
+            }
+        });
+        
+        // 按指挥点排序
+        cardImages = sortCardsByCommandPoint(cardImages);
+        
+        // 更新类型筛选器选项
+        const types = getCardTypes(cardImages);
+        updateTypeSelector(types);
+        
+        renderCards(cardImages);
+        
+        // 立即应用筛选，不需要点击国家
+        setTimeout(filterCards, 0);
+        
+    } catch (error) {
+        console.error('加载卡牌出错:', error);
+        cardsContainer.innerHTML = '<div class="no-cards">加载卡牌失败</div>';
+    }
+}
+
+
+function isGoldenCard(card, imagesData) {
+    const country = card.国家;
+    const cardName = card.名称;
+    
+    if (imagesData[country] && imagesData[country]['金卡']) {
+        return imagesData[country]['金卡'].some(imgPath => imgPath.includes(cardName));
+    }
+    
+    return false;
+}
+
+
+// 按指挥点排序卡牌
+function sortCardsByCommandPoint(cards) {
+    return cards.sort((a, b) => {
+        const cpA = parseInt(a.cardData?.详细信息?.["指挥点"]) || 0;
+        const cpB = parseInt(b.cardData?.详细信息?.["指挥点"]) || 0;
+        return cpA - cpB;
+    });
+}
+
+// 获取卡牌类型选项
+function getCardTypes(cards) {
+    const types = new Set();
+    cards.forEach(card => {
+        const type = card.cardData?.详细信息?.类型;
+        if (type) {
+            types.add(type);
+        }
+    });
+    return Array.from(types).sort();
+}
+
+// 更新类型选择器
+function updateTypeSelector(types) {
+    typeSelect.innerHTML = '<option value="">全部类型</option>';
+    
+    types.forEach(type => {
+        const option = document.createElement('option');
+        option.value = type;
+        option.textContent = type;
+        typeSelect.appendChild(option);
+    });
+    
+    // 不要在这里重新绑定事件监听器，因为已经在 setupEventListeners 中绑定过了
+}
+
+// 渲染卡牌 (移除右下角的指挥点数字，添加预备图标)
+function renderCards(cards) {
+    if (cards.length === 0) {
+        cardsContainer.innerHTML = '<div class="no-cards">未找到匹配的卡牌</div>';
+        return;
+    }
+    
+    let html = '';
+    cards.forEach(card => {
+        // 处理图片路径
+        const imagePath = card.path;
+        const encodedImagePath = encodeImagePath(imagePath);
+        const fileName = imagePath.split('/').pop();
+        const displayName = card.name || fileName;
+        
+        // 获取稀有度 - 确保正确获取稀有度信息
+        const rarity = card.cardData?.详细信息?.稀有度 || '未知';
+        
+        // 获取卡牌代码
+        const cardCode = card.cardData?.详细信息?.["卡牌代码"] || '';
+        
+        // 检查是否为预备卡牌
+        const isReserve = card.cardData?.详细信息?.活跃 === "false";
+        
+        // 获取稀有度限制次数
+        const rarityLimits = {
+            '精英': 1,
+            '特殊': 2,
+            '限定': 3,
+            '普通': 4
+        };
+        const maxClicks = rarityLimits[rarity] || 1;
+        
+        // 调试信息 - 检查特定卡牌
+        if (card.name === "步兵第七十七联队") {
+            console.log("步兵第七十七联队卡牌信息:", card);
+            console.log("稀有度:", rarity);
+        }
+        
+        html += `
+    <div class="card-item" 
+         data-name="${card.name}" 
+         data-rarity="${rarity}"
+         data-code="${cardCode}"
+         data-card="${encodeURIComponent(JSON.stringify(card.cardData))}">
+        <img src="${encodedImagePath}" alt="${displayName}">
+        <div class="card-indicators" data-rarity="${rarity}"></div>
+        ${isReserve ? `<img 
+            src="image/T_nui-icon-Reserves-gritty-256.png" 
+            alt="预备" 
+            style="position:absolute;bottom:5px;right:2px;width:15px;height:15px;z-index:10;"
+        >` : ''}
+        <div class="card-clicks" style="position:absolute;bottom:5px;left:5px;background-color:rgba(0,0,0,0.7);color:white;font-size:12px;font-weight:bold;padding:2px 6px;border-radius:10px;z-index:10;">
+            ${maxClicks}
+        </div>
+    </div>
+`;
+    });
+    
+    cardsContainer.innerHTML = html;
+    
+    // 应用当前筛选条件，使用 setTimeout 确保 DOM 已更新
+    setTimeout(filterCards, 0);
+}
+
+// 筛选卡牌
+// 在 js/deck/deck_image.js 中找到 filterCards 函数并替换为以下代码：
+
+// 筛选卡牌
+// 在 js/deck/deck_image.js 中找到 filterCards 函数，并替换为以下代码：
+
+// 筛选卡牌
+function filterCards() {
+    const rarity = raritySelect.value;
+    const type = typeSelect.value;
+    const commandPoints = commandPointsSelect.value;
+    const status = statusSelect.value;
+    // 获取衍生筛选值（从两个筛选器中获取，移动端和桌面端）
+    const derived = derivedSelect.value || mobileDerivedSelect.value;
+    const search = searchInput.value.trim().toLowerCase();
+
+    const cardItems = document.querySelectorAll('.card-item');
+    
+    cardItems.forEach(item => {
+        const cardName = item.dataset.name.toLowerCase();
+        const cardData = JSON.parse(decodeURIComponent(item.dataset.card));
+        const cardRarity = cardData.详细信息?.稀有度 || '';
+        const cardType = cardData.详细信息?.类型 || '';
+        const cardCommandPoint = cardData.详细信息?.["指挥点"] || '';
+        const cardStatus = cardData.详细信息?.活跃 || 'true';
+        // 获取衍生值，默认为"fake"
+        const cardDerived = cardData.详细信息?.衍生 || 'fake';
+
+        let show = true;
+        
+        // 稀有度筛选（精英、特殊等）
+        if (rarity && cardRarity !== rarity) {
+            show = false;
+        }
+        
+        // 类型筛选（步兵、坦克等）
+        if (type && cardType !== type) {
+            show = false;
+        }
+        
+        // 指挥点筛选
+        if (commandPoints) {
+            if (commandPoints === "7+") {
+                if (parseInt(cardCommandPoint) < 7) {
+                    show = false;
+                }
+            } else if (cardCommandPoint !== commandPoints) {
+                show = false;
+            }
+        }
+        
+        // 状态筛选
+        if (status !== "" && status !== undefined) {
+            // 需要将 cardStatus 转换为字符串进行比较
+            const statusStr = cardStatus === true || cardStatus === "true" ? "true" : "false";
+            if (statusStr !== status) {
+                show = false;
+            }
+        }
+        
+        // 衍生筛选
+        if (derived && cardDerived !== derived) {
+            show = false;
+        }
+        
+        // 搜索筛选
+        if (search && !cardName.includes(search)) {
+            show = false;
+        }
+        
+        // 调试信息 - 检查特定卡牌的筛选结果
+        if (item.dataset.name === "步兵第七十七联队") {
+            console.log("步兵第七十七联队筛选信息:", {
+                cardRarity,
+                selectedRarity: rarity,
+                show,
+                statusMatch: status === "" || status === undefined || (cardStatus === true || cardStatus === "true" ? "true" : "false") === status
+            });
+        }
+        
+        item.style.display = show ? 'block' : 'none';
+    });
+}

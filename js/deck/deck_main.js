@@ -1,1 +1,328 @@
-window['\x64\x65\x63\x6b']={精英:{},特殊:{},限定:{},普通:{}};window['\x64\x65\x63\x6b\x43\x61\x72\x64\x73']=[];window['\x63\x61\x72\x64\x43\x6f\x64\x65\x73']={};window['\x6f\x72\x69\x67\x69\x6e\x61\x6c\x43\x6f\x75\x6e\x74\x72\x79\x43\x6f\x64\x65']="";const rarityLimits={'\u7cbe\u82f1':1,'\u7279\u6b8a':2,'\u9650\u5b9a':3,'\u666e\u901a':4};window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x44\x4f\x4d\x43\x6f\x6e\x74\x65\x6e\x74\x4c\x6f\x61\x64\x65\x64',function(){const urlParams=new URLSearchParams(window['\x6c\x6f\x63\x61\x74\x69\x6f\x6e']['\x73\x65\x61\x72\x63\x68']);const code=urlParams['\x67\x65\x74']('\x63\x6f\x64\x65');if(code&&code['\x73\x74\x61\x72\x74\x73\x57\x69\x74\x68']('\x25\x25')){window['\x6f\x72\x69\x67\x69\x6e\x61\x6c\x43\x6f\x75\x6e\x74\x72\x79\x43\x6f\x64\x65']=code['\x73\x75\x62\x73\x74\x72\x69\x6e\x67'](2,4)}window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x6d\x6f\x64\x61\x6c\x2d\x63\x6c\x6f\x73\x65')['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x63\x6c\x69\x63\x6b',function(){window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x6c\x69\x6d\x69\x74\x2d\x6d\x6f\x64\x61\x6c')['\x73\x74\x79\x6c\x65']['\x64\x69\x73\x70\x6c\x61\x79']='\x6e\x6f\x6e\x65'});window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x63\x61\x72\x64\x73\x2d\x63\x6f\x6e\x74\x61\x69\x6e\x65\x72')['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x63\x6c\x69\x63\x6b',function(szdD_C1){const cardItem=szdD_C1['\x74\x61\x72\x67\x65\x74']['\x63\x6c\x6f\x73\x65\x73\x74']('\x2e\x63\x61\x72\x64\x2d\x69\x74\x65\x6d');if(!cardItem)return;const cardName=cardItem['\x64\x61\x74\x61\x73\x65\x74']['\x6e\x61\x6d\x65'];const rarity=cardItem['\x64\x61\x74\x61\x73\x65\x74']['\x72\x61\x72\x69\x74\x79'];const cardCode=cardItem['\x64\x61\x74\x61\x73\x65\x74']['\x63\x6f\x64\x65'];if(isRarityLimitReached(rarity,cardName)){showLimitModal(rarity);return}const totalCards=getTotalCards();if(totalCards>=39){window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x6d\x6f\x64\x61\x6c\x2d\x6d\x65\x73\x73\x61\x67\x65')['\x74\x65\x78\x74\x43\x6f\x6e\x74\x65\x6e\x74']='\u5361\u7ec4\u5df2\u8fbe\u5230\u6700\u5927\u6570\u91cf\uff08\x33\x39\u5f20\uff09';window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x6c\x69\x6d\x69\x74\x2d\x6d\x6f\x64\x61\x6c')['\x73\x74\x79\x6c\x65']['\x64\x69\x73\x70\x6c\x61\x79']='\x62\x6c\x6f\x63\x6b';return}addToDeck(cardName,rarity,cardItem['\x64\x61\x74\x61\x73\x65\x74']['\x63\x61\x72\x64'],cardCode);updateDeckPreview();updateDeckCode();updateCardClickCount(cardItem,cardName,rarity)});function updateCardClickCount(kb2,kcDadt3,NlfOXCOz4){const rarityLimits={'\u7cbe\u82f1':1,'\u7279\u6b8a':2,'\u9650\u5b9a':3,'\u666e\u901a':4};const limit=rarityLimits[NlfOXCOz4]||1;const currentCount=window['\x64\x65\x63\x6b'][NlfOXCOz4][kcDadt3]||0;const remainingClicks=limit-currentCount;const clicksElement=kb2['\x71\x75\x65\x72\x79\x53\x65\x6c\x65\x63\x74\x6f\x72']('\x2e\x63\x61\x72\x64\x2d\x63\x6c\x69\x63\x6b\x73');if(clicksElement){clicksElement['\x74\x65\x78\x74\x43\x6f\x6e\x74\x65\x6e\x74']=remainingClicks;if(remainingClicks<=0){clicksElement['\x73\x74\x79\x6c\x65']['\x6f\x70\x61\x63\x69\x74\x79']='\x30\x2e\x35'}}}window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x70\x72\x65\x76\x69\x65\x77\x2d\x6c\x69\x73\x74')['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x63\x6c\x69\x63\x6b',function(r5){const previewItem=r5['\x74\x61\x72\x67\x65\x74']['\x63\x6c\x6f\x73\x65\x73\x74']('\x2e\x70\x72\x65\x76\x69\x65\x77\x2d\x69\x74\x65\x6d');if(!previewItem)return;const cardName=previewItem['\x64\x61\x74\x61\x73\x65\x74']['\x6e\x61\x6d\x65'];const rarity=previewItem['\x64\x61\x74\x61\x73\x65\x74']['\x72\x61\x72\x69\x74\x79'];removeFromDeck(cardName,rarity);updateDeckPreview();updateDeckCode()});window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x73\x61\x76\x65\x2d\x62\x74\x6e')['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x63\x6c\x69\x63\x6b',function(){const deckCode=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x64\x65\x63\x6b\x2d\x63\x6f\x64\x65')['\x74\x65\x78\x74\x43\x6f\x6e\x74\x65\x6e\x74'];if(deckCode){copyToClipboard(deckCode);window["\x61\x6c\x65\x72\x74"]('\u5361\u7ec4\u4ee3\u7801\u5df2\u590d\u5236\u5230\u526a\u8d34\u677f')}});loadCardCodes()});async function loadCardCodes(){try{const response=await fetch('\x64\x61\x74\x61\x2f\x6e\x65\x77\x6b\x2e\x6a\x73\x6f\x6e');if(!response['\x6f\x6b']){throw new window["\x45\x72\x72\x6f\x72"]('\x6e\x65\x77\x6b\x2e\x6a\x73\x6f\x6e \u7f51\u7edc\u54cd\u5e94\u9519\u8bef');}const cardsData=await response['\x6a\x73\x6f\x6e']();cardsData['\x66\x6f\x72\x45\x61\x63\x68'](card=>{const cardName=card.名称;const cardCode=card.详细信息?.["\u5361\u724c\u4ee3\u7801"];if(cardCode){window['\x63\x61\x72\x64\x43\x6f\x64\x65\x73'][cardName]=cardCode}})}catch(error){console['\x65\x72\x72\x6f\x72']('\u52a0\u8f7d\u5361\u724c\u4ee3\u7801\u6570\u636e\u51fa\u9519\x3a',error)}}function getTotalCards(){let total=0;for(const rarity in window['\x64\x65\x63\x6b']){for(const cardName in window['\x64\x65\x63\x6b'][rarity]){total+=window['\x64\x65\x63\x6b'][rarity][cardName]}}return total}function isRarityLimitReached(rarity,wRk6){const limit=rarityLimits[rarity];const currentCount=window['\x64\x65\x63\x6b'][rarity][wRk6]||0;return currentCount>=limit}function showLimitModal(rarity){const limit=rarityLimits[rarity];window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x6d\x6f\x64\x61\x6c\x2d\x6d\x65\x73\x73\x61\x67\x65')['\x74\x65\x78\x74\x43\x6f\x6e\x74\x65\x6e\x74']=`${rarity}类型至多只能选择${limit}张`;window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x6c\x69\x6d\x69\x74\x2d\x6d\x6f\x64\x61\x6c')['\x73\x74\x79\x6c\x65']['\x64\x69\x73\x70\x6c\x61\x79']='\x62\x6c\x6f\x63\x6b'}function addToDeck(ou7,E8,$nJFzDF9,_10){if(!window['\x64\x65\x63\x6b'][E8]){window['\x64\x65\x63\x6b'][E8]={}}if(!window['\x64\x65\x63\x6b'][E8][ou7]){window['\x64\x65\x63\x6b'][E8][ou7]=0}window['\x64\x65\x63\x6b'][E8][ou7]++;const existingCard=window['\x64\x65\x63\x6b\x43\x61\x72\x64\x73']['\x66\x69\x6e\x64'](card=>card['\x6e\x61\x6d\x65']===ou7);if(!existingCard){const cardInfo=JSON['\x70\x61\x72\x73\x65'](decodeURIComponent($nJFzDF9));window['\x64\x65\x63\x6b\x43\x61\x72\x64\x73']['\x70\x75\x73\x68']({name:ou7,code:_10,E8:E8,commandPoint:window["\x70\x61\x72\x73\x65\x49\x6e\x74"](cardInfo.详细信息?.["\u6307\u6325\u70b9"])||0,data:cardInfo})}}function removeFromDeck(jhZjGRWo11,CV12){if(window['\x64\x65\x63\x6b'][CV12]&&window['\x64\x65\x63\x6b'][CV12][jhZjGRWo11]){window['\x64\x65\x63\x6b'][CV12][jhZjGRWo11]--;if(window['\x64\x65\x63\x6b'][CV12][jhZjGRWo11]<=0){delete window['\x64\x65\x63\x6b'][CV12][jhZjGRWo11];const cardIndex=window['\x64\x65\x63\x6b\x43\x61\x72\x64\x73']['\x66\x69\x6e\x64\x49\x6e\x64\x65\x78'](card=>card['\x6e\x61\x6d\x65']===jhZjGRWo11);if(cardIndex>-1){window['\x64\x65\x63\x6b\x43\x61\x72\x64\x73']['\x73\x70\x6c\x69\x63\x65'](cardIndex,1)}}}}function updateDeckPreview(){const previewList=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x70\x72\x65\x76\x69\x65\x77\x2d\x6c\x69\x73\x74');previewList['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']='';const sortedCards=[..['\x77\x69\x6e\x64\x6f\x77']['\x64\x65\x63\x6b\x43\x61\x72\x64\x73']]['\x73\x6f\x72\x74']((a,b)=>a['\x63\x6f\x6d\x6d\x61\x6e\x64\x50\x6f\x69\x6e\x74']-b['\x63\x6f\x6d\x6d\x61\x6e\x64\x50\x6f\x69\x6e\x74']);sortedCards['\x66\x6f\x72\x45\x61\x63\x68'](card=>{const count=window['\x64\x65\x63\x6b'][card['\x72\x61\x72\x69\x74\x79']][card['\x6e\x61\x6d\x65']]||0;if(count>0){const listItem=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x63\x72\x65\x61\x74\x65\x45\x6c\x65\x6d\x65\x6e\x74']('\x6c\x69');listItem['\x63\x6c\x61\x73\x73\x4e\x61\x6d\x65']='\x70\x72\x65\x76\x69\x65\x77\x2d\x69\x74\x65\x6d';listItem['\x64\x61\x74\x61\x73\x65\x74']['\x6e\x61\x6d\x65']=card['\x6e\x61\x6d\x65'];listItem['\x64\x61\x74\x61\x73\x65\x74']['\x72\x61\x72\x69\x74\x79']=card['\x72\x61\x72\x69\x74\x79'];listItem['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']=`<div class="\x70\x72\x65\x76\x69\x65\x77\x2d\x69\x6e\x66\x6f"><div class="\x70\x72\x65\x76\x69\x65\x77\x2d\x6e\x61\x6d\x65">${card['\x6e\x61\x6d\x65']}</div><div class="\x70\x72\x65\x76\x69\x65\x77\x2d\x63\x6f\x73\x74">指挥点:${card['\x63\x6f\x6d\x6d\x61\x6e\x64\x50\x6f\x69\x6e\x74']}</div></div><div class="\x70\x72\x65\x76\x69\x65\x77\x2d\x63\x6f\x75\x6e\x74">X${count}</div>`;previewList['\x61\x70\x70\x65\x6e\x64\x43\x68\x69\x6c\x64'](listItem)}});const totalCards=getTotalCards();window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x73\x61\x76\x65\x2d\x62\x74\x6e')['\x64\x69\x73\x61\x62\x6c\x65\x64']=totalCards===0;const previewTitle=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x71\x75\x65\x72\x79\x53\x65\x6c\x65\x63\x74\x6f\x72']('\x2e\x70\x72\x65\x76\x69\x65\x77\x2d\x74\x69\x74\x6c\x65');previewTitle['\x74\x65\x78\x74\x43\x6f\x6e\x74\x65\x6e\x74']=`卡组预览(${totalCards}/39)`}function updateDeckCode(){const urlParams=new URLSearchParams(window['\x6c\x6f\x63\x61\x74\x69\x6f\x6e']['\x73\x65\x61\x72\x63\x68']);const fullCode=urlParams['\x67\x65\x74']('\x63\x6f\x64\x65');if(!fullCode||!fullCode['\x73\x74\x61\x72\x74\x73\x57\x69\x74\x68']('\x25\x25'))return;const originalCountryCode=fullCode['\x73\x75\x62\x73\x74\x72\x69\x6e\x67'](2,4);if(!originalCountryCode)return;const deckPart=generateDeckCode();const finalCode=`%%${originalCountryCode}|${deckPart}`;const deckCodeElement=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x64\x65\x63\x6b\x2d\x63\x6f\x64\x65');deckCodeElement['\x74\x65\x78\x74\x43\x6f\x6e\x74\x65\x6e\x74']=finalCode;deckCodeElement['\x63\x6c\x61\x73\x73\x4c\x69\x73\x74']['\x61\x64\x64']('\x76\x69\x73\x69\x62\x6c\x65')}function generateDeckCode(){const layers={0:[],1:[],2:[],3:[]};const maxCount={"\u7cbe\u82f1":1,"\u7279\u6b8a":2,"\u9650\u5b9a":3,"\u666e\u901a":4};for(const rarity in window['\x64\x65\x63\x6b']){for(const cardName in window['\x64\x65\x63\x6b'][rarity]){const count=window['\x64\x65\x63\x6b'][rarity][cardName];const code=window['\x63\x61\x72\x64\x43\x6f\x64\x65\x73'][cardName]||cardName['\x73\x75\x62\x73\x74\x72\x69\x6e\x67'](0,2);const cappedCount=window["\x4d\x61\x74\x68"]['\x6d\x69\x6e'](count,maxCount[rarity]);const layerIndex=cappedCount-1;if(layerIndex>=0&&layerIndex<=3){layers[layerIndex]['\x70\x75\x73\x68'](code)}}}return`${layers[0]['\x6a\x6f\x69\x6e']('')};${layers[1]['\x6a\x6f\x69\x6e']('')};${layers[2]['\x6a\x6f\x69\x6e']('')};${layers[3]['\x6a\x6f\x69\x6e']('')}`}function copyToClipboard(X13){const textarea=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x63\x72\x65\x61\x74\x65\x45\x6c\x65\x6d\x65\x6e\x74']('\x74\x65\x78\x74\x61\x72\x65\x61');textarea['\x76\x61\x6c\x75\x65']=X13;window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x62\x6f\x64\x79']['\x61\x70\x70\x65\x6e\x64\x43\x68\x69\x6c\x64'](textarea);textarea['\x73\x65\x6c\x65\x63\x74']();window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x65\x78\x65\x63\x43\x6f\x6d\x6d\x61\x6e\x64']('\x63\x6f\x70\x79');window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x62\x6f\x64\x79']['\x72\x65\x6d\x6f\x76\x65\x43\x68\x69\x6c\x64'](textarea)}
+// js/deck_main.js
+
+// 卡组数据结构 - 记录每张卡牌的数量
+window.deck = {
+    精英: {},
+    特殊: {},
+    限定: {},
+    普通: {}
+};
+
+// 卡组中的所有卡牌（包含详细信息）
+window.deckCards = [];
+
+// 卡牌代码映射
+window.cardCodes = {};
+
+// 保存从card.html传递过来的原始国家代码
+window.originalCountryCode = "";
+
+// 稀有度限制
+const rarityLimits = {
+    '精英': 1,
+    '特殊': 2,
+    '限定': 3,
+    '普通': 4
+};
+
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    // 解析并保存从URL传递的原始国家代码
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    if (code && code.startsWith('%%')) {
+        // 提取国家代码部分 (例如从 %%12|... 中提取 12)
+        window.originalCountryCode = code.substring(2, 4);
+    }
+    
+    // 设置弹窗关闭事件
+    document.getElementById('modal-close').addEventListener('click', function() {
+        document.getElementById('limit-modal').style.display = 'none';
+    });
+    
+    // 点击卡牌事件委托
+ // deck_main.js 中的点击卡牌事件委托修改
+document.getElementById('cards-container').addEventListener('click', function(e) {
+    const cardItem = e.target.closest('.card-item');
+    if (!cardItem) return;
+    
+    const cardName = cardItem.dataset.name;
+    const rarity = cardItem.dataset.rarity;
+    const cardCode = cardItem.dataset.code;
+    
+    // 检查是否超过该稀有度的限制
+    if (isRarityLimitReached(rarity, cardName)) {
+        showLimitModal(rarity);
+        return;
+    }
+    
+    // 检查卡组是否已满（39张）
+    const totalCards = getTotalCards();
+    if (totalCards >= 39) {
+        document.getElementById('modal-message').textContent = '卡组已达到最大数量（39张）';
+        document.getElementById('limit-modal').style.display = 'block';
+        return;
+    }
+    
+    // 添加到卡组
+    addToDeck(cardName, rarity, cardItem.dataset.card, cardCode);
+    
+    // 更新预览
+    updateDeckPreview();
+    
+    // 更新卡组代码，使用原始国家代码
+    updateDeckCode();
+    
+    // 更新卡牌上的点击次数显示
+    updateCardClickCount(cardItem, cardName, rarity);
+});
+
+function updateCardClickCount(cardItem, cardName, rarity) {
+    // 获取稀有度限制
+    const rarityLimits = {
+        '精英': 1,
+        '特殊': 2,
+        '限定': 3,
+        '普通': 4
+    };
+    
+    const limit = rarityLimits[rarity] || 1;
+    const currentCount = window.deck[rarity][cardName] || 0;
+    const remainingClicks = limit - currentCount;
+    
+    // 更新卡牌上的点击次数显示
+    const clicksElement = cardItem.querySelector('.card-clicks');
+    if (clicksElement) {
+        clicksElement.textContent = remainingClicks;
+        // 如果没有剩余点击次数，可以改变样式
+        if (remainingClicks <= 0) {
+            clicksElement.style.opacity = '0.5';
+        }
+    }
+}
+    
+    // 点击预览项事件委托（用于移除卡牌）
+    document.getElementById('preview-list').addEventListener('click', function(e) {
+        const previewItem = e.target.closest('.preview-item');
+        if (!previewItem) return;
+        
+        const cardName = previewItem.dataset.name;
+        const rarity = previewItem.dataset.rarity;
+        
+        // 从卡组中移除一张
+        removeFromDeck(cardName, rarity);
+        
+        // 更新预览
+        updateDeckPreview();
+        
+        // 更新卡组代码，使用原始国家代码
+        updateDeckCode();
+    });
+    
+    // 保存按钮事件
+    document.getElementById('save-btn').addEventListener('click', function() {
+        const deckCode = document.getElementById('deck-code').textContent;
+        if (deckCode) {
+            copyToClipboard(deckCode);
+            alert('卡组代码已复制到剪贴板');
+        }
+    });
+    
+    // 加载卡牌代码数据
+    loadCardCodes();
+});
+
+// 加载卡牌代码数据
+async function loadCardCodes() {
+    try {
+        const response = await fetch('data/newk.json');
+        if (!response.ok) {
+            throw new Error('newk.json 网络响应错误');
+        }
+        const cardsData = await response.json();
+        
+        // 构建卡牌代码映射
+        cardsData.forEach(card => {
+            const cardName = card.名称;
+            const cardCode = card.详细信息?.["卡牌代码"];
+            if (cardCode) {
+                window.cardCodes[cardName] = cardCode;
+            }
+        });
+    } catch (error) {
+        console.error('加载卡牌代码数据出错:', error);
+    }
+}
+
+// 获取卡组总卡牌数
+function getTotalCards() {
+    let total = 0;
+    for (const rarity in window.deck) {
+        for (const cardName in window.deck[rarity]) {
+            total += window.deck[rarity][cardName];
+        }
+    }
+    return total;
+}
+
+// 检查稀有度是否达到限制（根据分号位置判断）
+function isRarityLimitReached(rarity, cardName) {
+    const limit = rarityLimits[rarity];
+    const currentCount = window.deck[rarity][cardName] || 0;
+    
+    // 同一张卡牌可以重复添加
+    return currentCount >= limit;
+}
+
+// 显示限制弹窗
+function showLimitModal(rarity) {
+    const limit = rarityLimits[rarity];
+    document.getElementById('modal-message').textContent = `${rarity}类型至多只能选择${limit}张`;
+    document.getElementById('limit-modal').style.display = 'block';
+}
+
+// 添加卡牌到卡组
+function addToDeck(cardName, rarity, cardData, cardCode) {
+    // 初始化稀有度对象
+    if (!window.deck[rarity]) {
+        window.deck[rarity] = {};
+    }
+    
+    // 增加卡牌计数
+    if (!window.deck[rarity][cardName]) {
+        window.deck[rarity][cardName] = 0;
+    }
+    window.deck[rarity][cardName]++;
+    
+    // 添加卡牌详细信息（如果还没有）
+    const existingCard = window.deckCards.find(card => card.name === cardName);
+    if (!existingCard) {
+        const cardInfo = JSON.parse(decodeURIComponent(cardData));
+        window.deckCards.push({
+            name: cardName,
+            code: cardCode,
+            rarity: rarity,
+            commandPoint: parseInt(cardInfo.详细信息?.["指挥点"]) || 0,
+            data: cardInfo
+        });
+    }
+}
+
+// 从卡组中移除卡牌
+function removeFromDeck(cardName, rarity) {
+    if (window.deck[rarity] && window.deck[rarity][cardName]) {
+        window.deck[rarity][cardName]--;
+        if (window.deck[rarity][cardName] <= 0) {
+            delete window.deck[rarity][cardName];
+            
+            // 从详细信息数组中移除
+            const cardIndex = window.deckCards.findIndex(card => card.name === cardName);
+            if (cardIndex > -1) {
+                window.deckCards.splice(cardIndex, 1);
+            }
+        }
+    }
+}
+
+// 更新卡组预览
+function updateDeckPreview() {
+    const previewList = document.getElementById('preview-list');
+    previewList.innerHTML = '';
+    
+    // 按指挥点排序
+    const sortedCards = [...window.deckCards].sort((a, b) => a.commandPoint - b.commandPoint);
+    
+    // 显示排序后的卡牌
+    sortedCards.forEach(card => {
+        const count = window.deck[card.rarity][card.name] || 0;
+        if (count > 0) {
+            const listItem = document.createElement('li');
+            listItem.className = 'preview-item';
+            listItem.dataset.name = card.name;
+            listItem.dataset.rarity = card.rarity;
+            listItem.innerHTML = `
+                <div class="preview-info">
+                    <div class="preview-name">${card.name}</div>
+                    <div class="preview-cost">指挥点: ${card.commandPoint}</div>
+                </div>
+                <div class="preview-count">X${count}</div>
+            `;
+            previewList.appendChild(listItem);
+        }
+    });
+    
+    // 启用保存按钮
+    const totalCards = getTotalCards();
+    document.getElementById('save-btn').disabled = totalCards === 0;
+    
+    // 更新标题显示卡牌数量
+    const previewTitle = document.querySelector('.preview-title');
+    previewTitle.textContent = `卡组预览 (${totalCards}/39)`;
+}
+
+// 更新卡组代码 - 使用原始国家代码
+function updateDeckCode() {
+    // 永远从URL参数中获取原始国家代码，永不使用可能被修改的 window.originalCountryCode
+    const urlParams = new URLSearchParams(window.location.search);
+    const fullCode = urlParams.get('code');
+    
+    if (!fullCode || !fullCode.startsWith('%%')) return;
+    
+    // 从原始URL中提取国家代码部分（例如从 %%12|... 中提取 12）
+    const originalCountryCode = fullCode.substring(2, 4);
+    
+    if (!originalCountryCode) return;
+    
+    // 生成卡组部分代码
+    const deckPart = generateDeckCode();
+    
+    // 构建完整代码，使用从URL中提取的原始国家代码
+    const finalCode = `%%${originalCountryCode}|${deckPart}`;
+    
+    const deckCodeElement = document.getElementById('deck-code');
+    deckCodeElement.textContent = finalCode;
+    deckCodeElement.classList.add('visible');
+}
+
+
+function generateDeckCode() {
+    const layers = { 0: [], 1: [], 2: [], 3: [] };
+
+    // 定义每种稀有度的最大次数
+    const maxCount = {
+        "精英": 1,
+        "特殊": 2,
+        "限定": 3,
+        "普通": 4
+    };
+
+    // 遍历所有卡牌
+    for (const rarity in window.deck) {
+        for (const cardName in window.deck[rarity]) {
+            const count = window.deck[rarity][cardName];
+            const code = window.cardCodes[cardName] || cardName.substring(0, 2);
+
+            // 限制点击次数不超过最大上限
+            const cappedCount = Math.min(count, maxCount[rarity]);
+
+            // 放入对应层级（count 次对应层级 count-1）
+            const layerIndex = cappedCount - 1;
+            if (layerIndex >= 0 && layerIndex <= 3) {
+                layers[layerIndex].push(code);
+            }
+        }
+    }
+
+    // 拼接结果（全局三个分号）
+    return `${layers[0].join('')};${layers[1].join('')};${layers[2].join('')};${layers[3].join('')}`;
+}
+
+// 复制到剪贴板
+function copyToClipboard(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+}
