@@ -620,59 +620,66 @@
       const endIndex = startIndex + MESSAGES_PER_PAGE;
       const messagesToShow = allMessages.slice(startIndex, endIndex);
 
-      list.innerHTML = messagesToShow.map(m => {
-        const time = new Date(m.created_at).toLocaleString();
-        const messageReplies = allReplies.filter(r => r.comment_id === m.id);
-        
-        return `
-          <div class="message-item" data-message-id="${m.id}">
-            <div class="message-header">
-              <div class="default-avatar-small">👤</div>
-              <div class="message-user-info">
-                <div class="message-user">
-                  ${m.user_name} <span class="message-time">[${time}]</span>
+list.innerHTML = messagesToShow.map(m => {
+  const time = new Date(m.created_at).toLocaleString();
+  const messageReplies = allReplies.filter(r => r.comment_id === m.id);
+  
+  return `
+    <div class="message-item" data-message-id="${m.id}">
+      <div class="message-header">
+        ${m.user_name ? (() => {
+          // 查找留言用户的头像
+          const messageUser = allUsers.find(u => u.user_name === m.user_name);
+          const avatarUrl = messageUser ? messageUser.avatar_url : null;
+          return avatarUrl ? 
+            `<img src="${avatarUrl}" alt="头像" class="message-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='" />` :
+            `<div class="default-avatar-small">👤</div>`;
+        })() : `<div class="default-avatar-small">👤</div>`}
+        <div class="message-user-info">
+          <div class="message-user">
+            ${m.user_name} <span class="message-time">[${time}]</span>
+          </div>
+        </div>
+      </div>
+      <div class="message-content">${m.content}</div>
+      
+      <div class="reply-section">
+        <div class="reply-header">回复 (${messageReplies.length})</div>
+        ${messageReplies.map(r => {
+          const replyTime = new Date(r.created_at).toLocaleString();
+          // 根据user_id查找用户信息
+          const user = allUsers.find(u => u.id == r.user_id);
+          const userName = user ? user.user_name : '未知用户';
+          const userAvatar = user ? user.avatar_url : null;
+          
+          return `
+            <div class="reply-item">
+              <div class="reply-header-info">
+                ${userAvatar ? 
+                  `<img src="${userAvatar}" alt="头像" class="reply-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='" />` :
+                  `<div class="default-avatar-tiny">👤</div>`
+                }
+                <div class="reply-user">
+                  ${userName} <span class="reply-time">[${replyTime}]</span>
                 </div>
               </div>
+              <div class="reply-content">${r.content}</div>
             </div>
-            <div class="message-content">${m.content}</div>
-            
-            <div class="reply-section">
-              <div class="reply-header">回复 (${messageReplies.length})</div>
-              ${messageReplies.map(r => {
-                const replyTime = new Date(r.created_at).toLocaleString();
-                // 根据user_id查找用户信息
-                const user = allUsers.find(u => u.id == r.user_id);
-                const userName = user ? user.user_name : '未知用户';
-                const userAvatar = user ? user.avatar_url : null;
-                
-                return `
-                  <div class="reply-item">
-                    <div class="reply-header-info">
-                      ${userAvatar ? 
-                        `<img src="${userAvatar}" alt="头像" class="reply-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='" />` :
-                        `<div class="default-avatar-tiny">👤</div>`
-                      }
-                      <div class="reply-user">
-                        ${userName} <span class="reply-time">[${replyTime}]</span>
-                      </div>
-                    </div>
-                    <div class="reply-content">${r.content}</div>
-                  </div>
-                `;
-              }).join('')}
-              
-              <div class="reply-form" id="replyForm-${m.id}">
-                <textarea id="replyContent-${m.id}" placeholder="输入回复内容"></textarea>
-                <button class="send-reply" data-message-id="${m.id}">发送回复</button>
-              </div>
-              
-              <div class="reply-toggle" data-message-id="${m.id}">
-                ${currentUser ? '回复' : '请登录后回复'}
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('')}
+        
+        <div class="reply-form" id="replyForm-${m.id}">
+          <textarea id="replyContent-${m.id}" placeholder="输入回复内容"></textarea>
+          <button class="send-reply" data-message-id="${m.id}">发送回复</button>
+        </div>
+        
+        <div class="reply-toggle" data-message-id="${m.id}">
+          ${currentUser ? '回复' : '请登录后回复'}
+        </div>
+      </div>
+    </div>
+  `;
+}).join('');
       
       // 绑定回复事件
       bindReplyEvents();
