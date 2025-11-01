@@ -1,1 +1,68 @@
-function parseDeckCode(EIQm1){if(!EIQm1['\x73\x74\x61\x72\x74\x73\x57\x69\x74\x68']('\x25\x25')||!EIQm1['\x65\x6e\x64\x73\x57\x69\x74\x68']('\x7c')){return null}const body=EIQm1['\x73\x75\x62\x73\x74\x72\x69\x6e\x67'](2,EIQm1['\x6c\x65\x6e\x67\x74\x68']-1);const match=body['\x6d\x61\x74\x63\x68'](/^(\d+)(.*)$/);if(!match){return null}const countryCode=match[1];const cardCodesString=match[2];const cardCodes=cardCodesString['\x73\x70\x6c\x69\x74']('\x3b')['\x66\x69\x6c\x74\x65\x72'](EIQm1=>EIQm1!=='');const cardCounts={};cardCodes['\x66\x6f\x72\x45\x61\x63\x68'](EIQm1=>{cardCounts[EIQm1]=(cardCounts[EIQm1]||0)+1});return{countryCode:window["\x70\x61\x72\x73\x65\x49\x6e\x74"](countryCode),cardCounts:cardCounts}}async function loadDeckFromCode(mwNUI2){const parsed=parseDeckCode(mwNUI2);if(!parsed){return null}try{const response=await fetch('\x64\x61\x74\x61\x2f\x63\x61\x72\x64\x63\x6f\x64\x65\x2e\x6a\x73\x6f\x6e');const codesData=await response['\x6a\x73\x6f\x6e']();const deckCards=[];for(const[importId,count]of window["\x4f\x62\x6a\x65\x63\x74"]['\x65\x6e\x74\x72\x69\x65\x73'](parsed['\x63\x61\x72\x64\x43\x6f\x75\x6e\x74\x73'])){const cardEntry=codesData['\x66\x69\x6e\x64'](c=>c['\x69\x6d\x70\x6f\x72\x74\x49\x64']===importId);if(cardEntry){deckCards['\x70\x75\x73\x68']({card:cardEntry,count:count})}}return{countryCode:parsed['\x63\x6f\x75\x6e\x74\x72\x79\x43\x6f\x64\x65'],cards:deckCards}}catch(error){console['\x65\x72\x72\x6f\x72']('\u52a0\u8f7d\u5361\u7ec4\u5931\u8d25\x3a',error);return null}}
+// code.js
+
+// 解析卡组代码
+function parseDeckCode(code) {
+    if (!code.startsWith('%%') || !code.endsWith('|')) {
+        return null;
+    }
+    
+    // 提取主体部分
+    const body = code.substring(2, code.length - 1);
+    
+    // 分离国家代码和卡牌代码
+    const match = body.match(/^(\d+)(.*)$/);
+    if (!match) {
+        return null;
+    }
+    
+    const countryCode = match[1];
+    const cardCodesString = match[2];
+    
+    // 解析卡牌代码
+    const cardCodes = cardCodesString.split(';').filter(code => code !== '');
+    
+    // 统计每张卡的数量
+    const cardCounts = {};
+    cardCodes.forEach(code => {
+        cardCounts[code] = (cardCounts[code] || 0) + 1;
+    });
+    
+    return {
+        countryCode: parseInt(countryCode),
+        cardCounts: cardCounts
+    };
+}
+
+// 根据代码加载卡组
+async function loadDeckFromCode(code) {
+    const parsed = parseDeckCode(code);
+    if (!parsed) {
+        return null;
+    }
+    
+    try {
+        // 加载卡牌代码映射
+        const response = await fetch('data/cardcode.json');
+        const codesData = await response.json();
+        
+        // 将importId映射回cardId
+        const deckCards = [];
+        for (const [importId, count] of Object.entries(parsed.cardCounts)) {
+            const cardEntry = codesData.find(c => c.importId === importId);
+            if (cardEntry) {
+                deckCards.push({
+                    card: cardEntry,
+                    count: count
+                });
+            }
+        }
+        
+        return {
+            countryCode: parsed.countryCode,
+            cards: deckCards
+        };
+    } catch (error) {
+        console.error('加载卡组失败:', error);
+        return null;
+    }
+}

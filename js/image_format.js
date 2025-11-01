@@ -1,1 +1,494 @@
-function createModal(){const modal=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x63\x72\x65\x61\x74\x65\x45\x6c\x65\x6d\x65\x6e\x74']('\x64\x69\x76');modal['\x69\x64']='\x63\x61\x72\x64\x2d\x6d\x6f\x64\x61\x6c';modal['\x73\x74\x79\x6c\x65']['\x63\x73\x73\x54\x65\x78\x74']=`display:none;position:fixed;z-index:2000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.9);overflow:auto;`;modal['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']=`<div style="\x70\x6f\x73\x69\x74\x69\x6f\x6e\x3a \x72\x65\x6c\x61\x74\x69\x76\x65\x3b \x77\x69\x64\x74\x68\x3a \x39\x35\x25\x3b \x6d\x61\x78\x2d\x77\x69\x64\x74\x68\x3a \x31\x32\x30\x30\x70\x78\x3b \x6d\x61\x72\x67\x69\x6e\x3a \x35\x25 \x61\x75\x74\x6f\x3b \x62\x61\x63\x6b\x67\x72\x6f\x75\x6e\x64\x3a \x23\x31\x61\x31\x61\x31\x61\x3b \x62\x6f\x72\x64\x65\x72\x2d\x72\x61\x64\x69\x75\x73\x3a \x31\x30\x70\x78\x3b \x6f\x76\x65\x72\x66\x6c\x6f\x77\x3a \x68\x69\x64\x64\x65\x6e\x3b"><span id="\x63\x6c\x6f\x73\x65\x2d\x6d\x6f\x64\x61\x6c"style="\x70\x6f\x73\x69\x74\x69\x6f\x6e\x3a \x61\x62\x73\x6f\x6c\x75\x74\x65\x3b \x74\x6f\x70\x3a \x31\x35\x70\x78\x3b \x72\x69\x67\x68\x74\x3a \x32\x30\x70\x78\x3b \x63\x6f\x6c\x6f\x72\x3a \x77\x68\x69\x74\x65\x3b \x66\x6f\x6e\x74\x2d\x73\x69\x7a\x65\x3a \x33\x30\x70\x78\x3b \x66\x6f\x6e\x74\x2d\x77\x65\x69\x67\x68\x74\x3a \x62\x6f\x6c\x64\x3b \x63\x75\x72\x73\x6f\x72\x3a \x70\x6f\x69\x6e\x74\x65\x72\x3b \x7a\x2d\x69\x6e\x64\x65\x78\x3a \x32\x30\x30\x31\x3b">&times;</span><div id="\x6d\x6f\x64\x61\x6c\x2d\x63\x6f\x6e\x74\x65\x6e\x74"style="\x64\x69\x73\x70\x6c\x61\x79\x3a \x66\x6c\x65\x78\x3b \x66\x6c\x65\x78\x2d\x64\x69\x72\x65\x63\x74\x69\x6f\x6e\x3a \x63\x6f\x6c\x75\x6d\x6e\x3b \x68\x65\x69\x67\x68\x74\x3a \x61\x75\x74\x6f\x3b \x6d\x69\x6e\x2d\x68\x65\x69\x67\x68\x74\x3a \x35\x30\x30\x70\x78\x3b"><div id="\x69\x6d\x61\x67\x65\x2d\x63\x6f\x6e\x74\x61\x69\x6e\x65\x72"style="\x66\x6c\x65\x78\x3a \x31\x3b \x64\x69\x73\x70\x6c\x61\x79\x3a \x66\x6c\x65\x78\x3b \x61\x6c\x69\x67\x6e\x2d\x69\x74\x65\x6d\x73\x3a \x63\x65\x6e\x74\x65\x72\x3b \x6a\x75\x73\x74\x69\x66\x79\x2d\x63\x6f\x6e\x74\x65\x6e\x74\x3a \x63\x65\x6e\x74\x65\x72\x3b \x70\x61\x64\x64\x69\x6e\x67\x3a \x32\x30\x70\x78\x3b \x6d\x69\x6e\x2d\x68\x65\x69\x67\x68\x74\x3a \x33\x30\x30\x70\x78\x3b"><img id="\x6d\x6f\x64\x61\x6c\x2d\x69\x6d\x61\x67\x65"style="\x6d\x61\x78\x2d\x77\x69\x64\x74\x68\x3a \x31\x30\x30\x25\x3b \x6d\x61\x78\x2d\x68\x65\x69\x67\x68\x74\x3a \x31\x30\x30\x25\x3b \x6f\x62\x6a\x65\x63\x74\x2d\x66\x69\x74\x3a \x63\x6f\x6e\x74\x61\x69\x6e\x3b"src=""alt=""><img id="\x72\x65\x73\x65\x72\x76\x65\x2d\x69\x63\x6f\x6e"style="\x70\x6f\x73\x69\x74\x69\x6f\x6e\x3a \x61\x62\x73\x6f\x6c\x75\x74\x65\x3b \x62\x6f\x74\x74\x6f\x6d\x3a \x32\x30\x70\x78\x3b \x72\x69\x67\x68\x74\x3a \x32\x30\x70\x78\x3b \x77\x69\x64\x74\x68\x3a \x36\x34\x70\x78\x3b \x68\x65\x69\x67\x68\x74\x3a \x36\x34\x70\x78\x3b \x64\x69\x73\x70\x6c\x61\x79\x3a \x6e\x6f\x6e\x65\x3b"src="\x69\x6d\x61\x67\x65\x2f\x54\x5f\x6e\x75\x69\x2d\x69\x63\x6f\x6e\x2d\x52\x65\x73\x65\x72\x76\x65\x73\x2d\x67\x72\x69\x74\x74\x79\x2d\x32\x35\x36\x2e\x70\x6e\x67"alt="\u9884\u5907"></div><div id="\x69\x6e\x66\x6f\x2d\x63\x6f\x6e\x74\x61\x69\x6e\x65\x72"style="\x66\x6c\x65\x78\x3a \x31\x3b \x70\x61\x64\x64\x69\x6e\x67\x3a \x32\x30\x70\x78\x3b \x63\x6f\x6c\x6f\x72\x3a \x77\x68\x69\x74\x65\x3b \x6f\x76\x65\x72\x66\x6c\x6f\x77\x2d\x79\x3a \x61\x75\x74\x6f\x3b"><h2 id="\x63\x61\x72\x64\x2d\x6e\x61\x6d\x65"style="\x6d\x61\x72\x67\x69\x6e\x2d\x62\x6f\x74\x74\x6f\x6d\x3a \x31\x35\x70\x78\x3b \x66\x6f\x6e\x74\x2d\x73\x69\x7a\x65\x3a \x32\x34\x70\x78\x3b"></h2><p id="\x63\x61\x72\x64\x2d\x64\x65\x73\x63\x72\x69\x70\x74\x69\x6f\x6e"style="\x6d\x61\x72\x67\x69\x6e\x2d\x62\x6f\x74\x74\x6f\x6d\x3a \x31\x35\x70\x78\x3b \x66\x6f\x6e\x74\x2d\x73\x69\x7a\x65\x3a \x31\x36\x70\x78\x3b \x6c\x69\x6e\x65\x2d\x68\x65\x69\x67\x68\x74\x3a \x31\x2e\x35\x3b"></p><div id="\x63\x61\x72\x64\x2d\x64\x65\x74\x61\x69\x6c\x73"style="\x66\x6f\x6e\x74\x2d\x73\x69\x7a\x65\x3a \x31\x34\x70\x78\x3b"><table style="\x77\x69\x64\x74\x68\x3a \x31\x30\x30\x25\x3b \x62\x6f\x72\x64\x65\x72\x2d\x63\x6f\x6c\x6c\x61\x70\x73\x65\x3a \x63\x6f\x6c\x6c\x61\x70\x73\x65\x3b"><tbody id="\x64\x65\x74\x61\x69\x6c\x73\x2d\x74\x61\x62\x6c\x65"></tbody></table></div></div></div></div>`;const style=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x63\x72\x65\x61\x74\x65\x45\x6c\x65\x6d\x65\x6e\x74']('\x73\x74\x79\x6c\x65');style['\x74\x65\x78\x74\x43\x6f\x6e\x74\x65\x6e\x74']=`@media(max-width:768px){#card-modal#modal-content{flex-direction:column}#card-modal#image-container{min-height:200px;padding:10px}#card-modal#info-container{padding:15px}#card-modal#card-name{font-size:20px;margin-bottom:10px}#card-modal#card-description{font-size:14px;margin-bottom:10px}#card-modal#card-details{font-size:12px}#card-modal td{padding:6px 4px}}@media(max-width:480px){#card-modal{padding:5px}#card-modal#modal-content{width:100%;margin:2%auto}#card-modal#card-name{font-size:18px}#card-modal#card-description{font-size:13px}#card-modal#card-details{font-size:11px}}`;window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x68\x65\x61\x64']['\x61\x70\x70\x65\x6e\x64\x43\x68\x69\x6c\x64'](style);window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x62\x6f\x64\x79']['\x61\x70\x70\x65\x6e\x64\x43\x68\x69\x6c\x64'](modal);window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x63\x6c\x6f\x73\x65\x2d\x6d\x6f\x64\x61\x6c')['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x63\x6c\x69\x63\x6b',closeModal);modal['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x63\x6c\x69\x63\x6b',function(ltL1){if(ltL1['\x74\x61\x72\x67\x65\x74']===modal)closeModal()})}function closeModal(){window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x63\x61\x72\x64\x2d\x6d\x6f\x64\x61\x6c')['\x73\x74\x79\x6c\x65']['\x64\x69\x73\x70\x6c\x61\x79']='\x6e\x6f\x6e\x65';window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x62\x6f\x64\x79']['\x73\x74\x79\x6c\x65']['\x6f\x76\x65\x72\x66\x6c\x6f\x77']='\x61\x75\x74\x6f'}function showModal(rUQ2,dqYnAjhfV3){const modal=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x63\x61\x72\x64\x2d\x6d\x6f\x64\x61\x6c');const modalImage=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x6d\x6f\x64\x61\x6c\x2d\x69\x6d\x61\x67\x65');const reserveIcon=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x72\x65\x73\x65\x72\x76\x65\x2d\x69\x63\x6f\x6e');const cardName=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x63\x61\x72\x64\x2d\x6e\x61\x6d\x65');const cardDescription=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x63\x61\x72\x64\x2d\x64\x65\x73\x63\x72\x69\x70\x74\x69\x6f\x6e');const detailsTable=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x64\x65\x74\x61\x69\x6c\x73\x2d\x74\x61\x62\x6c\x65');modalImage['\x73\x72\x63']=rUQ2;cardName['\x74\x65\x78\x74\x43\x6f\x6e\x74\x65\x6e\x74']=dqYnAjhfV3.名称||'\u672a\u77e5\u540d\u79f0';cardDescription['\x74\x65\x78\x74\x43\x6f\x6e\x74\x65\x6e\x74']=dqYnAjhfV3.描述||'\u65e0\u63cf\u8ff0';const isActive=dqYnAjhfV3.详细信息?.活跃==="\x74\x72\x75\x65";reserveIcon['\x73\x74\x79\x6c\x65']['\x64\x69\x73\x70\x6c\x61\x79']=isActive?'\x6e\x6f\x6e\x65':'\x62\x6c\x6f\x63\x6b';detailsTable['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']='';const detailInfo=dqYnAjhfV3.详细信息||{};const excludeFields=["\u7a00\u6709\u5ea6","\u7c7b\u578b","\u6307\u6325\u70b9","\u6d3b\u8dc3","\u884d\u751f\u81ea","\u5361\u724c\u4ee3\u7801","\u884d\u751f\u5361\u724c"];const basicFields=["\u7a00\u6709\u5ea6","\u7c7b\u578b","\u6307\u6325\u70b9"];basicFields['\x66\x6f\x72\x45\x61\x63\x68'](field=>{if(detailInfo[field]){const row=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x63\x72\x65\x61\x74\x65\x45\x6c\x65\x6d\x65\x6e\x74']('\x74\x72');row['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']=`<td style="\x70\x61\x64\x64\x69\x6e\x67\x3a \x38\x70\x78\x3b \x62\x6f\x72\x64\x65\x72\x2d\x62\x6f\x74\x74\x6f\x6d\x3a \x31\x70\x78 \x73\x6f\x6c\x69\x64 \x23\x34\x34\x34\x3b \x66\x6f\x6e\x74\x2d\x77\x65\x69\x67\x68\x74\x3a \x62\x6f\x6c\x64\x3b">${field}</td><td style="\x70\x61\x64\x64\x69\x6e\x67\x3a \x38\x70\x78\x3b \x62\x6f\x72\x64\x65\x72\x2d\x62\x6f\x74\x74\x6f\x6d\x3a \x31\x70\x78 \x73\x6f\x6c\x69\x64 \x23\x34\x34\x34\x3b">${detailInfo[field]}</td>`;detailsTable['\x61\x70\x70\x65\x6e\x64\x43\x68\x69\x6c\x64'](row)}});if(detailInfo.活跃!==undefined){const statusText=detailInfo.活跃==="\x74\x72\x75\x65"?"\u6d3b\u8dc3":"\u9884\u5907";const row=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x63\x72\x65\x61\x74\x65\x45\x6c\x65\x6d\x65\x6e\x74']('\x74\x72');row['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']=`<td style="\x70\x61\x64\x64\x69\x6e\x67\x3a \x38\x70\x78\x3b \x62\x6f\x72\x64\x65\x72\x2d\x62\x6f\x74\x74\x6f\x6d\x3a \x31\x70\x78 \x73\x6f\x6c\x69\x64 \x23\x34\x34\x34\x3b \x66\x6f\x6e\x74\x2d\x77\x65\x69\x67\x68\x74\x3a \x62\x6f\x6c\x64\x3b">状态</td><td style="\x70\x61\x64\x64\x69\x6e\x67\x3a \x38\x70\x78\x3b \x62\x6f\x72\x64\x65\x72\x2d\x62\x6f\x74\x74\x6f\x6d\x3a \x31\x70\x78 \x73\x6f\x6c\x69\x64 \x23\x34\x34\x34\x3b">${statusText}</td>`;detailsTable['\x61\x70\x70\x65\x6e\x64\x43\x68\x69\x6c\x64'](row)}for(const[key,value]of window["\x4f\x62\x6a\x65\x63\x74"]['\x65\x6e\x74\x72\x69\x65\x73'](detailInfo)){if(!excludeFields['\x69\x6e\x63\x6c\x75\x64\x65\x73'](key)){const row=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x63\x72\x65\x61\x74\x65\x45\x6c\x65\x6d\x65\x6e\x74']('\x74\x72');row['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c']=`<td style="\x70\x61\x64\x64\x69\x6e\x67\x3a \x38\x70\x78\x3b \x62\x6f\x72\x64\x65\x72\x2d\x62\x6f\x74\x74\x6f\x6d\x3a \x31\x70\x78 \x73\x6f\x6c\x69\x64 \x23\x34\x34\x34\x3b \x66\x6f\x6e\x74\x2d\x77\x65\x69\x67\x68\x74\x3a \x62\x6f\x6c\x64\x3b">${key}</td><td style="\x70\x61\x64\x64\x69\x6e\x67\x3a \x38\x70\x78\x3b \x62\x6f\x72\x64\x65\x72\x2d\x62\x6f\x74\x74\x6f\x6d\x3a \x31\x70\x78 \x73\x6f\x6c\x69\x64 \x23\x34\x34\x34\x3b">${value}</td>`;detailsTable['\x61\x70\x70\x65\x6e\x64\x43\x68\x69\x6c\x64'](row)}}modal['\x73\x74\x79\x6c\x65']['\x64\x69\x73\x70\x6c\x61\x79']='\x62\x6c\x6f\x63\x6b';window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x62\x6f\x64\x79']['\x73\x74\x79\x6c\x65']['\x6f\x76\x65\x72\x66\x6c\x6f\x77']='\x68\x69\x64\x64\x65\x6e';modal['\x73\x63\x72\x6f\x6c\x6c\x54\x6f\x70']=0}function findCardData(U_Bawhi4,klh5){let fileNameWithoutExt=U_Bawhi4['\x72\x65\x70\x6c\x61\x63\x65'](/\.[^/.]+$/,"");return fetch('\x64\x61\x74\x61\x2f\x6e\x65\x77\x6b\x2e\x6a\x73\x6f\x6e')['\x74\x68\x65\x6e'](response=>{if(!response['\x6f\x6b']){throw new window["\x45\x72\x72\x6f\x72"](`无法加载newk['\x6a\x73\x6f\x6e']:${response['\x73\x74\x61\x74\x75\x73']}`)}return response['\x6a\x73\x6f\x6e']()})['\x74\x68\x65\x6e'](cardData=>{const card=findBestMatch(cardData,fileNameWithoutExt,klh5);return card||{}})['\x63\x61\x74\x63\x68'](error=>{console['\x65\x72\x72\x6f\x72']('\u67e5\u627e\u5361\u724c\u6570\u636e\u65f6\u51fa\u9519\x3a',error);return{}})}function findBestMatch($VZpfINH6,dLB$ln7,WsEuj8){if(!window["\x41\x72\x72\x61\x79"]['\x69\x73\x41\x72\x72\x61\x79']($VZpfINH6)||$VZpfINH6['\x6c\x65\x6e\x67\x74\x68']===0){return null}let cleanFileName=dLB$ln7['\x73\x70\x6c\x69\x74']('\x2f')['\x70\x6f\x70']()['\x72\x65\x70\x6c\x61\x63\x65'](/\.[^/.]+$/,"");let match=$VZpfINH6['\x66\x69\x6e\x64'](item=>{if(item.国家!==WsEuj8)return false;return item.名称===cleanFileName});if(match)return match;const cleanFileNameNoSpaces=cleanFileName['\x72\x65\x70\x6c\x61\x63\x65'](/\s+/g,'');match=$VZpfINH6['\x66\x69\x6e\x64'](item=>{if(item.国家!==WsEuj8)return false;const cleanCardName=item.名称['\x72\x65\x70\x6c\x61\x63\x65'](/\s+/g,'');return cleanCardName===cleanFileNameNoSpaces});if(match)return match;const keyPart=extractKeyPart(cleanFileName);if(keyPart){const keyPartUpper=keyPart['\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65']();match=$VZpfINH6['\x66\x69\x6e\x64'](item=>{if(item.国家!==WsEuj8)return false;const cardNameUpper=item.名称['\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65']();return cardNameUpper===keyPartUpper});if(match)return match}const fileNameUpper=cleanFileName['\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65']();match=$VZpfINH6['\x66\x69\x6e\x64'](item=>{if(item.国家!==WsEuj8)return false;const cardNameUpper=item.名称['\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65']();return fileNameUpper['\x69\x6e\x63\x6c\x75\x64\x65\x73'](cardNameUpper)||cardNameUpper['\x69\x6e\x63\x6c\x75\x64\x65\x73'](fileNameUpper)});if(match)return match;if(keyPart){const keyPartUpper=keyPart['\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65']();match=$VZpfINH6['\x66\x69\x6e\x64'](item=>{if(item.国家!==WsEuj8)return false;const cardNameUpper=item.名称['\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65']();return cardNameUpper['\x69\x6e\x63\x6c\x75\x64\x65\x73'](keyPartUpper)});if(match)return match}const fileNameLower=cleanFileName['\x74\x6f\x4c\x6f\x77\x65\x72\x43\x61\x73\x65']();match=$VZpfINH6['\x66\x69\x6e\x64'](item=>{if(item.国家!==WsEuj8)return false;const cardNameLower=item.名称['\x74\x6f\x4c\x6f\x77\x65\x72\x43\x61\x73\x65']();const cardDescLower=(item.描述||"")['\x74\x6f\x4c\x6f\x77\x65\x72\x43\x61\x73\x65']();return fileNameLower['\x69\x6e\x63\x6c\x75\x64\x65\x73'](cardNameLower)||cardNameLower['\x69\x6e\x63\x6c\x75\x64\x65\x73'](fileNameLower)||fileNameLower['\x69\x6e\x63\x6c\x75\x64\x65\x73'](cardDescLower)||cardDescLower['\x69\x6e\x63\x6c\x75\x64\x65\x73'](fileNameLower)});return match}function extractKeyPart(trZc9){const chineseMatch=trZc9['\x6d\x61\x74\x63\x68'](/[\u\x34\x65\x30\x30-\u\x39\x66\x61\x35]+/g);if(chineseMatch&&chineseMatch['\x6c\x65\x6e\x67\x74\x68']>0){return chineseMatch[0]}return null}function initImageClickEvents(){const observer=new MutationObserver(function(mutations){mutations['\x66\x6f\x72\x45\x61\x63\x68'](function(uaWU10){if(uaWU10['\x74\x79\x70\x65']==='\x63\x68\x69\x6c\x64\x4c\x69\x73\x74'){window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x71\x75\x65\x72\x79\x53\x65\x6c\x65\x63\x74\x6f\x72\x41\x6c\x6c']('\x2e\x69\x6d\x61\x67\x65\x2d\x69\x74\x65\x6d \x69\x6d\x67')['\x66\x6f\x72\x45\x61\x63\x68'](img=>{if(!img['\x68\x61\x73\x41\x74\x74\x72\x69\x62\x75\x74\x65']('\x64\x61\x74\x61\x2d\x63\x6c\x69\x63\x6b\x2d\x68\x61\x6e\x64\x6c\x65\x72')){img['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x63\x6c\x69\x63\x6b',function(){const imageUrl=this['\x73\x72\x63'];const fileName=decodeURIComponent(this['\x64\x61\x74\x61\x73\x65\x74']['\x66\x69\x6c\x65\x6e\x61\x6d\x65']||'');const klh5=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x63\x6f\x75\x6e\x74\x72\x79\x2d\x73\x65\x6c\x65\x63\x74')['\x76\x61\x6c\x75\x65'];const searchKeyword=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x73\x65\x61\x72\x63\x68\x2d\x69\x6e\x70\x75\x74')['\x76\x61\x6c\x75\x65']['\x74\x72\x69\x6d']();const isSearchResult=searchKeyword['\x6c\x65\x6e\x67\x74\x68']>0;if(fileName){if(klh5){findCardData(fileName,klh5)['\x74\x68\x65\x6e'](cardData=>{if(window["\x4f\x62\x6a\x65\x63\x74"]['\x6b\x65\x79\x73'](cardData)['\x6c\x65\x6e\x67\x74\x68']>0){showModal(imageUrl,cardData)}else{showModal(imageUrl,{名称:fileName,描述:'\u6682\u65e0\u8be6\u7ec6\u4fe1\u606f',详细信息:{}})}})['\x63\x61\x74\x63\x68'](error=>{console['\x65\x72\x72\x6f\x72']('\u67e5\u627e\u5361\u724c\u6570\u636e\u65f6\u51fa\u9519\x3a',error);showModal(imageUrl,{名称:fileName||'\u672a\u77e5\u56fe\u7247',描述:'\u52a0\u8f7d\u6570\u636e\u65f6\u51fa\u9519\x3a '+error['\x6d\x65\x73\x73\x61\x67\x65'],详细信息:{}})})}else{findAllCountryData(fileName)['\x74\x68\x65\x6e'](cardData=>{if(window["\x4f\x62\x6a\x65\x63\x74"]['\x6b\x65\x79\x73'](cardData)['\x6c\x65\x6e\x67\x74\x68']>0){showModal(imageUrl,cardData)}else{showModal(imageUrl,{名称:fileName,描述:'\u6682\u65e0\u8be6\u7ec6\u4fe1\u606f',详细信息:{}})}})['\x63\x61\x74\x63\x68'](error=>{console['\x65\x72\x72\x6f\x72']('\u67e5\u627e\u5361\u724c\u6570\u636e\u65f6\u51fa\u9519\x3a',error);showModal(imageUrl,{名称:fileName||'\u672a\u77e5\u56fe\u7247',描述:'\u52a0\u8f7d\u6570\u636e\u65f6\u51fa\u9519\x3a '+error['\x6d\x65\x73\x73\x61\x67\x65'],详细信息:{}})})}}else{showModal(imageUrl,{名称:fileName||'\u672a\u77e5\u56fe\u7247',描述:'\u6682\u65e0\u8be6\u7ec6\u4fe1\u606f',详细信息:{}})}});img['\x73\x65\x74\x41\x74\x74\x72\x69\x62\x75\x74\x65']('\x64\x61\x74\x61\x2d\x63\x6c\x69\x63\x6b\x2d\x68\x61\x6e\x64\x6c\x65\x72','\x74\x72\x75\x65')}})}})});const imageDisplay=window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64']('\x69\x6d\x61\x67\x65\x2d\x64\x69\x73\x70\x6c\x61\x79');if(imageDisplay){observer['\x6f\x62\x73\x65\x72\x76\x65'](imageDisplay,{childList:true,subtree:true})}}function findAllCountryData(gQ11){let fileNameWithoutExt=gQ11['\x72\x65\x70\x6c\x61\x63\x65'](/\.[^/.]+$/,"");return fetch('\x64\x61\x74\x61\x2f\x6e\x65\x77\x6b\x2e\x6a\x73\x6f\x6e')['\x74\x68\x65\x6e'](response=>{if(!response['\x6f\x6b']){throw new window["\x45\x72\x72\x6f\x72"](`无法加载newk['\x6a\x73\x6f\x6e']:${response['\x73\x74\x61\x74\x75\x73']}`)}return response['\x6a\x73\x6f\x6e']()})['\x74\x68\x65\x6e'](cardData=>{const card=findAllCountryBestMatch(cardData,fileNameWithoutExt);return card||{}})['\x63\x61\x74\x63\x68'](error=>{console['\x65\x72\x72\x6f\x72']('\u67e5\u627e\u5361\u724c\u6570\u636e\u65f6\u51fa\u9519\x3a',error);return{}})}function findAllCountryBestMatch(OfEZTj12,cF13){if(!window["\x41\x72\x72\x61\x79"]['\x69\x73\x41\x72\x72\x61\x79'](OfEZTj12)||OfEZTj12['\x6c\x65\x6e\x67\x74\x68']===0){return null}let cleanFileName=cF13['\x73\x70\x6c\x69\x74']('\x2f')['\x70\x6f\x70']()['\x72\x65\x70\x6c\x61\x63\x65'](/\.[^/.]+$/,"");let match=OfEZTj12['\x66\x69\x6e\x64'](item=>{return item.名称===cleanFileName});if(match)return match;const cleanFileNameNoSpaces=cleanFileName['\x72\x65\x70\x6c\x61\x63\x65'](/\s+/g,'');match=OfEZTj12['\x66\x69\x6e\x64'](item=>{const cleanCardName=item.名称['\x72\x65\x70\x6c\x61\x63\x65'](/\s+/g,'');return cleanCardName===cleanFileNameNoSpaces});if(match)return match;const keyPart=extractKeyPart(cleanFileName);if(keyPart){const keyPartUpper=keyPart['\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65']();match=OfEZTj12['\x66\x69\x6e\x64'](item=>{const cardNameUpper=item.名称['\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65']();return cardNameUpper===keyPartUpper});if(match)return match}const fileNameUpper=cleanFileName['\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65']();match=OfEZTj12['\x66\x69\x6e\x64'](item=>{const cardNameUpper=item.名称['\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65']();return fileNameUpper['\x69\x6e\x63\x6c\x75\x64\x65\x73'](cardNameUpper)||cardNameUpper['\x69\x6e\x63\x6c\x75\x64\x65\x73'](fileNameUpper)});if(match)return match;if(keyPart){const keyPartUpper=keyPart['\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65']();match=OfEZTj12['\x66\x69\x6e\x64'](item=>{const cardNameUpper=item.名称['\x74\x6f\x55\x70\x70\x65\x72\x43\x61\x73\x65']();return cardNameUpper['\x69\x6e\x63\x6c\x75\x64\x65\x73'](keyPartUpper)});if(match)return match}const fileNameLower=cleanFileName['\x74\x6f\x4c\x6f\x77\x65\x72\x43\x61\x73\x65']();match=OfEZTj12['\x66\x69\x6e\x64'](item=>{const cardNameLower=item.名称['\x74\x6f\x4c\x6f\x77\x65\x72\x43\x61\x73\x65']();const cardDescLower=(item.描述||"")['\x74\x6f\x4c\x6f\x77\x65\x72\x43\x61\x73\x65']();return fileNameLower['\x69\x6e\x63\x6c\x75\x64\x65\x73'](cardNameLower)||cardNameLower['\x69\x6e\x63\x6c\x75\x64\x65\x73'](fileNameLower)||fileNameLower['\x69\x6e\x63\x6c\x75\x64\x65\x73'](cardDescLower)||cardDescLower['\x69\x6e\x63\x6c\x75\x64\x65\x73'](fileNameLower)});return match}window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x44\x4f\x4d\x43\x6f\x6e\x74\x65\x6e\x74\x4c\x6f\x61\x64\x65\x64',function(){createModal();initImageClickEvents()});window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]['\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72']('\x6b\x65\x79\x64\x6f\x77\x6e',function(agyrHfk14){if(agyrHfk14['\x6b\x65\x79']==='\x45\x73\x63\x61\x70\x65'){closeModal()}});
+// image_format.js
+
+// 创建模态框元素 - 优化移动端适配
+function createModal() {
+    const modal = document.createElement('div');
+    modal.id = 'card-modal';
+    modal.style.cssText = `
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.9);
+        overflow: auto;
+    `;
+    
+    modal.innerHTML = `
+        <div style="position: relative; width: 95%; max-width: 1200px; margin: 5% auto; background: #1a1a1a; border-radius: 10px; overflow: hidden;">
+            <span id="close-modal" style="position: absolute; top: 15px; right: 20px; color: white; font-size: 30px; font-weight: bold; cursor: pointer; z-index: 2001;">&times;</span>
+            <div id="modal-content" style="display: flex; flex-direction: column; height: auto; min-height: 500px;">
+                <div id="image-container" style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; min-height: 300px;">
+                    <img id="modal-image" style="max-width: 100%; max-height: 100%; object-fit: contain;" src="" alt="">
+                    <img id="reserve-icon" style="position: absolute; bottom: 20px; right: 20px; width: 64px; height: 64px; display: none;" src="image/T_nui-icon-Reserves-gritty-256.png" alt="预备">
+                </div>
+                <div id="info-container" style="flex: 1; padding: 20px; color: white; overflow-y: auto;">
+                    <h2 id="card-name" style="margin-bottom: 15px; font-size: 24px;"></h2>
+                    <p id="card-description" style="margin-bottom: 15px; font-size: 16px; line-height: 1.5;"></p>
+                    <div id="card-details" style="font-size: 14px;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tbody id="details-table"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // 添加移动端媒体查询
+    const style = document.createElement('style');
+    style.textContent = `
+        @media (max-width: 768px) {
+            #card-modal #modal-content {
+                flex-direction: column;
+            }
+            
+            #card-modal #image-container {
+                min-height: 200px;
+                padding: 10px;
+            }
+            
+            #card-modal #info-container {
+                padding: 15px;
+            }
+            
+            #card-modal #card-name {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+            
+            #card-modal #card-description {
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+            
+            #card-modal #card-details {
+                font-size: 12px;
+            }
+            
+            #card-modal td {
+                padding: 6px 4px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #card-modal {
+                padding: 5px;
+            }
+            
+            #card-modal #modal-content {
+                width: 100%;
+                margin: 2% auto;
+            }
+            
+            #card-modal #card-name {
+                font-size: 18px;
+            }
+            
+            #card-modal #card-description {
+                font-size: 13px;
+            }
+            
+            #card-modal #card-details {
+                font-size: 11px;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    document.body.appendChild(modal);
+    
+    // 添加关闭事件
+    document.getElementById('close-modal').addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) closeModal();
+    });
+}
+
+// 关闭模态框
+function closeModal() {
+    document.getElementById('card-modal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// 显示模态框 - 修改版本
+function showModal(imageSrc, cardData) {
+    const modal = document.getElementById('card-modal');
+    const modalImage = document.getElementById('modal-image');
+    const reserveIcon = document.getElementById('reserve-icon');
+    const cardName = document.getElementById('card-name');
+    const cardDescription = document.getElementById('card-description');
+    const detailsTable = document.getElementById('details-table');
+    
+    // 设置图片
+    modalImage.src = imageSrc;
+    
+    // 设置卡片信息
+    cardName.textContent = cardData.名称 || '未知名称';
+    cardDescription.textContent = cardData.描述 || '无描述';
+    
+    // 显示/隐藏预备图标
+    const isActive = cardData.详细信息?.活跃 === "true";
+    reserveIcon.style.display = isActive ? 'none' : 'block';
+    
+    // 清空并填充详细信息表格
+    detailsTable.innerHTML = '';
+    
+    // 按要求组织显示信息
+    const detailInfo = cardData.详细信息 || {};
+    
+    // 定义需要排除的字段（包括衍生和卡牌代码相关字段）
+    const excludeFields = ["稀有度", "类型", "指挥点", "活跃", "衍生自", "卡牌代码", "衍生卡牌"];
+    
+    // 显示基本信息
+    const basicFields = ["稀有度", "类型", "指挥点"];
+    basicFields.forEach(field => {
+        if (detailInfo[field]) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td style="padding: 8px; border-bottom: 1px solid #444; font-weight: bold;">${field}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #444;">${detailInfo[field]}</td>
+            `;
+            detailsTable.appendChild(row);
+        }
+    });
+    
+    // 显示状态信息
+    if (detailInfo.活跃 !== undefined) {
+        const statusText = detailInfo.活跃 === "true" ? "活跃" : "预备";
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td style="padding: 8px; border-bottom: 1px solid #444; font-weight: bold;">状态</td>
+            <td style="padding: 8px; border-bottom: 1px solid #444;">${statusText}</td>
+        `;
+        detailsTable.appendChild(row);
+    }
+    
+    // 显示其他信息（排除衍生和卡牌代码相关字段）
+    for (const [key, value] of Object.entries(detailInfo)) {
+        if (!excludeFields.includes(key)) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td style="padding: 8px; border-bottom: 1px solid #444; font-weight: bold;">${key}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #444;">${value}</td>
+            `;
+            detailsTable.appendChild(row);
+        }
+    }
+    
+    // 显示模态框
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    
+    // 移动端适配：滚动到顶部
+    modal.scrollTop = 0;
+}
+
+// 查找卡牌数据 - 使用newk.json并改进匹配逻辑
+function findCardData(imageFileName, country) {
+    // 移除文件扩展名
+    let fileNameWithoutExt = imageFileName.replace(/\.[^/.]+$/, "");
+    
+    // 加载新的卡牌数据文件
+    return fetch('data/newk.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`无法加载 newk.json: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(cardData => {
+            // 查找匹配的卡片 - 使用更智能的匹配算法
+            const card = findBestMatch(cardData, fileNameWithoutExt, country);
+            return card || {};
+        })
+        .catch(error => {
+            console.error('查找卡牌数据时出错:', error);
+            return {};
+        });
+}
+
+// 智能匹配函数 - 改进版，支持更精确的匹配
+function findBestMatch(cardData, fileName, country) {
+    if (!Array.isArray(cardData) || cardData.length === 0) {
+        return null;
+    }
+    
+    // 清理文件名，移除路径和扩展名
+    let cleanFileName = fileName.split('/').pop().replace(/\.[^/.]+$/, "");
+    
+    // 尝试多种匹配策略
+    
+    // 策略1: 精确匹配（最高优先级）
+    let match = cardData.find(item => {
+        if (item.国家 !== country) return false;
+        return item.名称 === cleanFileName;
+    });
+    
+    if (match) return match;
+    
+    // 策略2: 去除空格后精确匹配
+    const cleanFileNameNoSpaces = cleanFileName.replace(/\s+/g, '');
+    match = cardData.find(item => {
+        if (item.国家 !== country) return false;
+        const cleanCardName = item.名称.replace(/\s+/g, '');
+        return cleanCardName === cleanFileNameNoSpaces;
+    });
+    
+    if (match) return match;
+    
+    // 策略3: 完全匹配文件名的关键部分（通常是中文部分）
+    const keyPart = extractKeyPart(cleanFileName);
+    if (keyPart) {
+        const keyPartUpper = keyPart.toUpperCase();
+        match = cardData.find(item => {
+            if (item.国家 !== country) return false;
+            const cardNameUpper = item.名称.toUpperCase();
+            return cardNameUpper === keyPartUpper;
+        });
+        
+        if (match) return match;
+    }
+    
+    // 策略4: 文件名包含卡牌名（不区分大小写）
+    const fileNameUpper = cleanFileName.toUpperCase();
+    match = cardData.find(item => {
+        if (item.国家 !== country) return false;
+        const cardNameUpper = item.名称.toUpperCase();
+        return fileNameUpper.includes(cardNameUpper) || cardNameUpper.includes(fileNameUpper);
+    });
+    
+    if (match) return match;
+    
+    // 策略5: 卡牌名包含文件名的关键部分
+    if (keyPart) {
+        const keyPartUpper = keyPart.toUpperCase();
+        match = cardData.find(item => {
+            if (item.国家 !== country) return false;
+            const cardNameUpper = item.名称.toUpperCase();
+            return cardNameUpper.includes(keyPartUpper);
+        });
+        
+        if (match) return match;
+    }
+    
+    // 策略6: 最宽松的包含匹配（不区分大小写）
+    const fileNameLower = cleanFileName.toLowerCase();
+    match = cardData.find(item => {
+        if (item.国家 !== country) return false;
+        const cardNameLower = item.名称.toLowerCase();
+        const cardDescLower = (item.描述 || "").toLowerCase();
+        return fileNameLower.includes(cardNameLower) || 
+               cardNameLower.includes(fileNameLower) ||
+               fileNameLower.includes(cardDescLower) ||
+               cardDescLower.includes(fileNameLower);
+    });
+    
+    return match;
+}
+function extractKeyPart(fileName) {
+    // 匹配中文字符
+    const chineseMatch = fileName.match(/[\u4e00-\u9fa5]+/g);
+    if (chineseMatch && chineseMatch.length > 0) {
+        return chineseMatch[0]; // 返回第一个中文部分
+    }
+    return null;
+}
+
+// 初始化图片点击事件
+// 初始化图片点击事件
+// 初始化图片点击事件
+function initImageClickEvents() {
+    // 监听图片容器的变化
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+                // 为新添加的图片添加点击事件
+                document.querySelectorAll('.image-item img').forEach(img => {
+                    if (!img.hasAttribute('data-click-handler')) {
+                        img.addEventListener('click', function() {
+                            const imageUrl = this.src;
+                            const fileName = decodeURIComponent(this.dataset.filename || '');
+                            const country = document.getElementById('country-select').value;
+                            
+                            // 检查是否有搜索关键词
+                            const searchKeyword = document.getElementById('search-input').value.trim();
+                            const isSearchResult = searchKeyword.length > 0;
+                            
+                            if (fileName) {
+                                // 如果有选择国家，使用该国家进行查找
+                                if (country) {
+                                    findCardData(fileName, country).then(cardData => {
+                                        if (Object.keys(cardData).length > 0) {
+                                            showModal(imageUrl, cardData);
+                                        } else {
+                                            // 即使没有找到匹配数据，也显示基本信息
+                                            showModal(imageUrl, {
+                                                名称: fileName,
+                                                描述: '暂无详细信息',
+                                                详细信息: {}
+                                            });
+                                        }
+                                    }).catch(error => {
+                                        console.error('查找卡牌数据时出错:', error);
+                                        showModal(imageUrl, {
+                                            名称: fileName || '未知图片',
+                                            描述: '加载数据时出错: ' + error.message,
+                                            详细信息: {}
+                                        });
+                                    });
+                                } else {
+                                    // 如果没有选择国家，尝试在所有国家中查找
+                                    findAllCountryData(fileName).then(cardData => {
+                                        if (Object.keys(cardData).length > 0) {
+                                            showModal(imageUrl, cardData);
+                                        } else {
+                                            // 显示基本信息
+                                            showModal(imageUrl, {
+                                                名称: fileName,
+                                                描述: '暂无详细信息',
+                                                详细信息: {}
+                                            });
+                                        }
+                                    }).catch(error => {
+                                        console.error('查找卡牌数据时出错:', error);
+                                        showModal(imageUrl, {
+                                            名称: fileName || '未知图片',
+                                            描述: '加载数据时出错: ' + error.message,
+                                            详细信息: {}
+                                        });
+                                    });
+                                }
+                            } else {
+                                showModal(imageUrl, {
+                                    名称: fileName || '未知图片',
+                                    描述: '暂无详细信息',
+                                    详细信息: {}
+                                });
+                            }
+                        });
+                        img.setAttribute('data-click-handler', 'true');
+                    }
+                });
+            }
+        });
+    });
+    
+    const imageDisplay = document.getElementById('image-display');
+    if (imageDisplay) {
+        observer.observe(imageDisplay, { childList: true, subtree: true });
+    }
+}
+
+// 在所有国家中查找卡牌数据
+function findAllCountryData(imageFileName) {
+    // 移除文件扩展名
+    let fileNameWithoutExt = imageFileName.replace(/\.[^/.]+$/, "");
+    
+    // 加载新的卡牌数据文件
+    return fetch('data/newk.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`无法加载 newk.json: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(cardData => {
+            // 查找匹配的卡片 - 在所有国家中查找
+            const card = findAllCountryBestMatch(cardData, fileNameWithoutExt);
+            return card || {};
+        })
+        .catch(error => {
+            console.error('查找卡牌数据时出错:', error);
+            return {};
+        });
+}
+
+// 在所有国家中查找最佳匹配
+// 在所有国家中查找最佳匹配
+function findAllCountryBestMatch(cardData, fileName) {
+    if (!Array.isArray(cardData) || cardData.length === 0) {
+        return null;
+    }
+    
+    // 清理文件名，移除路径和扩展名
+    let cleanFileName = fileName.split('/').pop().replace(/\.[^/.]+$/, "");
+    
+    // 尝试多种匹配策略
+    
+    // 策略1: 精确匹配（最高优先级）
+    let match = cardData.find(item => {
+        return item.名称 === cleanFileName;
+    });
+    
+    if (match) return match;
+    
+    // 策略2: 去除空格后精确匹配
+    const cleanFileNameNoSpaces = cleanFileName.replace(/\s+/g, '');
+    match = cardData.find(item => {
+        const cleanCardName = item.名称.replace(/\s+/g, '');
+        return cleanCardName === cleanFileNameNoSpaces;
+    });
+    
+    if (match) return match;
+    
+    // 策略3: 完全匹配文件名的关键部分（通常是中文部分）
+    const keyPart = extractKeyPart(cleanFileName);
+    if (keyPart) {
+        const keyPartUpper = keyPart.toUpperCase();
+        match = cardData.find(item => {
+            const cardNameUpper = item.名称.toUpperCase();
+            return cardNameUpper === keyPartUpper;
+        });
+        
+        if (match) return match;
+    }
+    
+    // 策略4: 文件名包含卡牌名（不区分大小写）
+    const fileNameUpper = cleanFileName.toUpperCase();
+    match = cardData.find(item => {
+        const cardNameUpper = item.名称.toUpperCase();
+        return fileNameUpper.includes(cardNameUpper) || cardNameUpper.includes(fileNameUpper);
+    });
+    
+    if (match) return match;
+    
+    // 策略5: 卡牌名包含文件名的关键部分
+    if (keyPart) {
+        const keyPartUpper = keyPart.toUpperCase();
+        match = cardData.find(item => {
+            const cardNameUpper = item.名称.toUpperCase();
+            return cardNameUpper.includes(keyPartUpper);
+        });
+        
+        if (match) return match;
+    }
+    
+    // 策略6: 最宽松的包含匹配（不区分大小写）
+    const fileNameLower = cleanFileName.toLowerCase();
+    match = cardData.find(item => {
+        const cardNameLower = item.名称.toLowerCase();
+        const cardDescLower = (item.描述 || "").toLowerCase();
+        return fileNameLower.includes(cardNameLower) || 
+               cardNameLower.includes(fileNameLower) ||
+               fileNameLower.includes(cardDescLower) ||
+               cardDescLower.includes(fileNameLower);
+    });
+    
+    return match;
+}
+
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    createModal();
+    initImageClickEvents();
+});
+
+// 添加键盘事件支持（ESC关闭模态框）
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeModal();
+    }
+});
