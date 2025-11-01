@@ -22,7 +22,7 @@
             box-sizing: border-box;
         }
 
-
+        /* 使用 flex 布局 */
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
@@ -55,7 +55,7 @@
             transform: translateX(100%);
             opacity: 0;
             transition: transform 0.8s ease-out, opacity 0.8s ease-out;
-            overflow: hidden;
+            overflow: hidden; /* 防止内容溢出 */
         }
 
         .content.animate-in {
@@ -258,11 +258,14 @@
                 <img src="pwp.png" alt="marisa" class="content-image">
                 <div class="text-content">
                     <!-- blueeggs - 粗体很大 -->
-                    <a href="https://space.bilibili.com/596035099" target="_blank" class="content-link">我的bilibili</a>
-                    <a href="https://qm.qq.com/q/EYj3eGmiEo" target="_blank" class="content-link">我的QQ</a>                   
+                    <a href="https://space.bilibili.com/596035099" target="_blank" class="content-link">blueeggs</a>
+
+                    <!-- 如果没有你想要的素材可以来私信我 - 比上面的小点，粗体 -->
                     <p class="bold-text">如果没有你想要的素材可以来私信我</p>
+
+                    <!-- ps：我能找到的情况下 - 没粗体，比上面两个都小 -->
                     <p class="normal-text">ps：我能找到的情况下</p>
-                    <p class="normal-text">最后提交时间：2025.10.07 21.16</p>
+                    <p class="normal-text">最后提交时间：</p>
                 </div>
             </div>
         </div>
@@ -270,11 +273,9 @@
 
     <!-- 底部导航栏 -->
     <div class="bottom-nav">
-        <a href="index.html">卡图</a>
-        <a href="image2.html">其他素材</a>
-        <a href="suck.html">音效库</a>
-        <a href="zaza.html">加载动画</a>
-        <a href="team.html">关于</a>
+        <a href="index.html" class="nav-link">主页</a>
+        <a href="meie.html" class="nav-link">我的</a>
+        <a href="team.html" class="nav-link">关于</a>
     </div>
 
     <script>
@@ -291,5 +292,3 @@
 
 </body>
 </html>
-
-
