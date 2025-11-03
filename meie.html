@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>我的</title>
-  <script></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
     * {
       margin: 0;
@@ -118,7 +118,7 @@
       background-color: #cc0000;
     }
 
-    
+    /* 底部导航栏 */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -145,7 +145,7 @@
       font-weight: bold;
     }
 
-    
+    /* 移动端适配 */
     @media (max-width: 768px) {
       .container {
         padding: 0 10px;
@@ -210,18 +210,18 @@
     
     <div class="profile-container">
       <div id="avatarContainer">
-        
+        <!-- 头像将通过 JavaScript 动态插入 -->
       </div>
       <div class="user-details">
         <p>用户名: <span id="userName"></span></p>
-        
+        <!-- 邮箱信息已隐藏 -->
       </div>
       <div class="note">资料暂不支持修改</div>
       <button class="logout-btn" id="logout">退出登录</button>
     </div>
   </div>
 
-  
+  <!-- 底部导航栏 -->
   <div class="bottom-nav">
         <a href="index.html" class="nav-link">主页</a>
         <a href="meie.html" class="nav-link">我的</a>
@@ -235,59 +235,71 @@
 
     let currentUser = null;
 
-    
+    // 页面加载时检查用户状态
     document.addEventListener('DOMContentLoaded', function() {
       loadUserProfile();
+      // 绑定退出登录按钮事件
+      document.getElementById('logout').addEventListener('click', logout);
     });
 
     function loadUserProfile() {
-  const userStr = localStorage.getItem('currentUser');
-  if (!userStr) {
-    window.location.href = 'sign.html';
-    return;
-  }
-  
-  currentUser = JSON.parse(userStr);
-  console.log('当前用户信息:', currentUser);
-  
-  const userNameElement = document.getElementById('userName');
-  userNameElement.textContent = currentUser.user_name;
-  
-  
-  if (currentUser.admin !== null && currentUser.admin !== undefined && 
-      (parseInt(currentUser.admin) === 0 || currentUser.admin === true)) {
-    const adminTag = document.createElement('span');
-    adminTag.textContent = ' [管理员]';
-    adminTag.style.color = 'red';
-    adminTag.style.fontSize = '12px';
-    adminTag.style.marginLeft = '5px';
-    userNameElement.appendChild(adminTag);
-    console.log('显示管理员标识');
-  }
-
-  const avatarContainer = document.getElementById('avatarContainer');
-  if (currentUser.avatar_url) {
-    avatarContainer.innerHTML = `<img src="${currentUser.avatar_url}" alt="头像" class="user-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='" />`;
-  } else {
-    avatarContainer.innerHTML = `<div class="default-avatar">👤</div>`;
-  }
-}
-      
-      
-      const avatarContainer = document.getElementById('avatarContainer');
-      if (currentUser.avatar_url) {
-        avatarContainer.innerHTML = `<img src="${currentUser.avatar_url}" alt="头像" class="user-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='" />`;
-      } else {
-        avatarContainer.innerHTML = `<div class="default-avatar">👤</div>`;
+      const userStr = localStorage.getItem('currentUser');
+      if (!userStr) {
+        window.location.href = 'sign.html';
+        return;
       }
-    
-
-    
-    document.getElementById('logout').addEventListener('click', function() {
-      localStorage.removeItem('currentUser');
       
-      window.location.href = 'sign.html';
-    });
+      try {
+        currentUser = JSON.parse(userStr);
+        console.log('当前用户信息:', currentUser);
+        
+        const userNameElement = document.getElementById('userName');
+        if (userNameElement) {
+          userNameElement.textContent = currentUser.user_name;
+          
+          // 更准确的管理员判断逻辑
+          if (currentUser.admin !== null && currentUser.admin !== undefined && 
+              (parseInt(currentUser.admin) === 0 || currentUser.admin === true)) {
+            const adminTag = document.createElement('span');
+            adminTag.textContent = ' [管理员]';
+            adminTag.style.color = 'red';
+            adminTag.style.fontSize = '12px';
+            adminTag.style.marginLeft = '5px';
+            userNameElement.appendChild(adminTag);
+            console.log('显示管理员标识');
+          }
+        }
+
+        // 显示头像
+        const avatarContainer = document.getElementById('avatarContainer');
+        if (avatarContainer) {
+          if (currentUser.avatar_url) {
+            avatarContainer.innerHTML = `<img src="${currentUser.avatar_url}" alt="头像" class="user-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='" />`;
+          } else {
+            avatarContainer.innerHTML = `<div class="default-avatar">👤</div>`;
+          }
+        }
+      } catch (e) {
+        console.error('解析用户信息失败:', e);
+        window.location.href = 'sign.html';
+      }
+    }
+
+    // 退出登录功能
+    function logout() {
+      try {
+        // 清除本地存储的用户信息
+        localStorage.removeItem('currentUser');
+        console.log('用户已退出登录');
+        
+        // 跳转到登录页面
+        window.location.href = 'sign.html';
+      } catch (e) {
+        console.error('退出登录时出错:', e);
+        // 即使出错也尝试跳转
+        window.location.href = 'sign.html';
+      }
+    }
   </script>
 </body>
 </html>
