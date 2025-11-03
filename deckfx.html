@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>留言测试</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <title>留言板</title>
+  <script></script>
   <style>
     * {
       margin: 0;
@@ -168,7 +168,7 @@
     .message-content {
       color: #555;
       line-height: 1.5;
-      /* 添加以下属性以支持换行 */
+      
       white-space: pre-wrap;
       word-wrap: break-word;
       margin-left: 50px;
@@ -359,7 +359,7 @@
       margin-bottom: 10px;
     }
 
-    /* 底部导航栏 */
+    
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -384,7 +384,7 @@
       font-weight: bold;
     }
 
-    /* 移动端适配 */
+    
     @media (max-width: 768px) {
       .container {
         padding: 0 10px;
@@ -484,6 +484,7 @@
       }
     }
   </style>
+  
 </head>
 <body>
   <div class="container">
@@ -505,12 +506,12 @@
         <div class="loading">加载中...</div>
       </div>
       <div class="pagination" id="pagination">
-        <!-- 数字页码分页控件将在这里生成 -->
+        
       </div>
     </div>
   </div>
 
-  <!-- 底部导航栏 -->
+  
   <div class="bottom-nav">
         <a href="index.html" class="nav-link">主页</a>
         <a href="meie.html" class="nav-link">我的</a>
@@ -523,113 +524,118 @@
 
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     
-    // 分页配置
     const MESSAGES_PER_PAGE = 5;
     let currentPage = 1;
     let allMessages = [];
     let allReplies = [];
-    let allUsers = []; // 存储用户信息
+    let allUsers = [];
     let currentUser = null;
 
-    // 页面加载时检查用户登录状态
     document.addEventListener('DOMContentLoaded', function() {
       checkUserLogin();
       loadMessages();
     });
 
-    function checkUserLogin() {
-      const userStr = localStorage.getItem('currentUser');
-      if (userStr) {
-        currentUser = JSON.parse(userStr);
-        document.getElementById('loginInfo').innerHTML = `
-          <div style="display: flex; align-items: center; margin-bottom: 15px;">
-            ${currentUser.avatar_url ? 
-              `<img src="${currentUser.avatar_url}" alt="头像" class="message-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='" />` :
-              `<div class="default-avatar-small">👤</div>`
-            }
-            <div>
-              <div>已登录为: <strong>${currentUser.user_name}</strong></div>
-              <div style="font-size: 12px; color: #666;">${currentUser.email}</div>
-            </div>
-          </div>
-        `;
-        document.getElementById('userDisplay').textContent = `用户名: ${currentUser.user_name}`;
-        document.getElementById('userDisplay').style.display = 'block';
-      } else {
-        document.getElementById('loginInfo').innerHTML = `
-          <div class="login-prompt">
-            请 <a href="sign.html">登录</a> 以使用完整功能
-          </div>
-        `;
-        document.getElementById('userDisplay').style.display = 'none';
-      }
-    }
+function checkUserLogin() {
+  const userStr = localStorage.getItem('currentUser');
+  if (userStr) {
+    currentUser = JSON.parse(userStr);
+    console.log('当前用户信息:', currentUser);
+    
+    document.getElementById('loginInfo').innerHTML = `
+      <div style="display: flex; align-items: center; margin-bottom: 15px;">
+        ${currentUser.avatar_url ? 
+          `<img src="${currentUser.avatar_url}" alt="头像" class="message-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='" />` :
+          `<div class="default-avatar-small">👤</div>`
+        }
+        <div>
+          <div>已登录为: <strong>${currentUser.user_name}${(currentUser.admin === 0 || currentUser.admin === "0") ? ' (管理员)' : ''}</strong></div>
+          <div style="font-size: 12px; color: #666;">${currentUser.email}</div>
+        </div>
+      </div>
+    `;
+    document.getElementById('userDisplay').textContent = `用户名: ${currentUser.user_name}`;
+    document.getElementById('userDisplay').style.display = 'block';
+  } else {
+    document.getElementById('loginInfo').innerHTML = `
+      <div class="login-prompt">
+        请 <a href="sign.html">登录</a> 以使用完整功能
+      </div>
+    `;
+    document.getElementById('userDisplay').style.display = 'none';
+  }
+}
+async function loadMessages() {
 
-    async function loadMessages() {
-      // 加载留言
-      const { data: messages, error: messagesError } = await sb
-        .from('kardsdeck')
-        .select('*')
-        .order('created_at', { ascending: false });
+  const { data: messages, error: messagesError } = await sb
+    .from('kardsdeck')
+    .select('*')
+    .order('created_at', { ascending: false });
 
-      if (messagesError) {
-        console.error(messagesError);
-        document.getElementById('list').innerHTML = '<div class="no-messages">加载留言失败</div>';
-        return;
-      }
+  if (messagesError) {
+    console.error(messagesError);
+    document.getElementById('list').innerHTML = '<div class="no-messages">加载留言失败</div>';
+    return;
+  }
 
-      // 加载回复
-      const { data: replies, error: repliesError } = await sb
-        .from('replies')
-        .select('*')
-        .order('created_at', { ascending: true });
+ 
+  const { data: replies, error: repliesError } = await sb
+    .from('replies')
+    .select('*')
+    .order('created_at', { ascending: true });
 
-      if (repliesError) {
-        console.error(repliesError);
-        document.getElementById('list').innerHTML = '<div class="no-messages">加载回复失败</div>';
-        return;
-      }
+  if (repliesError) {
+    console.error(repliesError);
+    document.getElementById('list').innerHTML = '<div class="no-messages">加载回复失败</div>';
+    return;
+  }
 
-      // 加载所有用户信息，用于显示回复的用户名和头像
-      const { data: users, error: usersError } = await sb
-        .from('zhuce')
-        .select('id, user_name, avatar_url');
 
-      if (usersError) {
-        console.error(usersError);
-        document.getElementById('list').innerHTML = '<div class="no-messages">加载用户信息失败</div>';
-        return;
-      }
+  const { data: users, error: usersError } = await sb
+    .from('zhuce')
+    .select('id, user_name, avatar_url, admin');
 
-      allMessages = messages;
-      allReplies = replies;
-      allUsers = users; // 保存用户信息
-      renderMessages();
-      renderPagination();
-    }
+  if (usersError) {
+    console.error(usersError);
+    document.getElementById('list').innerHTML = '<div class="no-messages">加载用户信息失败</div>';
+    return;
+  }
 
-    function renderMessages() {
-      const list = document.getElementById('list');
-      
-      if (allMessages.length === 0) {
-        list.innerHTML = '<div class="no-messages">暂无留言</div>';
-        return;
-      }
+  allMessages = messages;
+  allReplies = replies;
+  allUsers = users; 
+  renderMessages();
+  renderPagination();
+}
 
-      const startIndex = (currentPage - 1) * MESSAGES_PER_PAGE;
-      const endIndex = startIndex + MESSAGES_PER_PAGE;
-      const messagesToShow = allMessages.slice(startIndex, endIndex);
+
+function renderMessages() {
+  const list = document.getElementById('list');
+  
+  if (allMessages.length === 0) {
+    list.innerHTML = '<div class="no-messages">暂无留言</div>';
+    return;
+  }
+
+  const startIndex = (currentPage - 1) * MESSAGES_PER_PAGE;
+  const endIndex = startIndex + MESSAGES_PER_PAGE;
+  const messagesToShow = allMessages.slice(startIndex, endIndex);
 
 list.innerHTML = messagesToShow.map(m => {
   const time = new Date(m.created_at).toLocaleString();
   const messageReplies = allReplies.filter(r => r.comment_id === m.id);
   
+
+  const messageUser = allUsers.find(u => u.user_name === m.user_name);
+  
+  
+  console.log('留言用户:', m.user_name, '用户详情:', messageUser);
+  
   return `
     <div class="message-item" data-message-id="${m.id}">
       <div class="message-header">
         ${m.user_name ? (() => {
-          // 查找留言用户的头像
-          const messageUser = allUsers.find(u => u.user_name === m.user_name);
+     
           const avatarUrl = messageUser ? messageUser.avatar_url : null;
           return avatarUrl ? 
             `<img src="${avatarUrl}" alt="头像" class="message-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='" />` :
@@ -637,7 +643,9 @@ list.innerHTML = messagesToShow.map(m => {
         })() : `<div class="default-avatar-small">👤</div>`}
         <div class="message-user-info">
           <div class="message-user">
-            ${m.user_name} <span class="message-time">[${time}]</span>
+            ${m.user_name} 
+            ${messageUser && (messageUser.admin === 0 || messageUser.admin === "0") ? '<span style="color:red;font-size:12px;margin-left:5px;">[管理员]</span>' : ''}
+            <span class="message-time">[${time}]</span>
           </div>
         </div>
       </div>
@@ -647,21 +655,28 @@ list.innerHTML = messagesToShow.map(m => {
         <div class="reply-header">回复 (${messageReplies.length})</div>
         ${messageReplies.map(r => {
           const replyTime = new Date(r.created_at).toLocaleString();
-          // 根据user_id查找用户信息
+          
           const user = allUsers.find(u => u.id == r.user_id);
           const userName = user ? user.user_name : '未知用户';
           const userAvatar = user ? user.avatar_url : null;
+          
+          
+          console.log('回复用户:', userName, '用户详情:', user);
           
           return `
             <div class="reply-item">
               <div class="reply-header-info">
                 ${userAvatar ? 
                   `<img src="${userAvatar}" alt="头像" class="reply-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='" />` :
-                  `<div class="default-avatar-tiny">👤</div>`
-                }
+                  `<div class="default-avatar-tiny">👤</div>`}
                 <div class="reply-user">
-                  ${userName} <span class="reply-time">[${replyTime}]</span>
-                </div>
+                  ${userName} 
+                  ${user && (user.admin === 0 || user.admin === "0") ? '<span style="color:red;font-size:10px;margin-left:3px;">[管理员]</span>' : ''}
+                  <span class="reply-time">[${replyTime}]</span>
+${(currentUser && (parseInt(currentUser.admin) === 0 || currentUser.admin === "0")) || 
+  (currentUser && user && user.id === currentUser.id) ? 
+  `<button class="delete-reply-btn" style="background:none;border:none;color:red;cursor:pointer;margin-left:5px;font-size:10px;min-width:44px;min-height:44px;-webkit-tap-highlight-color: transparent;touch-action: manipulation;" onclick="event.stopPropagation(); deleteReply(${r.id}); return false;">删除</button>` : 
+  ''}
               </div>
               <div class="reply-content">${r.content}</div>
             </div>
@@ -680,13 +695,81 @@ list.innerHTML = messagesToShow.map(m => {
     </div>
   `;
 }).join('');
+  
+  
+  bindReplyEvents();
+}
+
+
+async function deleteMessage(messageId) {
+  
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+  
+  
+  const { data: message, error: fetchError } = await sb
+    .from('kardsdeck')
+    .select('user_name')
+    .eq('id', messageId)
+    .single();
+    
+  if (fetchError) {
+    console.error('获取留言信息失败:', fetchError);
+    alert('获取留言信息失败: ' + fetchError.message);
+    return;
+  }
+  
+  
+  const isAdmin = currentUser && (parseInt(currentUser.admin) === 0 || currentUser.admin === "0");
+  const isOwner = currentUser && message.user_name === currentUser.user_name;
+  
+  if (!isAdmin && !isOwner) {
+    alert('您没有权限删除这条留言');
+    return;
+  }
+  
+  if (!confirm('确定要删除这条留言吗？这将同时删除所有相关回复。')) {
+    return;
+  }
+  
+  try {
+    
+    const { error: repliesError } = await sb
+      .from('replies')
+      .delete()
+      .eq('comment_id', messageId);
       
-      // 绑定回复事件
-      bindReplyEvents();
+    if (repliesError) {
+      console.error('删除回复失败:', repliesError);
+      alert('删除回复失败: ' + repliesError.message);
+      return;
     }
+    
+    
+    const { error: messageError } = await sb
+      .from('kardsdeck')
+      .delete()
+      .eq('id', messageId);
+      
+    if (messageError) {
+      console.error('删除留言失败:', messageError);
+      alert('删除留言失败: ' + messageError.message);
+      return;
+    }
+    
+    alert('删除成功');
+    await loadMessages();
+  } catch (error) {
+    console.error('删除过程中出错:', error);
+    alert('删除过程中出错: ' + error.message);
+  }
+}
+
+
 
     function bindReplyEvents() {
-      // 回复切换事件
       document.querySelectorAll('.reply-toggle').forEach(toggle => {
         toggle.addEventListener('click', function() {
           if (!currentUser) {
@@ -701,7 +784,7 @@ list.innerHTML = messagesToShow.map(m => {
         });
       });
       
-      // 发送回复事件
+      
       document.querySelectorAll('.send-reply').forEach(button => {
         button.addEventListener('click', async function() {
           if (!currentUser) {
@@ -722,7 +805,7 @@ list.innerHTML = messagesToShow.map(m => {
             .from('replies')
             .insert([{
               comment_id: parseInt(messageId),
-              user_id: currentUser.id, // 使用用户ID而不是用户名
+              user_id: currentUser.id, 
               content: content
             }]);
             
@@ -750,22 +833,22 @@ list.innerHTML = messagesToShow.map(m => {
 
       let paginationHTML = '';
       
-      // 首页按钮
+      
       if (currentPage > 1) {
         paginationHTML += `<button id="first-page">首页</button>`;
       }
       
-      // 页码按钮
+      
       const maxVisiblePages = 5;
       let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
       let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
       
-      // 调整起始页，确保显示足够的页码
+      
       if (endPage - startPage + 1 < maxVisiblePages) {
         startPage = Math.max(1, endPage - maxVisiblePages + 1);
       }
       
-      // 生成页码按钮
+      
       for (let i = startPage; i <= endPage; i++) {
         if (i === currentPage) {
           paginationHTML += `<button class="active">${i}</button>`;
@@ -774,12 +857,12 @@ list.innerHTML = messagesToShow.map(m => {
         }
       }
       
-      // 末页按钮
+      
       if (currentPage < totalPages) {
         paginationHTML += `<button id="last-page">末页</button>`;
       }
       
-      // 页码信息
+      
       paginationHTML += `
         <div class="page-info">
           第 ${currentPage} 页，共 ${totalPages} 页
@@ -788,8 +871,8 @@ list.innerHTML = messagesToShow.map(m => {
       
       pagination.innerHTML = paginationHTML;
       
-      // 绑定事件
-      // 首页按钮
+      
+      
       if (document.getElementById('first-page')) {
         document.getElementById('first-page').addEventListener('click', () => {
           currentPage = 1;
@@ -798,7 +881,7 @@ list.innerHTML = messagesToShow.map(m => {
         });
       }
       
-      // 末页按钮
+      
       if (document.getElementById('last-page')) {
         document.getElementById('last-page').addEventListener('click', () => {
           currentPage = totalPages;
@@ -807,7 +890,7 @@ list.innerHTML = messagesToShow.map(m => {
         });
       }
       
-      // 页码按钮
+      
       document.querySelectorAll('.pagination button[data-page]').forEach(button => {
         button.addEventListener('click', () => {
           currentPage = parseInt(button.dataset.page);
@@ -845,7 +928,7 @@ list.innerHTML = messagesToShow.map(m => {
       }
     });
 
-    // 退出登录功能
+    
     window.logout = function() {
       localStorage.removeItem('currentUser');
       checkUserLogin();

@@ -1,4 +1,3 @@
-<!-- deck.html -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -38,7 +37,6 @@
             margin-top: 5px;
         }
         
-        /* 指挥点特殊样式 - 白色图片需要显眼一些 */
         .command-point-tooltip {
             filter: drop-shadow(0 0 3px rgba(0,0,0,0.8));
         }
@@ -53,7 +51,7 @@
             font-family: Arial, sans-serif;
             padding: 10px;
             background-color: #f5f5f5;
-            padding-bottom: 60px; /* 为底部按钮留出空间 */
+            padding-bottom: 60px; 
         }
 
         .card-item {
@@ -346,7 +344,6 @@
             font-size: 14px;
         }
         
-        /* 预备图标样式 */
         .reserve-icon {
             position: absolute;
             bottom: 5px;
@@ -356,7 +353,6 @@
             z-index: 10;
         }
         
-        /* 弹窗样式 */
         .modal {
             display: none;
             position: fixed;
@@ -394,7 +390,6 @@
             cursor: pointer;
         }
         
-        /* 底部导航栏 - 固定在底部 */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -422,7 +417,6 @@
             background-color: #0066cc;
         }
         
-        /* 桌面端隐藏底部导航栏 */
         @media (min-width: 768px) {
             .bottom-nav {
                 display: none;
@@ -437,7 +431,6 @@
             }
         }
         
-        /* 手机端样式 */
         @media (max-width: 767px) {
             .cards-container {
                 grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
@@ -463,7 +456,6 @@
             }
         }
 
-        /* 移动端筛选按钮 */
         .mobile-filter-btn {
             position: fixed;
             bottom: 80px;
@@ -489,13 +481,11 @@
                 display: flex;
             }
             
-            /* 在移动端隐藏桌面版筛选器 */
             .desktop-filters {
                 display: none;
             }
         }
 
-        /* 移动端筛选面板 */
     .mobile-filter-overlay {
         position: fixed;
         top: 0;
@@ -512,7 +502,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #e0e0e0; /* 更深的灰色背景 */
+    background-color: #e0e0e0; 
     border-radius: 10px;
     padding: 20px;
     z-index: 2001;
@@ -596,11 +586,10 @@
         text-align: center;
     }
     
-    /* 指挥点图片特殊样式 */
 .command-point-tooltip img {
     filter: drop-shadow(0 0 2px rgba(0,0,0,0.8));
-    background-color: #f10505; /* 灰色背景 */
-    border-radius: 4px; /* 圆角 */
+    background-color: #f10505; 
+    border-radius: 4px; 
     padding: 2px;
 }
         
@@ -666,7 +655,6 @@
             font-size: 16px;
         }
         
-        /* 卡组预览弹出面板 */
         .deck-preview-overlay {
             position: fixed;
             top: 0;
@@ -720,7 +708,6 @@
             color: #999;
         }
         
-        /* ESC键提示 */
         .esc-hint {
             text-align: center;
             font-size: 12px;
@@ -728,7 +715,6 @@
             margin-top: 10px;
         }
         
-        /* 关闭按钮样式 */
         .close-preview-btn {
             padding: 5px 10px;
             background-color: #dc3545;
@@ -759,7 +745,6 @@
     background-color: #5a6268;
 }
 
-/* 为选中状态添加更好的视觉反馈 */
 .tooltip-option.selected {
     background-color: #1e90ff;
     color: white;
@@ -774,7 +759,6 @@
         <div class="main-content">
             <h1>卡组生成器</h1>
 
-               <!-- 悬浮框容器 -->
 <div id="rarity-tooltip" class="tooltip">
     <div class="tooltip-content">
         <img id="rarity-tooltip-image" src="" alt="">
@@ -795,18 +779,22 @@
 </div>
 
             
-    <!-- 移动端筛选按钮 -->
 <div class="mobile-filter-btn" id="mobile-filter-btn">+</div>
 
-<!-- 移动端筛选悬浮框 -->
 <div class="mobile-filter-overlay" id="mobile-filter-overlay"></div>
 
-<!-- deck.html 中的移动端筛选悬浮框部分 -->
 <div class="mobile-filter-tooltip" id="mobile-filter-tooltip">
     <div class="tooltip-header">
         <h3>筛选条件</h3>
         <button class="close-tooltip" id="close-mobile-tooltip">×</button>
     </div>
+
+    <div class="tooltip-section">
+        <h4>搜索</h4>
+        <input type="text" id="mobile-search-input" placeholder="搜索卡牌名称或描述..." style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd;">
+    </div>
+
+
     
     <div class="tooltip-section">
         <h4>稀有度</h4>
@@ -899,17 +887,6 @@
         </div>
     </div>
     
-    <div class="tooltip-section">
-        <h4>衍生</h4>
-        <div class="tooltip-options" id="derived-options">
-            <div class="tooltip-option" data-value="true" data-type="derived">
-                <span>显示</span>
-            </div>
-            <div class="tooltip-option" data-value="fake" data-type="derived">
-                <span>隐藏</span>
-            </div>
-        </div>
-    </div>
     
     <div class="tooltip-section">
         <button class="reset-all-filters-btn">重置所有筛选</button>
@@ -919,7 +896,7 @@
             <div class="selector-group">
                 <h2>选择国家</h2>
                 <div class="country-selector" id="country-selector">
-                    <!-- 国家选项将通过JavaScript动态加载 -->
+                    
                 </div>
             </div>
             
@@ -989,7 +966,7 @@
             </div>
             
             <div class="cards-container" id="cards-container">
-                <!-- 卡牌将通过JavaScript动态加载 -->
+                
                 <div class="no-cards">请选择国家以查看卡牌</div>
             </div>
             
@@ -997,7 +974,6 @@
         </div>
     </div>
     
-    <!-- 移动端卡组预览面板 -->
     <div class="deck-preview-overlay" id="deck-preview-overlay">
         <div class="deck-preview-panel" id="deck-preview-panel">
             <div class="preview-panel-header">
@@ -1006,19 +982,16 @@
             </div>
             <div class="deck-code" id="deck-code"></div>
             <ul class="preview-list" id="preview-list">
-                <!-- 卡组预览项将通过JavaScript动态加载 -->
             </ul>
             <button class="save-btn" id="save-btn" disabled>保存卡组代码</button>
             <div class="esc-hint">按 ESC 键关闭</div>
         </div>
     </div>
     
-    <!-- 手机端底部导航栏 - 固定在底部 -->
     <div class="bottom-nav">
         <button class="nav-button" id="toggle-preview">卡组预览</button>
     </div>
     
-    <!-- 限制提示弹窗 -->
     <div id="limit-modal" class="modal">
         <div class="modal-content">
             <p id="modal-message">该类型卡牌已达上限</p>
@@ -1026,34 +999,32 @@
         </div>
     </div>
 
-    <script src="js/deck/deck_image.js"></script>
-    <script src="js/deck/deck_main.js"></script>
-    <script src="js/deck/deck_code.js"></script>
-    <script src="js/deck/deck_us.js"></script>
+    <script></script>
+    <script></script>
+    <script></script>
+    <script></script>
     
-    <script>
 
+
+<script>
     function initTooltips() {
-        // 稀有度筛选器悬浮框
+        
         const raritySelect = document.getElementById('rarity-select');
-        const mobileRaritySelect = document.getElementById('mobile-rarity-select');
         const rarityTooltip = document.getElementById('rarity-tooltip');
         const rarityTooltipImage = document.getElementById('rarity-tooltip-image');
         const rarityTooltipText = document.getElementById('rarity-tooltip-text');
         
-        // 类型筛选器悬浮框
+        
         const typeSelect = document.getElementById('type-select');
-        const mobileTypeSelect = document.getElementById('mobile-type-select');
         const typeTooltip = document.getElementById('type-tooltip');
         const typeTooltipImage = document.getElementById('type-tooltip-image');
         
-        // 指挥点筛选器悬浮框
+        
         const commandPointSelect = document.getElementById('command-point-select');
-        const mobileCommandPointSelect = document.getElementById('mobile-command-point-select');
         const commandPointTooltip = document.getElementById('command-point-tooltip');
         const commandPointTooltipImage = document.getElementById('command-point-tooltip-image');
         
-        // 稀有度选项悬浮事件
+        
         function setupRarityTooltip(selectElement) {
             selectElement.addEventListener('mouseenter', function(e) {
                 if (e.target.tagName === 'OPTION' && e.target.value) {
@@ -1076,7 +1047,7 @@
             });
         }
         
-        // 类型选项悬浮事件
+        
         function setupTypeTooltip(selectElement) {
             selectElement.addEventListener('mouseenter', function(e) {
                 if (e.target.tagName === 'OPTION' && e.target.value) {
@@ -1098,7 +1069,7 @@
             });
         }
         
-        // 指挥点选项悬浮事件
+        
         function setupCommandPointTooltip(selectElement) {
             selectElement.addEventListener('mouseenter', function(e) {
                 if (e.target.tagName === 'OPTION' && e.target.value) {
@@ -1120,13 +1091,13 @@
             });
         }
         
-        // 显示悬浮框
+        
         function showTooltip(tooltip, e) {
             tooltip.style.display = 'block';
             moveTooltip(tooltip, e);
         }
         
-        // 移动悬浮框
+        
         function moveTooltip(tooltip, e) {
             const x = e.clientX + 15;
             const y = e.clientY + 15;
@@ -1134,592 +1105,679 @@
             tooltip.style.top = y + 'px';
         }
         
-        // 为桌面端和移动端筛选器设置悬浮框
+        
         if (raritySelect) setupRarityTooltip(raritySelect);
-        if (mobileRaritySelect) setupRarityTooltip(mobileRaritySelect);
         if (typeSelect) setupTypeTooltip(typeSelect);
-        if (mobileTypeSelect) setupTypeTooltip(mobileTypeSelect);
         if (commandPointSelect) setupCommandPointTooltip(commandPointSelect);
-        if (mobileCommandPointSelect) setupCommandPointTooltip(mobileCommandPointSelect);
     }
     
-    // 初始化悬浮框
+    
     initTooltips();
-// 在 deck.html 文件底部的 script 标签中，替换整个 DOMContentLoaded 事件处理函数为以下代码：
 
-document.addEventListener('DOMContentLoaded', function() {
-    // 国家选择逻辑
-    const countrySelector = document.getElementById('country-selector');
-    let selectedMainCountry = null;
-    let selectedSecondaryCountry = null;
-    // 保存从URL传递过来的原始国家代码
-    let originalMainCountry = null;
-    let originalSecondaryCountry = null;
-    let originalCountryCode = ""; // 保存原始国家代码字符串，如 "12"
-    
-    // 初始化国家图标
-    loadCountryIcons();
-    
-    // 从URL参数获取国家代码
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-    if (code && code.startsWith('%%')) {
-        parseCountryCodeFromUrl(code);
-    }
-    
-    // 国家图标点击事件 - 只用于视觉反馈和卡牌筛选，不影响代码生成
-    countrySelector.addEventListener('click', function(e) {
-        const countryOption = e.target.closest('.country-option');
-        if (!countryOption || countryOption.style.display === 'none') return;
+    document.addEventListener('DOMContentLoaded', function() {
         
-        const countryId = parseInt(countryOption.dataset.countryId);
+        const countrySelector = document.getElementById('country-selector');
+        let selectedMainCountry = null;
+        let selectedSecondaryCountry = null;
         
-        // 只允许选择从card.html传递过来的两个国家
-        if (countryId !== originalMainCountry && countryId !== originalSecondaryCountry) {
-            return;
-        }
+        let originalMainCountry = null;
+        let originalSecondaryCountry = null;
+        let originalCountryCode = ""; 
         
-        // 切换选择状态（仅用于视觉反馈和卡牌筛选）
-        countryOption.classList.toggle('selected');
         
-        // 更新选中状态变量（仅用于卡牌筛选）
-        if (countryId === originalMainCountry) {
-            selectedMainCountry = countryOption.classList.contains('selected') ? countryId : null;
-        } else if (countryId === originalSecondaryCountry) {
-            selectedSecondaryCountry = countryOption.classList.contains('selected') ? countryId : null;
-        }
+        const mobileSearchInput = document.getElementById('mobile-search-input');
+        const searchInput = document.getElementById('search-input');
         
-        // 仅重新加载卡牌，不影响卡组代码
-        loadCardsForDisplay();
-    });
-
-    function loadCardsForDisplay() {
-        // 触发卡片加载
-        if (selectedMainCountry || selectedSecondaryCountry) {
-            if (typeof loadCardsForCountries === 'function') {
-                // 设置全局变量以兼容deck_image.js（仅用于卡牌筛选显示）
-                window.selectedMainCountry = selectedMainCountry;
-                window.selectedSecondaryCountry = selectedSecondaryCountry;
-                
-                loadCardsForCountries();
-            }
-        } else {
-            // 如果没有选中国家，显示提示信息
-            cardsContainer.innerHTML = '<div class="no-cards">请选择国家以查看卡牌</div>';
-        }
-    }
-    
-    // 从URL解析国家代码
-    function parseCountryCodeFromUrl(code) {
-        // 格式: %%12|...
-        const countryCode = code.substring(2, 4);
-        const mainCountryId = parseInt(countryCode.charAt(0));
-        const secondaryCountryId = parseInt(countryCode.charAt(1));
         
-        // 保存原始国家代码字符串，用于卡组代码生成
-        originalCountryCode = countryCode;
-        
-        // 保存原始国家ID
-        originalMainCountry = mainCountryId;
-        originalSecondaryCountry = secondaryCountryId;
-        
-        // 设置默认选中的国家（用于卡牌显示）
-        selectedMainCountry = mainCountryId;
-        selectedSecondaryCountry = secondaryCountryId;
-        
-        // 更新UI选择状态
-        if (mainCountryId) {
-            const mainCountryElement = document.querySelector(`.country-option[data-country-id="${mainCountryId}"]`);
-            if (mainCountryElement) {
-                mainCountryElement.classList.add('selected');
-            }
-        }
-        
-        if (secondaryCountryId) {
-            const secondaryCountryElement = document.querySelector(`.country-option[data-country-id="${secondaryCountryId}"]`);
-            if (secondaryCountryElement) {
-                secondaryCountryElement.classList.add('selected');
-            }
-        }
-        
-        // 隐藏其他未选中的国家
-        hideUnselectedCountries();
-        
-        // 自动加载卡牌（不需要点击国家）
-        setTimeout(() => {
-            if (typeof loadCardsForCountries === 'function') {
-                // 设置全局变量以兼容deck_image.js
-                window.selectedMainCountry = mainCountryId;
-                window.selectedSecondaryCountry = secondaryCountryId;
-                
-                loadCardsForCountries();
-            }
-        }, 100);
-    }
-    
-    // 隐藏未选中的国家
-    function hideUnselectedCountries() {
-        const countryItems = document.querySelectorAll('.country-option');
-        
-        countryItems.forEach(item => {
-            const countryId = parseInt(item.dataset.countryId);
+        if (mobileSearchInput) {
             
-            // 只显示从card.html传递过来的两个国家
+            mobileSearchInput.addEventListener('input', function() {
+                applyMobileFilter();
+            });
+            
+            
+            mobileSearchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    applyMobileFilter();
+                }
+            });
+        }
+        
+        
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                
+                const searchKeyword = searchInput.value.trim().toLowerCase();
+                
+                
+                const filters = {
+                    rarity: document.getElementById('rarity-select').value ? document.getElementById('rarity-select').value.split(',') : [],
+                    type: document.getElementById('type-select').value ? document.getElementById('type-select').value.split(',') : [],
+                    commandPoint: document.getElementById('command-point-select').value ? document.getElementById('command-point-select').value.split(',') : [],
+                    status: document.getElementById('status-select').value ? document.getElementById('status-select').value.split(',') : [],
+                    derived: document.getElementById('derived-select').value ? document.getElementById('derived-select').value.split(',') : [],
+                    search: searchKeyword
+                };
+                
+                
+                filterCardsByDesktop(filters);
+            });
+        }
+        
+        
+        function filterCardsByDesktop(filters) {
+            const cardItems = document.querySelectorAll('.card-item');
+            
+            cardItems.forEach(item => {
+                const cardData = JSON.parse(decodeURIComponent(item.dataset.card));
+                const cardRarity = cardData.详细信息?.稀有度 || '';
+                const cardType = cardData.详细信息?.类型 || '';
+                const cardCommandPoint = cardData.详细信息?.["指挥点"] || '';
+                const cardStatus = cardData.详细信息?.活跃 || 'true';
+                const cardDerived = cardData.详细信息?.衍生 || 'fake';
+                const cardName = cardData.名称 || '';
+                const cardDescription = cardData.描述 || '';
+                
+                let show = true;
+                
+                
+                if (filters.rarity.length > 0 && !filters.rarity.includes(cardRarity)) {
+                    show = false;
+                }
+                
+                
+                if (filters.type.length > 0 && !filters.type.includes(cardType)) {
+                    show = false;
+                }
+                
+                
+                if (filters.commandPoint.length > 0 && !filters.commandPoint.includes(cardCommandPoint)) {
+                    
+                    if (filters.commandPoint.includes("7+")) {
+                        if (parseInt(cardCommandPoint) >= 7) {
+                            show = true; 
+                        } else if (!filters.commandPoint.includes(cardCommandPoint)) {
+                            show = false; 
+                        }
+                    } else {
+                        show = false;
+                    }
+                }
+                
+                
+                if (filters.status.length > 0) {
+                    const statusStr = cardStatus === true || cardStatus === "true" ? "true" : "false";
+                    if (!filters.status.includes(statusStr)) {
+                        show = false;
+                    }
+                }
+                
+                
+                if (filters.derived.length > 0 && !filters.derived.includes(cardDerived)) {
+                    show = false;
+                }
+                
+                
+                if (filters.search && show) {
+                    const nameMatch = cardName.toLowerCase().includes(filters.search);
+                    const descMatch = cardDescription.toLowerCase().includes(filters.search);
+                    show = nameMatch || descMatch;
+                }
+                
+                item.style.display = show ? 'block' : 'none';
+            });
+        }
+        
+        
+        function applyMobileFilter() {
+            
+            const selectedOptions = document.querySelectorAll('.tooltip-option.selected');
+            
+            
+            const searchKeyword = mobileSearchInput ? mobileSearchInput.value.trim().toLowerCase() : '';
+            
+            
+            const filters = {
+                rarity: [],
+                type: [],
+                commandPoint: [],
+                status: [],
+                derived: [],
+                search: searchKeyword 
+            };
+            
+            
+            selectedOptions.forEach(option => {
+                const type = option.dataset.type;
+                const value = option.dataset.value;
+                
+                switch(type) {
+                    case 'rarity':
+                        filters.rarity.push(value);
+                        break;
+                    case 'type':
+                        filters.type.push(value);
+                        break;
+                    case 'command-point':
+                        filters.commandPoint.push(value);
+                        break;
+                    case 'status':
+                        filters.status.push(value);
+                        break;
+                    case 'derived':
+                        filters.derived.push(value);
+                        break;
+                }
+            });
+            
+            
+            filterCardsByMobile(filters);
+        }
+        
+        
+        function filterCardsByMobile(filters) {
+            const cardItems = document.querySelectorAll('.card-item');
+            
+            cardItems.forEach(item => {
+                const cardData = JSON.parse(decodeURIComponent(item.dataset.card));
+                const cardRarity = cardData.详细信息?.稀有度 || '';
+                const cardType = cardData.详细信息?.类型 || '';
+                const cardCommandPoint = cardData.详细信息?.["指挥点"] || '';
+                const cardStatus = cardData.详细信息?.活跃 || 'true';
+                const cardDerived = cardData.详细信息?.衍生 || 'fake';
+                const cardName = cardData.名称 || '';
+                const cardDescription = cardData.描述 || '';
+                
+                let show = true;
+                
+                
+                if (filters.rarity.length > 0 && !filters.rarity.includes(cardRarity)) {
+                    show = false;
+                }
+                
+                
+                if (filters.type.length > 0 && !filters.type.includes(cardType)) {
+                    show = false;
+                }
+                
+                
+                if (filters.commandPoint.length > 0 && !filters.commandPoint.includes(cardCommandPoint)) {
+                    
+                    if (filters.commandPoint.includes("7+")) {
+                        if (parseInt(cardCommandPoint) >= 7) {
+                            show = true; 
+                        } else if (!filters.commandPoint.includes(cardCommandPoint)) {
+                            show = false; 
+                        }
+                    } else {
+                        show = false;
+                    }
+                }
+                
+                
+                if (filters.status.length > 0) {
+                    const statusStr = cardStatus === true || cardStatus === "true" ? "true" : "false";
+                    if (!filters.status.includes(statusStr)) {
+                        show = false;
+                    }
+                }
+                
+                
+                if (filters.derived.length > 0 && !filters.derived.includes(cardDerived)) {
+                    show = false;
+                }
+                
+                
+                if (filters.search && show) {
+                    const nameMatch = cardName.toLowerCase().includes(filters.search);
+                    const descMatch = cardDescription.toLowerCase().includes(filters.search);
+                    show = nameMatch || descMatch;
+                }
+                
+                item.style.display = show ? 'block' : 'none';
+            });
+        }
+        
+        
+        loadCountryIcons();
+        
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        if (code && code.startsWith('%%')) {
+            parseCountryCodeFromUrl(code);
+        }
+        
+        
+        countrySelector.addEventListener('click', function(e) {
+            const countryOption = e.target.closest('.country-option');
+            if (!countryOption || countryOption.style.display === 'none') return;
+            
+            const countryId = parseInt(countryOption.dataset.countryId);
+            
+            
             if (countryId !== originalMainCountry && countryId !== originalSecondaryCountry) {
-                item.style.display = 'none';
+                return;
             }
+            
+            
+            countryOption.classList.toggle('selected');
+            
+            
+            if (countryId === originalMainCountry) {
+                selectedMainCountry = countryOption.classList.contains('selected') ? countryId : null;
+            } else if (countryId === originalSecondaryCountry) {
+                selectedSecondaryCountry = countryOption.classList.contains('selected') ? countryId : null;
+            }
+            
+            
+            loadCardsForDisplay();
         });
-    }
-    // 删除原有的移动端筛选功能代码，替换为以下内容
 
-const mobileFilterBtn = document.getElementById('mobile-filter-btn');
-const mobileFilterOverlay = document.getElementById('mobile-filter-overlay');
-const mobileFilterTooltip = document.getElementById('mobile-filter-tooltip');
-const closeMobileTooltip = document.getElementById('close-mobile-tooltip');
-    
-    // 打开筛选悬浮框
- // 打开筛选悬浮框
-mobileFilterBtn.addEventListener('click', function() {
-    mobileFilterOverlay.style.display = 'block';
-    mobileFilterTooltip.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-});
-
-// 关闭筛选悬浮框
-closeMobileTooltip.addEventListener('click', function() {
-    mobileFilterOverlay.style.display = 'none';
-    mobileFilterTooltip.style.display = 'none';
-    document.body.style.overflow = 'auto';
-});
-
-// 点击遮罩层关闭
-mobileFilterOverlay.addEventListener('click', function() {
-    mobileFilterOverlay.style.display = 'none';
-    mobileFilterTooltip.style.display = 'none';
-    document.body.style.overflow = 'auto';
-});
-
-// 选项点击事件
-document.querySelectorAll('.tooltip-option').forEach(option => {
-    option.addEventListener('click', function() {
-        const type = this.dataset.type;
-        const value = this.dataset.value;
-        
-        // 移除状态和衍生选项的单选限制，全部改为多选
-        this.classList.toggle('selected');
-        
-        // 立即应用筛选
-        applyMobileFilter();
-    });
-});
-
-// 应用移动端筛选
-function applyMobileFilter() {
-    // 获取所有选中的选项
-    const selectedOptions = document.querySelectorAll('.tooltip-option.selected');
-    
-    // 构建筛选条件对象
-    const filters = {
-        rarity: [],
-        type: [],
-        commandPoint: [],
-        status: [],  // 改为数组以支持多选
-        derived: []  // 改为数组以支持多选
-    };
-    
-    // 分类选中的选项
-    selectedOptions.forEach(option => {
-        const type = option.dataset.type;
-        const value = option.dataset.value;
-        
-        switch(type) {
-            case 'rarity':
-                filters.rarity.push(value);
-                break;
-            case 'type':
-                filters.type.push(value);
-                break;
-            case 'command-point':
-                filters.commandPoint.push(value);
-                break;
-            case 'status':
-                filters.status.push(value);
-                break;
-            case 'derived':
-                filters.derived.push(value);
-                break;
-        }
-    });
-    
-    // 应用筛选到卡牌
-    filterCardsByMobile(filters);
-}
-
-function filterCardsByMobile(filters) {
-    const cardItems = document.querySelectorAll('.card-item');
-    
-    cardItems.forEach(item => {
-        const cardData = JSON.parse(decodeURIComponent(item.dataset.card));
-        const cardRarity = cardData.详细信息?.稀有度 || '';
-        const cardType = cardData.详细信息?.类型 || '';
-        const cardCommandPoint = cardData.详细信息?.["指挥点"] || '';
-        const cardStatus = cardData.详细信息?.活跃 || 'true';
-        const cardDerived = cardData.详细信息?.衍生 || 'fake';
-        
-        let show = true;
-        
-        // 稀有度筛选（多选）
-        if (filters.rarity.length > 0 && !filters.rarity.includes(cardRarity)) {
-            show = false;
-        }
-        
-        // 类型筛选（多选）
-        if (filters.type.length > 0 && !filters.type.includes(cardType)) {
-            show = false;
-        }
-        
-        // 指挥点筛选（多选）
-        if (filters.commandPoint.length > 0 && !filters.commandPoint.includes(cardCommandPoint)) {
-            // 特殊处理 7+ 的情况
-            if (filters.commandPoint.includes("7+")) {
-                if (parseInt(cardCommandPoint) >= 7) {
-                    show = true; // 如果有 7+ 选项且卡牌指挥点 >= 7，则显示
-                } else if (!filters.commandPoint.includes(cardCommandPoint)) {
-                    show = false; // 如果没有匹配的指挥点且不是 7+ 情况，则隐藏
+        function loadCardsForDisplay() {
+            
+            if (selectedMainCountry || selectedSecondaryCountry) {
+                if (typeof loadCardsForCountries === 'function') {
+                    
+                    window.selectedMainCountry = selectedMainCountry;
+                    window.selectedSecondaryCountry = selectedSecondaryCountry;
+                    
+                    loadCardsForCountries();
                 }
             } else {
-                show = false;
+                
+                cardsContainer.innerHTML = '<div class="no-cards">请选择国家以查看卡牌</div>';
             }
         }
         
-        // 状态筛选（多选）- 修改为多选逻辑
-        if (filters.status.length > 0) {
-            const statusStr = cardStatus === true || cardStatus === "true" ? "true" : "false";
-            if (!filters.status.includes(statusStr)) {
-                show = false;
-            }
-        }
         
-        // 衍生筛选（多选）- 修改为多选逻辑
-        if (filters.derived.length > 0 && !filters.derived.includes(cardDerived)) {
-            show = false;
-        }
-        
-        item.style.display = show ? 'block' : 'none';
-    });
-}
-
-
-// 重置所有筛选按钮事件
-document.querySelector('.reset-all-filters-btn').addEventListener('click', function() {
-    // 清除所有选中状态
-    document.querySelectorAll('.tooltip-option').forEach(option => {
-        option.classList.remove('selected');
-    });
-    
-    // 重新显示所有卡牌
-    document.querySelectorAll('.card-item').forEach(item => {
-        item.style.display = 'block';
-    });
-});
-
-// 重置所有筛选按钮事件
-document.querySelector('.reset-all-filters-btn').addEventListener('click', function() {
-    resetAllFilters();
-});
-
-// 更新筛选器并立即应用
-function updateFilterAndApply(type, value) {
-    let selectElement;
-    switch(type) {
-        case 'rarity':
-            selectElement = document.getElementById('rarity-select');
-            break;
-        case 'type':
-            selectElement = document.getElementById('type-select');
-            break;
-        case 'command-point':
-            selectElement = document.getElementById('command-point-select');
-            break;
-        case 'status':
-            selectElement = document.getElementById('status-select');
-            break;
-        case 'derived':
-            selectElement = document.getElementById('derived-select');
-            break;
-    }
-    
-    if (selectElement) {
-        // 对于状态和衍生选项，使用单选逻辑
-        if (type === 'status' || type === 'derived') {
-            // 如果已经选中该选项，则取消选择（设为空值）
-            if (selectElement.value === value) {
-                selectElement.value = '';
-            } else {
-                selectElement.value = value;
-            }
-        } else {
-            // 对于其他选项，使用多选逻辑
-            // 检查是否已经选中
-            const currentValues = selectElement.value ? selectElement.value.split(',') : [];
-            const valueIndex = currentValues.indexOf(value);
+        function parseCountryCodeFromUrl(code) {
             
-            if (valueIndex > -1) {
-                // 如果已选中，则移除
-                currentValues.splice(valueIndex, 1);
-            } else {
-                // 如果未选中，则添加
-                currentValues.push(value);
+            const countryCode = code.substring(2, 4);
+            const mainCountryId = parseInt(countryCode.charAt(0));
+            const secondaryCountryId = parseInt(countryCode.charAt(1));
+            
+            
+            originalCountryCode = countryCode;
+            
+            
+            originalMainCountry = mainCountryId;
+            originalSecondaryCountry = secondaryCountryId;
+            
+            
+            selectedMainCountry = mainCountryId;
+            selectedSecondaryCountry = secondaryCountryId;
+            
+            
+            if (mainCountryId) {
+                const mainCountryElement = document.querySelector(`.country-option[data-country-id="${mainCountryId}"]`);
+                if (mainCountryElement) {
+                    mainCountryElement.classList.add('selected');
+                }
             }
             
-            selectElement.value = currentValues.join(',');
-        }
-        
-        // 立即触发筛选
-        if (typeof filterCards === 'function') {
-            filterCards();
-        }
-        
-        // 同步移动端筛选器
-        syncMobileFilters(type, selectElement.value);
-    }
-}
-
-// 重置所有筛选条件
-function resetAllFilters() {
-    // 重置桌面端筛选器
-    document.getElementById('rarity-select').value = '';
-    document.getElementById('type-select').value = '';
-    document.getElementById('command-point-select').value = '';
-    document.getElementById('status-select').value = '';
-    document.getElementById('derived-select').value = '';
-    
-    // 重置移动端选项选中状态
-    document.querySelectorAll('.tooltip-option').forEach(option => {
-        option.classList.remove('selected');
-    });
-    
-    // 立即触发筛选
-    if (typeof filterCards === 'function') {
-        filterCards();
-    }
-    
-    // 同步移动端筛选器
-    syncMobileFilters('rarity', '');
-    syncMobileFilters('type', '');
-    syncMobileFilters('command-point', '');
-    syncMobileFilters('status', '');
-    syncMobileFilters('derived', '');
-}
-
-    
-// 更新筛选器函数
-function updateFilter(type, value) {
-    let selectElement;
-    switch(type) {
-        case 'rarity':
-            selectElement = document.getElementById('rarity-select');
-            break;
-        case 'type':
-            selectElement = document.getElementById('type-select');
-            break;
-        case 'command-point':
-            selectElement = document.getElementById('command-point-select');
-            break;
-        case 'status':
-            selectElement = document.getElementById('status-select');
-            break;
-        case 'derived':
-            selectElement = document.getElementById('derived-select');
-            break;
-    }
-    
-    if (selectElement) {
-        // 对于状态和衍生选项，使用单选逻辑
-        if (type === 'status' || type === 'derived') {
-            // 如果已经选中该选项，则取消选择（设为空值）
-            if (selectElement.value === value) {
-                selectElement.value = '';
-            } else {
-                selectElement.value = value;
-            }
-        } else {
-            // 对于其他选项，使用多选逻辑
-            // 检查是否已经选中
-            const currentValues = selectElement.value ? selectElement.value.split(',') : [];
-            const valueIndex = currentValues.indexOf(value);
-            
-            if (valueIndex > -1) {
-                // 如果已选中，则移除
-                currentValues.splice(valueIndex, 1);
-            } else {
-                // 如果未选中，则添加
-                currentValues.push(value);
+            if (secondaryCountryId) {
+                const secondaryCountryElement = document.querySelector(`.country-option[data-country-id="${secondaryCountryId}"]`);
+                if (secondaryCountryElement) {
+                    secondaryCountryElement.classList.add('selected');
+                }
             }
             
-            selectElement.value = currentValues.join(',');
+            
+            hideUnselectedCountries();
+            
+            
+            setTimeout(() => {
+                if (typeof loadCardsForCountries === 'function') {
+                    
+                    window.selectedMainCountry = mainCountryId;
+                    window.selectedSecondaryCountry = secondaryCountryId;
+                    
+                    loadCardsForCountries();
+                }
+            }, 100);
         }
         
-        // 触发筛选
-        if (typeof filterCards === 'function') {
-            filterCards();
+        
+        function hideUnselectedCountries() {
+            const countryItems = document.querySelectorAll('.country-option');
+            
+            countryItems.forEach(item => {
+                const countryId = parseInt(item.dataset.countryId);
+                
+                
+                if (countryId !== originalMainCountry && countryId !== originalSecondaryCountry) {
+                    item.style.display = 'none';
+                }
+            });
         }
         
-        // 同步移动端筛选器
-        syncMobileFilters(type, selectElement.value);
-    }
-}
-    
-    // 同步移动端筛选器
-// 同步移动端筛选器
-function syncMobileFilters(type, value) {
-    // 同步到移动端筛选器
-    switch(type) {
-        case 'rarity':
-            const mobileRaritySelect = document.getElementById('mobile-rarity-select');
-            if (mobileRaritySelect) mobileRaritySelect.value = value;
-            break;
-        case 'type':
-            const mobileTypeSelect = document.getElementById('mobile-type-select');
-            if (mobileTypeSelect) mobileTypeSelect.value = value;
-            break;
-        case 'command-point':
-            const mobileCommandPointSelect = document.getElementById('mobile-command-point-select');
-            if (mobileCommandPointSelect) mobileCommandPointSelect.value = value;
-            break;
-        case 'status':
-            const mobileStatusSelect = document.getElementById('mobile-status-select');
-            if (mobileStatusSelect) mobileStatusSelect.value = value;
-            break;
-        case 'derived':
-            const mobileDerivedSelect = document.getElementById('mobile-derived-select');
-            if (mobileDerivedSelect) mobileDerivedSelect.value = value;
-            break;
-    }
-    
-    // 同步移动端悬浮框中的选项选中状态
-    // 清除同类型所有选项的选中状态
-    if (type === 'status' || type === 'derived') {
-        document.querySelectorAll(`.tooltip-option[data-type="${type}"]`).forEach(opt => {
-            opt.classList.remove('selected');
+        const mobileFilterBtn = document.getElementById('mobile-filter-btn');
+        const mobileFilterOverlay = document.getElementById('mobile-filter-overlay');
+        const mobileFilterTooltip = document.getElementById('mobile-filter-tooltip');
+        const closeMobileTooltip = document.getElementById('close-mobile-tooltip');
+        
+        
+        mobileFilterBtn.addEventListener('click', function() {
+            mobileFilterOverlay.style.display = 'block';
+            mobileFilterTooltip.style.display = 'block';
+            document.body.style.overflow = 'hidden';
         });
-        // 选中对应值的选项
-        if (value) {
-            const selectedOption = document.querySelector(`.tooltip-option[data-type="${type}"][data-value="${value}"]`);
-            if (selectedOption) {
-                selectedOption.classList.add('selected');
-            }
-        }
-    }
-}
-    
-    // 监听桌面端筛选器变化，同步到移动端
-const desktopRaritySelect = document.getElementById('rarity-select');
-const desktopTypeSelect = document.getElementById('type-select');
-const desktopCommandPointSelect = document.getElementById('command-point-select');
-const desktopStatusSelect = document.getElementById('status-select');
-const desktopDerivedSelect = document.getElementById('derived-select');
-    
-if (desktopRaritySelect) {
-    desktopRaritySelect.addEventListener('change', function() {
-        syncMobileFilters('rarity', this.value);
-    });
-}
 
-if (desktopTypeSelect) {
-    desktopTypeSelect.addEventListener('change', function() {
-        syncMobileFilters('type', this.value);
-    });
-}
-
-if (desktopCommandPointSelect) {
-    desktopCommandPointSelect.addEventListener('change', function() {
-        syncMobileFilters('command-point', this.value);
-    });
-}
-
-if (desktopStatusSelect) {
-    desktopStatusSelect.addEventListener('change', function() {
-        syncMobileFilters('status', this.value);
-        // 同步移动端悬浮框选项状态
-        document.querySelectorAll('.tooltip-option[data-type="status"]').forEach(opt => {
-            opt.classList.remove('selected');
+        
+        closeMobileTooltip.addEventListener('click', function() {
+            mobileFilterOverlay.style.display = 'none';
+            mobileFilterTooltip.style.display = 'none';
+            document.body.style.overflow = 'auto';
         });
-        if (this.value) {
-            const selectedOption = document.querySelector(`.tooltip-option[data-type="status"][data-value="${this.value}"]`);
-            if (selectedOption) {
-                selectedOption.classList.add('selected');
-            }
-        }
-    });
-}
 
-if (desktopDerivedSelect) {
-    desktopDerivedSelect.addEventListener('change', function() {
-        syncMobileFilters('derived', this.value);
-        // 同步移动端悬浮框选项状态
-        document.querySelectorAll('.tooltip-option[data-type="derived"]').forEach(opt => {
-            opt.classList.remove('selected');
+        
+        mobileFilterOverlay.addEventListener('click', function() {
+            mobileFilterOverlay.style.display = 'none';
+            mobileFilterTooltip.style.display = 'none';
+            document.body.style.overflow = 'auto';
         });
-        if (this.value) {
-            const selectedOption = document.querySelector(`.tooltip-option[data-type="derived"][data-value="${this.value}"]`);
-            if (selectedOption) {
-                selectedOption.classList.add('selected');
-            }
-        }
-    });
-}
-    
-    // 卡组预览功能
-    const togglePreviewBtn = document.getElementById('toggle-preview');
-    const deckPreviewOverlay = document.getElementById('deck-preview-overlay');
-    const deckPreviewPanel = document.getElementById('deck-preview-panel');
-    const closePreviewPanel = document.getElementById('close-preview-panel');
-    
-    // 打开卡组预览面板
-    togglePreviewBtn.addEventListener('click', function() {
-        deckPreviewOverlay.style.display = 'block';
-        setTimeout(() => {
-            deckPreviewPanel.classList.add('active');
-        }, 10);
-        document.body.style.overflow = 'hidden';
-    });
-    
-    // 关闭卡组预览面板函数
-    function closeDeckPreviewPanelFunc() {
-        deckPreviewPanel.classList.remove('active');
-        setTimeout(() => {
-            deckPreviewOverlay.style.display = 'none';
-        }, 300);
-        document.body.style.overflow = 'auto';
-    }
-    
-    // 关闭卡组预览面板
-    closePreviewPanel.addEventListener('click', closeDeckPreviewPanelFunc);
-    
-    // 点击遮罩层关闭卡组预览
-    deckPreviewOverlay.addEventListener('click', function(e) {
-        if (e.target === deckPreviewOverlay) {
-            closeDeckPreviewPanelFunc();
-        }
-    });
-    
-    // ESC键关闭面板
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            // 关闭筛选面板
-            if (mobileFilterPanel.classList.contains('active')) {
-                mobileFilterPanel.classList.remove('active');
-                document.body.style.overflow = 'auto';
+
+        
+        document.querySelectorAll('.tooltip-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const type = this.dataset.type;
+                const value = this.dataset.value;
+                
+                
+                this.classList.toggle('selected');
+                
+                
+                applyMobileFilter();
+            });
+        });
+
+        
+        document.querySelector('.reset-all-filters-btn').addEventListener('click', function() {
+            
+            document.querySelectorAll('.tooltip-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            
+            if (mobileSearchInput) {
+                mobileSearchInput.value = '';
             }
             
-            // 关闭卡组预览面板
-            if (deckPreviewOverlay.style.display === 'block') {
+            
+            document.querySelectorAll('.card-item').forEach(item => {
+                item.style.display = 'block';
+            });
+        });
+
+        
+        function updateFilterAndApply(type, value) {
+            let selectElement;
+            switch(type) {
+                case 'rarity':
+                    selectElement = document.getElementById('rarity-select');
+                    break;
+                case 'type':
+                    selectElement = document.getElementById('type-select');
+                    break;
+                case 'command-point':
+                    selectElement = document.getElementById('command-point-select');
+                    break;
+                case 'status':
+                    selectElement = document.getElementById('status-select');
+                    break;
+                case 'derived':
+                    selectElement = document.getElementById('derived-select');
+                    break;
+            }
+            
+            if (selectElement) {
+                
+                if (type === 'status' || type === 'derived') {
+                    
+                    if (selectElement.value === value) {
+                        selectElement.value = '';
+                    } else {
+                        selectElement.value = value;
+                    }
+                } else {
+                    
+                    
+                    const currentValues = selectElement.value ? selectElement.value.split(',') : [];
+                    const valueIndex = currentValues.indexOf(value);
+                    
+                    if (valueIndex > -1) {
+                        
+                        currentValues.splice(valueIndex, 1);
+                    } else {
+                        
+                        currentValues.push(value);
+                    }
+                    
+                    selectElement.value = currentValues.join(',');
+                }
+                
+                
+                if (typeof filterCards === 'function') {
+                    filterCards();
+                }
+                
+                
+                syncMobileFilters(type, selectElement.value);
+            }
+        }
+
+        
+        function resetAllFilters() {
+            
+            document.getElementById('rarity-select').value = '';
+            document.getElementById('type-select').value = '';
+            document.getElementById('command-point-select').value = '';
+            document.getElementById('status-select').value = '';
+            document.getElementById('derived-select').value = '';
+            if (searchInput) searchInput.value = '';
+            
+            
+            document.querySelectorAll('.tooltip-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            if (mobileSearchInput) mobileSearchInput.value = '';
+            
+            
+            if (typeof filterCards === 'function') {
+                filterCards();
+            }
+            
+            
+            syncMobileFilters('rarity', '');
+            syncMobileFilters('type', '');
+            syncMobileFilters('command-point', '');
+            syncMobileFilters('status', '');
+            syncMobileFilters('derived', '');
+        }
+        
+        
+        function updateFilter(type, value) {
+            let selectElement;
+            switch(type) {
+                case 'rarity':
+                    selectElement = document.getElementById('rarity-select');
+                    break;
+                case 'type':
+                    selectElement = document.getElementById('type-select');
+                    break;
+                case 'command-point':
+                    selectElement = document.getElementById('command-point-select');
+                    break;
+                case 'status':
+                    selectElement = document.getElementById('status-select');
+                    break;
+                case 'derived':
+                    selectElement = document.getElementById('derived-select');
+                    break;
+            }
+            
+            if (selectElement) {
+                
+                if (type === 'status' || type === 'derived') {
+                    
+                    if (selectElement.value === value) {
+                        selectElement.value = '';
+                    } else {
+                        selectElement.value = value;
+                    }
+                } else {
+                    
+                    
+                    const currentValues = selectElement.value ? selectElement.value.split(',') : [];
+                    const valueIndex = currentValues.indexOf(value);
+                    
+                    if (valueIndex > -1) {
+                        
+                        currentValues.splice(valueIndex, 1);
+                    } else {
+                        
+                        currentValues.push(value);
+                    }
+                    
+                    selectElement.value = currentValues.join(',');
+                }
+                
+                
+                if (typeof filterCards === 'function') {
+                    filterCards();
+                }
+                
+                
+                syncMobileFilters(type, selectElement.value);
+            }
+        }
+        
+        
+        function syncMobileFilters(type, value) {
+            
+            
+            if (type === 'status' || type === 'derived') {
+                document.querySelectorAll(`.tooltip-option[data-type="${type}"]`).forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                if (value) {
+                    const selectedOption = document.querySelector(`.tooltip-option[data-type="${type}"][data-value="${value}"]`);
+                    if (selectedOption) {
+                        selectedOption.classList.add('selected');
+                    }
+                }
+            }
+        }
+        
+        
+        const desktopRaritySelect = document.getElementById('rarity-select');
+        const desktopTypeSelect = document.getElementById('type-select');
+        const desktopCommandPointSelect = document.getElementById('command-point-select');
+        const desktopStatusSelect = document.getElementById('status-select');
+        const desktopDerivedSelect = document.getElementById('derived-select');
+        
+        if (desktopRaritySelect) {
+            desktopRaritySelect.addEventListener('change', function() {
+                syncMobileFilters('rarity', this.value);
+            });
+        }
+
+        if (desktopTypeSelect) {
+            desktopTypeSelect.addEventListener('change', function() {
+                syncMobileFilters('type', this.value);
+            });
+        }
+
+        if (desktopCommandPointSelect) {
+            desktopCommandPointSelect.addEventListener('change', function() {
+                syncMobileFilters('command-point', this.value);
+            });
+        }
+
+        if (desktopStatusSelect) {
+            desktopStatusSelect.addEventListener('change', function() {
+                syncMobileFilters('status', this.value);
+                
+                document.querySelectorAll('.tooltip-option[data-type="status"]').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                if (this.value) {
+                    const selectedOption = document.querySelector(`.tooltip-option[data-type="status"][data-value="${this.value}"]`);
+                    if (selectedOption) {
+                        selectedOption.classList.add('selected');
+                    }
+                }
+            });
+        }
+
+        if (desktopDerivedSelect) {
+            desktopDerivedSelect.addEventListener('change', function() {
+                syncMobileFilters('derived', this.value);
+                
+                document.querySelectorAll('.tooltip-option[data-type="derived"]').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                if (this.value) {
+                    const selectedOption = document.querySelector(`.tooltip-option[data-type="derived"][data-value="${this.value}"]`);
+                    if (selectedOption) {
+                        selectedOption.classList.add('selected');
+                    }
+                }
+            });
+        }
+        
+        
+        const togglePreviewBtn = document.getElementById('toggle-preview');
+        const deckPreviewOverlay = document.getElementById('deck-preview-overlay');
+        const deckPreviewPanel = document.getElementById('deck-preview-panel');
+        const closePreviewPanel = document.getElementById('close-preview-panel');
+        
+        
+        togglePreviewBtn.addEventListener('click', function() {
+            deckPreviewOverlay.style.display = 'block';
+            setTimeout(() => {
+                deckPreviewPanel.classList.add('active');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        });
+        
+        
+        function closeDeckPreviewPanelFunc() {
+            deckPreviewPanel.classList.remove('active');
+            setTimeout(() => {
+                deckPreviewOverlay.style.display = 'none';
+            }, 300);
+            document.body.style.overflow = 'auto';
+        }
+        
+        
+        closePreviewPanel.addEventListener('click', closeDeckPreviewPanelFunc);
+        
+        
+        deckPreviewOverlay.addEventListener('click', function(e) {
+            if (e.target === deckPreviewOverlay) {
                 closeDeckPreviewPanelFunc();
             }
-        }
+        });
+        
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                
+                if (mobileFilterPanel && mobileFilterPanel.classList.contains('active')) {
+                    mobileFilterPanel.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+                
+                
+                if (deckPreviewOverlay.style.display === 'block') {
+                    closeDeckPreviewPanelFunc();
+                }
+            }
+        });
     });
-});
-    </script>
+</script>
 </body>
 </html>

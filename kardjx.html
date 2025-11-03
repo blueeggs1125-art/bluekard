@@ -200,28 +200,28 @@
             </div>
             
             <div class="visual-representation" id="visual-representation">
-                <!-- 稀有度区域将通过JavaScript动态生成 -->
+                
             </div>
         </div>
     </div>
 
     <script>
-// 全局变量
+
 let parsedDeck = null;
 let cardData = null;
 let imageData = null;
 
-// 页面加载完成后初始化
+
 document.addEventListener('DOMContentLoaded', function() {
-    // 绑定事件
+    
     document.getElementById('parse-btn').addEventListener('click', parseDeckCode);
     document.getElementById('save-btn').addEventListener('click', saveImages);
     
-    // 加载数据
+    
     loadCardData();
 });
 
-// 加载卡牌数据
+
 async function loadCardData() {
     try {
         const response = await fetch('data/newk.json');
@@ -234,7 +234,7 @@ async function loadCardData() {
     }
 }
 
-// 解析卡组代码
+
 function parseDeckCode() {
     const codeInput = document.getElementById('code-input');
     const code = codeInput.value.trim();
@@ -244,9 +244,9 @@ function parseDeckCode() {
         return;
     }
     
-    // 解析代码逻辑
+    
     try {
-        // 格式验证
+        
         if (!code.startsWith('%%')) {
             throw new Error('无效的卡组代码格式');
         }
@@ -262,11 +262,11 @@ function parseDeckCode() {
             throw new Error('无效的卡组代码格式');
         }
         
-        // 按照分号位置解析（根据位置确定数量）
-        const oneCardCodes = sections[0] ? parseCardSection(sections[0]) : [];    // 1张
-        const twoCardCodes = sections[1] ? parseCardSection(sections[1]) : [];    // 2张
-        const threeCardCodes = sections[2] ? parseCardSection(sections[2]) : [];  // 3张
-        const fourCardCodes = sections[3] ? parseCardSection(sections[3]) : [];   // 4张
+        
+        const oneCardCodes = sections[0] ? parseCardSection(sections[0]) : [];    
+        const twoCardCodes = sections[1] ? parseCardSection(sections[1]) : [];    
+        const threeCardCodes = sections[2] ? parseCardSection(sections[2]) : [];  
+        const fourCardCodes = sections[3] ? parseCardSection(sections[3]) : [];   
         
         parsedDeck = {
             one: oneCardCodes,
@@ -275,10 +275,10 @@ function parseDeckCode() {
             four: fourCardCodes
         };
         
-        // 显示可视化预览
+        
         displayVisualPreview();
         
-        // 显示预览区域和保存按钮
+        
         document.getElementById('deck-preview').style.display = 'block';
         document.getElementById('save-btn').style.display = 'inline-block';
     } catch (error) {
@@ -286,11 +286,11 @@ function parseDeckCode() {
     }
 }
 
-// 解析卡牌部分 - 每两个字符为一个卡牌代码
+
 function parseCardSection(section) {
     const cards = [];
     
-    // 每两个字符为一个卡牌代码
+    
     for (let i = 0; i < section.length; i += 2) {
         const code = section.substring(i, i + 2);
         if (code.length === 2) {
@@ -301,15 +301,15 @@ function parseCardSection(section) {
     return cards;
 }
 
-// 显示可视化预览
+
 function displayVisualPreview() {
     const container = document.getElementById('visual-representation');
     container.innerHTML = '';
     
-    // 收集所有卡牌并按实际稀有度分类
+    
     const rarityGroups = {};
     
-    // 定义数量映射
+    
     const countMap = {
         'one': 1,
         'two': 2,
@@ -317,7 +317,7 @@ function displayVisualPreview() {
         'four': 4
     };
     
-    // 遍历所有卡牌代码并按实际稀有度分组
+    
     Object.keys(parsedDeck).forEach(category => {
         const count = countMap[category];
         parsedDeck[category].forEach(code => {
@@ -327,7 +327,7 @@ function displayVisualPreview() {
                 if (!rarityGroups[rarity]) {
                     rarityGroups[rarity] = [];
                 }
-                // 将卡牌代码添加指定次数
+                
                 for (let i = 0; i < count; i++) {
                     rarityGroups[rarity].push(code);
                 }
@@ -335,14 +335,14 @@ function displayVisualPreview() {
         });
     });
     
-    // 创建每个稀有度的展示区域
+    
     Object.keys(rarityGroups).forEach(rarity => {
         const cards = rarityGroups[rarity];
         
         const section = document.createElement('div');
         section.className = 'rarity-section';
         
-        // 统计该稀有度下不同卡牌的数量
+        
         const cardCounts = {};
         cards.forEach(code => {
             cardCounts[code] = (cardCounts[code] || 0) + 1;
@@ -354,23 +354,23 @@ function displayVisualPreview() {
                 <div class="rarity-count">${Object.keys(cardCounts).length} 种</div>
             </div>
             <div class="card-images-container" id="card-images-${rarity}">
-                <!-- 卡牌图片将通过JavaScript动态生成 -->
+                
             </div>
         `;
         
         container.appendChild(section);
         
-        // 显示该稀有度的卡牌图片
+        
         showCardImagesForRarity(rarity, cards);
     });
 }
 
-// 显示特定稀有度的卡牌图片
+
 function showCardImagesForRarity(rarityKey, cardCodes) {
     const container = document.getElementById(`card-images-${rarityKey}`);
     container.innerHTML = '';
     
-    // 获取所有卡牌信息并按指挥点排序
+    
     const cardInfoList = [];
     cardCodes.forEach(code => {
         const cardInfo = findCardByCode(code);
@@ -383,10 +383,10 @@ function showCardImagesForRarity(rarityKey, cardCodes) {
         }
     });
     
-    // 按指挥点排序
+    
     cardInfoList.sort((a, b) => a.commandPoint - b.commandPoint);
     
-    // 显示排序后的卡牌图片
+    
     cardInfoList.forEach(cardItem => {
         const cardInfo = cardItem.info;
         const imagePath = findImagePath(cardInfo.名称, cardInfo.国家);
@@ -410,7 +410,7 @@ function showCardImagesForRarity(rarityKey, cardCodes) {
     });
 }
 
-// 查找卡牌信息通过代码
+
 function findCardByCode(code) {
     if (!cardData) return null;
     
@@ -419,7 +419,7 @@ function findCardByCode(code) {
     );
 }
 
-// 查找图片路径
+
 function findImagePath(cardName, country) {
     if (!imageData || !imageData[country]) return null;
     
@@ -435,47 +435,47 @@ function findImagePath(cardName, country) {
     return null;
 }
 
-// 处理包含中文的图片路径
+
 function encodeImagePath(path) {
     return path.split('/').map(part => encodeURIComponent(part)).join('/');
 }
 
-// 保存图片功能 - 生成完整大图并下载
+
 function saveImages() {
-    // 获取所有显示的卡牌图片并按指挥点排序
+    
     const cardContainers = Array.from(document.querySelectorAll('.card-image-container'));
     
-    // 按指挥点排序
+    
     cardContainers.sort((a, b) => {
         const pointA = parseInt(a.getAttribute('data-command-point')) || 0;
         const pointB = parseInt(b.getAttribute('data-command-point')) || 0;
         return pointA - pointB;
     });
     
-    // 创建一个隐藏的canvas元素
+    
     const canvas = document.createElement('canvas');
     document.body.appendChild(canvas);
     const ctx = canvas.getContext('2d');
     
-    // 设置每张图片的尺寸
+    
     const imgWidth = 200;
     const imgHeight = 300;
     const imagesPerRow = 5;
     
-    // 计算canvas尺寸
+    
     const rows = Math.ceil(cardContainers.length / imagesPerRow);
     canvas.width = imgWidth * imagesPerRow;
     canvas.height = imgHeight * rows;
     
-    // 填充白色背景
+    
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    // 加载并绘制所有图片
+    
     let loadedImages = 0;
     const images = [];
     
-    // 创建所有图片对象
+    
     cardContainers.forEach((container, index) => {
         const img = container.querySelector('.card-image');
         if (img) {
@@ -486,14 +486,14 @@ function saveImages() {
                 images[index] = this;
                 loadedImages++;
                 
-                // 当所有图片加载完成时，绘制到canvas并下载
+                
                 if (loadedImages === cardContainers.length) {
                     drawImagesToCanvas();
                 }
             };
             imageObj.onerror = function() {
                 loadedImages++;
-                // 即使有图片加载失败，也继续处理其他图片
+                
                 if (loadedImages === cardContainers.length) {
                     drawImagesToCanvas();
                 }
@@ -506,7 +506,7 @@ function saveImages() {
         }
     });
     
-    // 绘制图片到canvas
+    
     function drawImagesToCanvas() {
         images.forEach((img, index) => {
             if (img) {
@@ -522,7 +522,7 @@ function saveImages() {
             }
         });
         
-        // 下载图片
+        
         try {
             const link = document.createElement('a');
             link.download = '卡组图片_' + new Date().getTime() + '.png';
@@ -534,7 +534,7 @@ function saveImages() {
             console.error('下载图片失败:', e);
             alert('图片生成完成，但由于浏览器安全限制无法自动下载。请右键点击下方图片并选择"另存为"来保存。');
             
-            // 在新窗口中显示图片
+            
             const newWindow = window.open('', '_blank');
             newWindow.document.write(`
                 <!DOCTYPE html>
@@ -550,7 +550,7 @@ function saveImages() {
             `);
         }
         
-        // 移除临时canvas
+        
         document.body.removeChild(canvas);
     }
 }

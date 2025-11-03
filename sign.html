@@ -264,7 +264,7 @@
     <div class="form-container" id="login_form">
       <h2>登录</h2>
       <div class="form-group">
-        <label for="login_email">邮箱（可随便填，登入账号）: *</label>
+        <label for="login_email">邮箱: *</label>
         <input id="login_email" type="email" placeholder="请输入邮箱" required>
       </div>
       <div class="form-group">
@@ -373,6 +373,40 @@ document.getElementById('register').addEventListener('click', async () => {
   registerBtn.disabled = true;
 
   try {
+    // 先检查用户名是否已存在
+    const { data: existingUsers, error: checkError } = await sb
+      .from('zhuce')
+      .select('user_name')
+      .eq('user_name', name);
+
+    if (checkError) {
+      console.error('检查用户名错误:', checkError);
+      alert('检查用户名时出错: ' + checkError.message);
+      return;
+    }
+
+    if (existingUsers && existingUsers.length > 0) {
+      alert('用户名已存在，请选择其他用户名');
+      return;
+    }
+
+    // 检查邮箱是否已存在
+    const { data: existingEmails, error: emailCheckError } = await sb
+      .from('zhuce')
+      .select('email')
+      .eq('email', email.toLowerCase());
+
+    if (emailCheckError) {
+      console.error('检查邮箱错误:', emailCheckError);
+      alert('检查邮箱时出错: ' + emailCheckError.message);
+      return;
+    }
+
+    if (existingEmails && existingEmails.length > 0) {
+      alert('该邮箱已被注册');
+      return;
+    }
+
     let avatarURL = null;
     
     // 如果用户选择了头像文件，则上传头像
@@ -421,6 +455,7 @@ document.getElementById('register').addEventListener('click', async () => {
       email: email.toLowerCase(), // 转换为小写
       password: password.substring(0, 100), // 限制密码长度
       avatar_url: avatarURL || null // 如果没有头像则设为null
+      // 不设置 admin 字段，让它默认为 NULL
     };
 
     // 插入用户表 (使用zhuce表名)
@@ -463,75 +498,76 @@ document.getElementById('register').addEventListener('click', async () => {
   }
 });
 
-    // 登录
-    document.getElementById('login').addEventListener('click', async () => {
-      const email = document.getElementById('login_email').value.trim();
-      const password = document.getElementById('login_password').value.trim();
-      if (!email || !password) {
-        alert('请填写邮箱和密码');
-        return;
+
+ document.getElementById('login').addEventListener('click', async () => {
+  const email = document.getElementById('login_email').value.trim();
+  const password = document.getElementById('login_password').value.trim();
+  if (!email || !password) {
+    alert('请填写邮箱和密码');
+    return;
+  }
+
+  // 显示加载状态
+  const loginBtn = document.getElementById('login');
+  const originalBtnText = loginBtn.textContent;
+  loginBtn.textContent = '登录中...';
+  loginBtn.disabled = true;
+
+  try {
+    // 查询用户 (使用zhuce表名)
+    const { data, error } = await sb.from('zhuce')
+      .select('*')
+      .eq('email', email.toLowerCase())
+      .eq('password', password)
+      .limit(1);
+
+    if (error) {
+      console.error('登录查询错误:', error);
+      alert('登录查询失败: ' + error.message);
+      return;
+    }
+    
+    if (data.length === 0) {
+      alert('邮箱或密码错误');
+      return;
+    }
+
+    currentUser = data[0];
+    console.log('登录用户信息:', currentUser); // 添加调试信息
+    
+    const container = document.getElementById('current_user');
+    container.innerHTML = `
+      ${currentUser.avatar_url ? 
+        `<img src="${currentUser.avatar_url}" alt="头像" class="user-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='">` :
+        `<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4=" alt="默认头像" class="user-avatar">`
       }
+      <div class="user-details">
+        <p>用户名: ${currentUser.user_name}${(currentUser.admin === 0 || currentUser.admin === "0") ? ' (管理员)' : ''}</p>
+        <p>邮箱: ${currentUser.email}</p>
+      </div>
+    `;
+    
+    // 显示用户信息区域
+    userInfo.style.display = 'block';
+    
+    alert('登录成功');
+    // 保存用户信息到 localStorage (包含所有字段，特别是admin)
+    localStorage.setItem('currentUser', JSON.stringify(data[0]));
+    // 跳转到 meie.html
+    window.location.href = 'meie.html';
 
-      // 显示加载状态
-      const loginBtn = document.getElementById('login');
-      const originalBtnText = loginBtn.textContent;
-      loginBtn.textContent = '登录中...';
-      loginBtn.disabled = true;
-
-      try {
-        // 查询用户 (使用zhuce表名)
-        const { data, error } = await sb.from('zhuce')
-          .select('*')
-          .eq('email', email.toLowerCase())
-          .eq('password', password)
-          .limit(1);
-
-        if (error) {
-          console.error('登录查询错误:', error);
-          alert('登录查询失败: ' + error.message);
-          return;
-        }
-        
-        if (data.length === 0) {
-          alert('邮箱或密码错误');
-          return;
-        }
-
-        currentUser = data[0];
-        const container = document.getElementById('current_user');
-        container.innerHTML = `
-          ${currentUser.avatar_url ? 
-            `<img src="${currentUser.avatar_url}" alt="头像" class="user-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='">` :
-            `<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4=" alt="默认头像" class="user-avatar">`
-          }
-          <div class="user-details">
-            <p>用户名: ${currentUser.user_name}</p>
-            <p>邮箱: ${currentUser.email}</p>
-          </div>
-        `;
-        
-        // 显示用户信息区域
-        userInfo.style.display = 'block';
-        
-        alert('登录成功');
-// 保存用户信息到 localStorage (包含 id)
-localStorage.setItem('currentUser', JSON.stringify(data[0]));
-// 跳转到 meie.html
-window.location.href = 'meie.html';
-
-        // 清空登录表单
-        document.getElementById('login_email').value = '';
-        document.getElementById('login_password').value = '';
-      } catch (error) {
-        console.error('登录过程出错:', error);
-        alert('登录过程中发生错误: ' + error.message);
-      } finally {
-        // 恢复按钮状态
-        loginBtn.textContent = originalBtnText;
-        loginBtn.disabled = false;
-      }
-    });
+    // 清空登录表单
+    document.getElementById('login_email').value = '';
+    document.getElementById('login_password').value = '';
+  } catch (error) {
+    console.error('登录过程出错:', error);
+    alert('登录过程中发生错误: ' + error.message);
+  } finally {
+    // 恢复按钮状态
+    loginBtn.textContent = originalBtnText;
+    loginBtn.disabled = false;
+  }
+});
   </script>
 </body>
-
 </html>

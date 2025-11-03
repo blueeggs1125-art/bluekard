@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>卡组分享</title>
+  <script></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+      background-color: #f5f5f5;
+      padding-bottom: 60px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      animation: pageSlideIn 0.4s ease-out forwards;
+      opacity: 0;
+    }
+
+
+
+
+
+
+
+
+.deck-content {
+  color: #555;
+  line-height: 1.5;
+  word-wrap: break-word;
+  margin-left: 50px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.deck-field {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.deck-field strong {
+  white-space: nowrap;
+  margin-right: 8px;
+}
+
+.deck-value {
+  word-break: break-word;
+  flex: 1;
+}
+
+.deck-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 50px;
+}
+
+.deck-meta {
+  display: flex;
+  gap: 15px;
+  font-size: 14px;
+  color: #666;
+  flex-wrap: wrap;
+}
+
+.deck-meta span {
+  background-color: #f0f0f0;
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+
+.copy-btn {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
+.copy-btn:hover {
+  background-color: #e0e0e0;
+}
+
+
+@media (max-width: 768px) {
+  .deck-content, .deck-footer {
+    margin-left: 43px;
+  }
+  
+  .deck-meta {
+    flex-wrap: wrap;
+  }
+  
+  .deck-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .copy-btn {
+    margin-top: 10px;
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .deck-content, .deck-footer {
+    margin-left: 43px;
+    font-size: 14px;
+  }
+  
+  .deck-meta {
+    font-size: 12px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @keyframes pageSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+      font-size: 24px;
+    }
+
+    .deck-form {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      background-color: white;
+      font-size: 16px;
+      font-family: Arial, sans-serif;
+    }
+
+    textarea {
+      min-height: 60px; 
+      resize: vertical;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 15px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    button {
+      padding: 12px 20px;
+      background-color: #1e90ff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #0066cc;
+    }
+
+    .decks-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+
+    .decks-header {
+      padding: 15px 20px;
+      background-color: #1e90ff;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .deck-list {
+      padding: 0 20px;
+    }
+
+    .deck-item {
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .deck-item:last-child {
+      border-bottom: none;
+    }
+
+    .deck-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .deck-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+      object-fit: cover;
+    }
+
+    .default-avatar-small {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+      background-color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #999;
+    }
+
+    .deck-user-info {
+      flex: 1;
+    }
+
+    .deck-user {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .deck-time {
+      color: #999;
+      font-size: 0.85em;
+      margin-left: 5px;
+    }
+
+    .deck-content {
+      color: #555;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin-left: 50px;
+      margin-top: 10px;
+    }
+
+    
+    .deck-content > div:not(:last-child) {
+      margin-bottom: 5px;
+    }
+
+    
+    .deck-message {
+      margin-top: 10px;
+    }
+
+    
+    .copy-btn {
+      background-color: #f0f0f0;
+      color: #333;
+      border: 1px solid #ddd;
+      padding: 5px 10px;
+      border-radius: 3px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .copy-btn:hover {
+      background-color: #e0e0e0;
+    }
+
+    .deck-meta {
+      display: flex;
+      gap: 15px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #666;
+      margin-left: 50px;
+    }
+
+    .deck-meta span {
+      background-color: #f0f0f0;
+      padding: 3px 8px;
+      border-radius: 10px;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .pagination button {
+      width: auto;
+      padding: 8px 15px;
+      background-color: #f0f0f0;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .pagination button:hover:not(.active) {
+      background-color: #e0e0e0;
+    }
+
+    .pagination button.active {
+      background-color: #1e90ff;
+      color: white;
+      border-color: #1e90ff;
+    }
+
+    .pagination button:first-child,
+    .pagination button:last-child {
+      background-color: #1e90ff;
+      color: white;
+      border-color: #1e90ff;
+    }
+
+    .pagination .page-info {
+      display: flex;
+      align-items: center;
+      color: #555;
+      font-size: 14px;
+      margin: 0 10px;
+    }
+
+    .no-decks {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+      font-style: italic;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+    }
+
+    .login-prompt {
+      text-align: center;
+      padding: 15px;
+      background-color: #e8f4ff;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      color: #1e90ff;
+    }
+
+    .login-prompt a {
+      color: #1e90ff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .login-prompt a:hover {
+      text-decoration: underline;
+    }
+
+    .user-display {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    
+    .floating-button {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      background-color: #1e90ff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      cursor: pointer;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+
+    .floating-button:hover {
+      background-color: #0066cc;
+      transform: scale(1.1);
+    }
+
+    .floating-button::before,
+    .floating-button::after {
+      content: "";
+      position: absolute;
+      background-color: white;
+      border-radius: 2px;
+    }
+
+    .floating-button::before {
+      width: 24px;
+      height: 4px;
+    }
+
+    .floating-button::after {
+      width: 4px;
+      height: 24px;
+    }
+
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .modal-header {
+      padding: 15px 20px;
+      background-color: #1e90ff;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .close-button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .modal-footer {
+      padding: 15px 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      border-top: 1px solid #eee;
+    }
+
+    .modal-footer button {
+      width: auto;
+      padding: 10px 20px;
+    }
+
+    .cancel-button {
+      background-color: #ccc;
+    }
+
+    .cancel-button:hover {
+      background-color: #999;
+    }
+
+    
+    .form-row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    .form-row select {
+      width: 100%;
+      padding: 8px; 
+      font-size: 14px; 
+    }
+
+    
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #fff;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      z-index: 1000;
+      font-size: 14px;
+    }
+
+    .bottom-nav a {
+      text-decoration: none;
+      color: #1e90ff;
+      text-align: center;
+    }
+
+    .bottom-nav a.active {
+      font-weight: bold;
+    }
+
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 10px;
+      }
+      
+      h1 {
+        font-size: 20px;
+      }
+      
+      .deck-form, .decks-container {
+        border-radius: 0;
+      }
+      
+      .deck-form {
+        padding: 15px;
+      }
+      
+      .deck-header {
+        margin-bottom: 5px;
+      }
+      
+      .deck-avatar, .default-avatar-small {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+        margin-right: 8px;
+      }
+      
+      .deck-content, .deck-meta {
+        margin-left: 43px;
+      }
+      
+      .pagination {
+        gap: 3px;
+        padding: 15px 5px;
+      }
+      
+      .pagination button {
+        padding: 6px 10px;
+        font-size: 14px;
+      }
+      
+      .modal-content {
+        width: 95%;
+      }
+      
+      
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 18px;
+      }
+      
+      .decks-header {
+        font-size: 16px;
+        padding: 12px 15px;
+      }
+      
+      .deck-item {
+        padding: 12px 0;
+      }
+      
+      .deck-user {
+        font-size: 14px;
+      }
+      
+      .deck-content {
+        font-size: 14px;
+      }
+      
+      .deck-meta {
+        font-size: 12px;
+      }
+      
+      .pagination {
+        padding: 10px 5px;
+      }
+      
+      .pagination button {
+        padding: 5px 8px;
+        font-size: 12px;
+      }
+      
+      .pagination .page-info {
+        font-size: 12px;
+        margin: 0 5px;
+      }
+      
+      .floating-button {
+        bottom: 70px;
+        right: 15px;
+        width: 50px;
+        height: 50px;
+      }
+      
+      .modal-body {
+        padding: 15px;
+      }
+      
+      .modal-header {
+        padding: 12px 15px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>卡组分享</h1>
+    
+    <div id="loginInfo"></div>
+    <div id="userDisplay" class="user-display" style="display: none;"></div>
+
+    <div class="decks-container">
+      <div class="decks-header">卡组分享</div>
+      <div class="deck-list" id="list">
+        <div class="loading">加载中...</div>
+      </div>
+      <div class="pagination" id="pagination">
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="floating-button" id="uploadButton"></div>
+
+  
+  <div class="modal" id="uploadModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span>发布卡组</span>
+        <button class="close-button" id="closeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="deckTitle">卡组标题:</label>
+          <input type="text" id="deckTitle" placeholder="输入卡组标题">
+        </div>
+        <div class="form-group">
+          <label for="cardCode">卡组代码:</label>
+          <textarea id="cardCode" placeholder="输入卡组代码"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="message">留言:</label>
+          <textarea id="message" placeholder="输入留言"></textarea>
+        </div>
+        
+<div style="display: flex; gap: 20px; align-items: center;">
+  <select id="type">
+    <option value="快攻">快攻</option>
+    <option value="中速">中速</option>
+    <option value="慢速">慢速</option>
+    <option value="变速">变速</option>
+    <option value="控制">控制</option>
+    <option value="娱乐">娱乐</option>
+    <option value="其他">其他</option>
+  </select>
+
+  <select id="cost">
+    <option value="平民">平民</option>
+    <option value="普通">普通</option>
+    <option value="昂贵">昂贵</option>
+    <option value="其他">其他</option>
+  </select>
+
+  <select id="state">
+    <option value="活跃">活跃</option>
+    <option value="预备">预备</option>
+  </select>
+</div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="cancel-button" id="cancelUpload">取消</button>
+        <button id="submitDeck">发布卡组</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-link">主页</a>
+    <a href="meie.html" class="nav-link">我的</a>
+    <a href="team.html" class="nav-link">关于</a>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://fyimdcysosuhwguizroi.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5aW1kY3lzb3N1aHdndWl6cm9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5ODM4MjIsImV4cCI6MjA3NzU1OTgyMn0._QZQCWwhzvQ7r2rarOPa7p9QI3TGAr8vaM1tLNudu1c';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    function copyToClipboard(text, button) {
+  
+  const originalText = button.textContent;
+  
+  
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(() => {
+      
+      button.textContent = '已复制';
+      setTimeout(() => {
+        button.textContent = originalText;
+      }, 2000);
+    }).catch(err => {
+      
+      fallbackCopyTextToClipboard(text, button, originalText);
+    });
+  } else {
+    
+    fallbackCopyTextToClipboard(text, button, originalText);
+  }
+}
+
+function fallbackCopyTextToClipboard(text, button, originalText) {
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  
+  
+  textArea.style.top = "0";
+  textArea.style.left = "0";
+  textArea.style.position = "fixed";
+  textArea.style.opacity = "0";
+  
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  
+  try {
+    const successful = document.execCommand('copy');
+    if (successful) {
+      button.textContent = '已复制';
+      setTimeout(() => {
+        button.textContent = originalText;
+      }, 2000);
+    } else {
+      alert('复制失败，请手动复制');
+    }
+  } catch (err) {
+    alert('复制失败，请手动复制');
+  }
+  
+  document.body.removeChild(textArea);
+}
+
+
+    
+    const DECKS_PER_PAGE = 5;
+    let currentPage = 1;
+    let allDecks = [];
+    let allUsers = [];
+    let currentUser = null;
+
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      checkUserLogin();
+      loadDecks();
+      
+      
+      document.getElementById('uploadButton').addEventListener('click', function() {
+        if (currentUser) {
+          document.getElementById('uploadModal').style.display = 'flex';
+        } else {
+          alert('请先登录');
+          window.location.href = 'sign.html';
+        }
+      });
+      
+      
+      document.getElementById('closeModal').addEventListener('click', function() {
+        document.getElementById('uploadModal').style.display = 'none';
+      });
+      
+      document.getElementById('cancelUpload').addEventListener('click', function() {
+        document.getElementById('uploadModal').style.display = 'none';
+      });
+      
+      
+      window.addEventListener('click', function(event) {
+        const modal = document.getElementById('uploadModal');
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+      
+      
+      document.getElementById('submitDeck').addEventListener('click', submitDeck);
+    });
+
+    function checkUserLogin() {
+      const userJson = localStorage.getItem('currentUser');
+      if (userJson) {
+        currentUser = JSON.parse(userJson);
+        document.getElementById('loginInfo').innerHTML = `
+          <div class="login-prompt">
+            已登录为: ${currentUser.user_name} (${currentUser.email})
+          </div>
+        `;
+        document.getElementById('userDisplay').innerHTML = `当前用户: ${currentUser.user_name}`;
+        document.getElementById('userDisplay').style.display = 'block';
+      } else {
+        document.getElementById('loginInfo').innerHTML = `
+          <div class="login-prompt">
+            请 <a href="sign.html">登录</a> 后使用卡组分享功能
+          </div>
+        `;
+        document.getElementById('userDisplay').style.display = 'none';
+      }
+    }
+
+
+
+async function loadDecks() {
+  console.log('开始加载卡组数据...');
+  
+  const { data: decks, error: decksError } = await sb
+    .from('decxfx')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (decksError) {
+    console.error('加载卡组失败:', decksError);
+    document.getElementById('list').innerHTML = '<div class="no-decks">加载卡组失败</div>';
+    return;
+  }
+
+  console.log('加载到的卡组数据:', decks);
+
+  
+  const { data: users, error: usersError } = await sb
+    .from('zhuce')
+    .select('id, user_name, avatar_url, admin');
+
+  if (usersError) {
+    console.error('加载用户信息失败:', usersError);
+    document.getElementById('list').innerHTML = '<div class="no-decks">加载用户信息失败</div>';
+    return;
+  }
+
+  console.log('加载到的用户数据:', users);
+
+  allDecks = decks;
+  allUsers = users;
+  
+  console.log('准备渲染卡组...');
+  renderDecks();
+  renderPagination();
+}
+function renderDecks() {
+  const listElement = document.getElementById('list');
+  console.log('开始渲染卡组，卡组数量:', allDecks.length, '用户数量:', allUsers.length);
+
+  if (allDecks.length === 0) {
+    listElement.innerHTML = '<div style="padding:10px;color:#999;">暂无卡组分享</div>';
+    return;
+  }
+
+  const startIndex = (currentPage - 1) * DECKS_PER_PAGE;
+  const endIndex = startIndex + DECKS_PER_PAGE;
+  const currentDecks = allDecks.slice(startIndex, endIndex);
+
+  listElement.innerHTML = currentDecks.map(deck => {
+    console.log('处理卡组:', deck);
+    
+    const user = allUsers.find(u => u.user_name === deck.user_name);
+    console.log('找到用户:', user);
+    
+    
+    const displayUser = user || { user_name: deck.user_name || '未知用户', avatar_url: null };
+    
+    
+    let createdAt = '未知时间';
+    if (deck.created_at) {
+      const date = new Date(deck.created_at);
+      
+      if (!isNaN(date.getTime())) {
+        createdAt = date.toLocaleString();
+      }
+    }
+
+    return `
+      <div class="deck-item">
+        
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+          ${displayUser.avatar_url ? 
+            `<img src="${displayUser.avatar_url}" alt="头像" style="width:40px;height:40px;border-radius:50%;" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCI+PHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjZTBkMGUwIi8+PHRleHQgeD0iMjUiIHk9IjI4IiBmb250LXNpemU9IjIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5Ij8/PC90ZXh0Pjwvc3ZnPg=='; this.onerror=null;">` :
+            `<div style="width:40px;height:40px;background:#e0e0e0;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#999;">${displayUser.user_name.charAt(0).toUpperCase()}</div>`
+          }
+          <div style="display:flex; flex-direction:column; line-height:1.1;">
+            <span style="font-weight:bold; margin:0;">
+              ${displayUser.user_name}
+              ${(displayUser.admin === 0 || displayUser.admin === "0" || displayUser.admin === true) ? '<span style="color:red;font-size:12px;margin-left:5px;">[管理员]</span>' : ''}
+            </span>
+            <span style="color:#999; font-size:0.85em;">[${createdAt}]</span>
+          </div>
+        </div>
+
+        
+        <div style="line-height:1.3; margin-left:48px; margin-top:2px; margin-bottom:100px;">
+          <div><strong>标题:</strong> ${deck.title || '无标题'}</div>
+          <div style="display:flex; align-items:flex-start; gap:10px; flex-wrap:wrap;">
+            <div><strong>卡组代码:</strong> <span id="cardcode-${deck.id}">${deck.cardcode || '无'}</span></div>
+            <button class="copy-btn" onclick="copyToClipboard('${deck.cardcode}', this)" style="background-color:#f0f0f0; color:#333; border:1px solid #ddd; padding:2px 6px; border-radius:3px; font-size:12px; cursor:pointer; white-space:nowrap; width:auto;">复制代码</button>
+          </div>
+          <div><strong>留言:</strong> ${deck.message || '无'}</div>
+        </div>
+
+        
+        <div style="font-size:0.85em; display:flex; gap:12px; margin-left:48px; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <span>类型: ${deck.type || '无'}</span>
+            <span>造价: ${deck.cost || '无'}</span>
+            <span>状态: ${deck.state || '无'}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+    function renderPagination() {
+      const paginationElement = document.getElementById('pagination');
+      const totalPages = Math.ceil(allDecks.length / DECKS_PER_PAGE);
+      
+      if (totalPages <= 1) {
+        paginationElement.innerHTML = '';
+        return;
+      }
+      
+      let paginationHTML = '';
+      
+      
+      if (currentPage > 1) {
+        paginationHTML += '<button id="first-page">首页</button>';
+      }
+      
+      
+      const pageRange = 5;
+      let startPage = Math.max(1, currentPage - Math.floor(pageRange/2));
+      let endPage = startPage + pageRange - 1;
+      
+      if (endPage > totalPages) {
+        endPage = totalPages;
+        startPage = Math.max(1, endPage - pageRange + 1);
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        if (i === currentPage) {
+          paginationHTML += `<button class="active">${i}</button>`;
+        } else {
+          paginationHTML += `<button data-page="${i}">${i}</button>`;
+        }
+      }
+      
+      
+      if (currentPage < totalPages) {
+        paginationHTML += '<button id="last-page">末页</button>';
+      }
+      
+      paginationHTML += `
+        <div class="page-info">
+          第 ${currentPage} 页，共 ${totalPages} 页
+        </div>
+      `;
+      
+      paginationElement.innerHTML = paginationHTML;
+      
+      
+      if (document.getElementById('first-page')) {
+        document.getElementById('first-page').addEventListener('click', () => {
+          currentPage = 1;
+          renderDecks();
+          renderPagination();
+        });
+      }
+      
+      if (document.getElementById('last-page')) {
+        document.getElementById('last-page').addEventListener('click', () => {
+          currentPage = totalPages;
+          renderDecks();
+          renderPagination();
+        });
+      }
+      
+      document.querySelectorAll('.pagination button[data-page]').forEach(button => {
+        button.addEventListener('click', () => {
+          currentPage = parseInt(button.dataset.page);
+          renderDecks();
+          renderPagination();
+        });
+      });
+    }
+
+    
+ async function submitDeck() {
+  const title = document.getElementById('deckTitle').value.trim();
+  const cardCode = document.getElementById('cardCode').value.trim();
+  const message = document.getElementById('message').value.trim();
+  const type = document.getElementById('type').value;
+  const cost = document.getElementById('cost').value;
+  const state = document.getElementById('state').value;
+  
+  if (!cardCode) {
+    alert('请输入卡组代码');
+    return;
+  }
+  
+  const submitButton = document.getElementById('submitDeck');
+  const originalText = submitButton.textContent;
+  submitButton.textContent = '发布中...';
+  submitButton.disabled = true;
+  
+  try {
+    const { data, error } = await sb
+      .from('decxfx')
+      .insert([
+        {
+          user_name: currentUser.user_name, 
+          title: title,
+          cardcode: cardCode,
+          message: message,
+          type: type,
+          cost: cost,
+          state: state
+        }
+      ]);
+      
+    if (error) {
+      console.error('发布失败:', error);
+      alert('发布失败: ' + error.message);
+      return;
+    }
+    
+    alert('卡组发布成功！');
+    document.getElementById('uploadModal').style.display = 'none';
+    resetForm();
+    loadDecks();
+  } catch (err) {
+    console.error('发布过程中出错:', err);
+    alert('发布过程中出错: ' + err.message);
+  } finally {
+    submitButton.textContent = originalText;
+    submitButton.disabled = false;
+  }
+}
+    
+    
+    function resetForm() {
+      document.getElementById('deckTitle').value = '';
+      document.getElementById('cardCode').value = '';
+      document.getElementById('message').value = '';
+      document.getElementById('type').value = '快攻';
+      document.getElementById('cost').value = '平民';
+      document.getElementById('state').value = '活跃';
+    }
+  </script>
+</body>
+</html>

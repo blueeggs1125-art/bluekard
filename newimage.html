@@ -15,6 +15,17 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <title>FUCK 1939</title>
     <style>
+        
+.image-item .image-name {
+    display: none;
+}
+
+
+@media (max-width: 768px) {
+    .image-item .image-name {
+        display: none;
+    }
+}
         * {
             margin: 0;
             padding: 0;
@@ -118,7 +129,7 @@
             grid-column: 1 / -1;
         }
         
-        /* 添加导航链接样式 */
+        
         .nav-link {
             display: block;
             text-align: center;
@@ -132,7 +143,7 @@
             text-decoration: underline;
         }
         
-        /* 统一的页面载入动画 */
+        
         @keyframes pageSlideIn {
             from {
                 opacity: 0;
@@ -144,38 +155,38 @@
             }
         }
 
-        /* 应用到所有页面容器 */
+        
         .container {
             animation: pageSlideIn 0.4s ease-out forwards;
         }
 
-        /* 为已有动画的页面调整动画 */
+        
         .content {
             animation: pageSlideIn 0.4s ease-out forwards;
         }
 
-        /* 视频列表动画 */
+        
         .video-list {
             animation: pageSlideIn 0.4s ease-out forwards;
         }
 
-        /* 音效容器动画 */
+        
         #sound-display {
             animation: pageSlideIn 0.4s ease-out forwards;
         }
 
-        /* 图片容器动画 */
+        
         #image-display {
             animation: pageSlideIn 0.4s ease-out forwards;
         }
 
-        /* 导航栏动画 */
+        
         .bottom-nav {
             animation: pageSlideIn 0.4s ease-out 0.1s forwards;
             animation-fill-mode: both;
         }
 
-        /* 初始状态设置 */
+        
         .container,
         .content,
         .video-list,
@@ -185,7 +196,7 @@
             opacity: 0;
         }
 
-        /* 延迟显示内容，避免闪烁 */
+        
         @media (prefers-reduced-motion: reduce) {
             .container,
             .content,
@@ -198,12 +209,12 @@
             }
         }
         
-        /* 在现有样式基础上添加 */
+        
         .container {
-            padding-bottom: 60px; /* 为底部导航栏留出空间 */
+            padding-bottom: 60px; 
         }
 
-        /* 底部按钮样式 */
+        
         .bottom-button-container {
             position: fixed;
             bottom: 60px;
@@ -229,7 +240,7 @@
             background-color: #0066cc;
         }
         
-        /* 预备图标样式 */
+        
         .image-item .reserve-icon {
             position: absolute;
             bottom: 5px;
@@ -239,7 +250,7 @@
             z-index: 10;
         }
         
-        /* 移动端筛选按钮 */
+        
         .mobile-filter-btn {
             position: fixed;
             bottom: 80px;
@@ -260,7 +271,7 @@
             display: none;
         }
         
-        /* 移动端筛选面板 */
+        
         .mobile-filter-panel {
             position: fixed;
             top: 0;
@@ -354,7 +365,7 @@
                 font-size: 20px;
             }
             
-            /* 在移动端隐藏桌面版筛选器 */
+            
             .desktop-filters {
                 display: none;
             }
@@ -385,6 +396,177 @@
                 height: 16px;
             }
         }
+        
+
+.mobile-filter-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: none;
+}
+
+.mobile-filter-tooltip {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e0e0e0; 
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 2001;
+    display: none;
+    width: 90%;
+    max-width: 400px;
+    height: 80%;
+    max-height: 500px;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.tooltip-header h3 {
+    margin: 0;
+    color: #333;
+}
+
+.close-tooltip {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
+
+.tooltip-section {
+    margin-bottom: 20px;
+}
+
+.tooltip-section h4 {
+    margin: 0 0 10px 0;
+    color: #555;
+    font-size: 16px;
+}
+
+.tooltip-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tooltip-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.tooltip-option:hover {
+    background-color: #f0f0f0;
+}
+
+.tooltip-option.selected {
+    background-color: #1e90ff;
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.tooltip-option img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-bottom: 5px;
+}
+
+.tooltip-option span {
+    font-size: 12px;
+    text-align: center;
+}
+
+.command-point-tooltip img {
+    filter: drop-shadow(0 0 2px rgba(0,0,0,0.8));
+    background-color: #968d8d; 
+    border-radius: 4px; 
+    padding: 2px;
+}
+
+.reset-all-filters-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #616568;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.reset-all-filters-btn:hover {
+    background-color: #49535a;
+}
+
+.special-icons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.special-icon {
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.special-icon:hover {
+    transform: scale(1.05);
+}
+
+.special-icon img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    background: transparent;
+    border-radius: 8px;
+    padding: 8px;
+    transition: all 0.3s ease;
+}
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+}
     </style>
 </head>
 <body>
@@ -392,117 +574,184 @@
         <a href="https://blueeggs1125-art.github.io/im/" class="bottom-button" target="_blank">卡图原画（非海报）</a>
     </div>
 
-    <!-- 移动端筛选按钮 -->
-    <div class="mobile-filter-btn" id="mobile-filter-btn">+</div>
     
-<!-- 移动端筛选面板 -->
-<div class="mobile-filter-panel" id="mobile-filter-panel">
-    <div class="filter-panel-header">
-        <h2>筛选条件</h2>
-        <button class="close-filter-panel" id="close-filter-panel">×</button>
+
+  
+
+
+<div class="mobile-filter-btn" id="mobile-filter-btn">+</div>
+
+
+<div class="mobile-filter-overlay" id="mobile-filter-overlay"></div>
+
+<div class="mobile-filter-tooltip" id="mobile-filter-tooltip">
+    <div class="tooltip-header">
+        <h3>筛选条件</h3>
+        <button class="close-tooltip" id="close-mobile-tooltip">×</button>
     </div>
     
-    <div class="filter-group">
-        <label for="mobile-country-select">国家:</label>
-        <select id="mobile-country-select">
-            <option value="">全部</option>
-            <option value="苏联">苏联</option>
-            <option value="美国">美国</option>
-            <option value="德国">德国</option>
-            <option value="日本">日本</option>
-            <option value="英国">英国</option>
-            <option value="波兰">波兰</option>
-            <option value="法国">法国</option>
-            <option value="意大利">意大利</option>
-            <option value="芬兰">芬兰</option>
-        </select>
+    
+    <div class="tooltip-section">
+        <h4>搜索</h4>
+        <input type="text" id="mobile-search-input" placeholder="搜索卡牌名称或描述..." style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd;">
     </div>
     
-    <div class="filter-group">
-        <label for="mobile-rarity-select">稀有度:</label>
-        <select id="mobile-rarity-select">
-            <option value="">全部</option>
-            <option value="精英">精英</option>
-            <option value="特殊">特殊</option>
-            <option value="限定">限定</option>
-            <option value="普通">普通</option>
-        </select>
+    <div class="tooltip-section">
+        <h4>国家</h4>
+        <div class="tooltip-options" id="country-options">
+            <div class="tooltip-option" data-value="德国" data-type="country">
+                <img src="image2/国家图标/德国/FactionIcon_GER_256_Color.png" alt="德国">
+            </div>
+            <div class="tooltip-option" data-value="英国" data-type="country">
+                <img src="image2/国家图标/英国/FactionIcon_BRI_256_Color.png" alt="英国">
+            </div>
+            <div class="tooltip-option" data-value="苏联" data-type="country">
+                <img src="image2/国家图标/苏联/FactionIcon_SOV_256_Color.png" alt="苏联">
+            </div>
+            <div class="tooltip-option" data-value="美国" data-type="country">
+                <img src="image2/国家图标/美国/FactionIcon_USA_256_Color.png" alt="美国">
+            </div>
+            <div class="tooltip-option" data-value="日本" data-type="country">
+                <img src="image2/国家图标/日本/FactionIcon_JAP_256_Color.png" alt="日本">
+            </div>
+            <div class="tooltip-option" data-value="法国" data-type="country">
+                <img src="image2/国家图标/法国/FactionIcon_FRA_256_Color.png" alt="法国">
+            </div>
+            <div class="tooltip-option" data-value="意大利" data-type="country">
+                <img src="image2/国家图标/意大利/FactionIcon_ITA_256_Color.png" alt="意大利">
+            </div>
+            <div class="tooltip-option" data-value="波兰" data-type="country">
+                <img src="image2/国家图标/波兰/FactionIcon_POL_512_Color.png" alt="波兰">
+            </div>
+            <div class="tooltip-option" data-value="芬兰" data-type="country">
+                <img src="image2/国家图标/芬兰/FactionIcon_FIN_1024_Color.png" alt="芬兰">    
+            </div>
+            <div class="special-icon" id="cardback-icon" title="卡背">
+                <img src="image/ToW_set_card_back_c.png" alt="卡背" style="width: 60px; height: 60px; object-fit: contain; background: transparent; border-radius: 8px; padding: 8px; cursor: pointer;">
+            </div>
+            <div class="special-icon" id="headquarters-icon" title="总部">
+                <img src="image/53villers-bocage.png" alt="总部" style="width: 60px; height: 60px; object-fit: contain; background: transparent; border-radius: 8px; padding: 8px; cursor: pointer;">
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="tooltip-section">
+        <h4>稀有度</h4>
+        <div class="tooltip-options" id="rarity-options">
+            <div class="tooltip-option" data-value="精英" data-type="rarity">
+                <img src="scr/稀有度/精英.png" alt="精英">
+                <span>精英</span>
+            </div>
+            <div class="tooltip-option" data-value="特殊" data-type="rarity">
+                <img src="scr/稀有度/特殊.png" alt="特殊">
+                <span>特殊</span>
+            </div>
+            <div class="tooltip-option" data-value="限定" data-type="rarity">
+                <img src="scr/稀有度/限定.png" alt="限定">
+                <span>限定</span>
+            </div>
+            <div class="tooltip-option" data-value="普通" data-type="rarity">
+                <img src="scr/稀有度/普通.png" alt="普通">
+                <span>普通</span>
+            </div>
+        </div>
     </div>
     
-    <div class="filter-group">
-        <label for="mobile-type-select">类型:</label>
-        <select id="mobile-type-select">
-            <option value="">全部</option>
-            <option value="步兵">步兵</option>
-            <option value="坦克">坦克</option>
-            <option value="火炮">火炮</option>
-            <option value="战斗机">战斗机</option>
-            <option value="轰炸机">轰炸机</option>
-            <option value="指令">指令</option>
-            <option value="反制指令">反制指令</option>
-        </select>
+    <div class="tooltip-section">
+        <h4>类型</h4>
+        <div class="tooltip-options" id="type-options">
+            <div class="tooltip-option" data-value="步兵" data-type="type">
+                <img src="scr/类型/步兵.png" alt="步兵">
+            </div>
+            <div class="tooltip-option" data-value="坦克" data-type="type">
+                <img src="scr/类型/坦克.png" alt="坦克">
+            </div>
+            <div class="tooltip-option" data-value="火炮" data-type="type">
+                <img src="scr/类型/火炮.png" alt="火炮">
+            </div>
+            <div class="tooltip-option" data-value="战斗机" data-type="type">
+                <img src="scr/类型/战斗机.png" alt="战斗机">
+            </div>
+            <div class="tooltip-option" data-value="轰炸机" data-type="type">
+                <img src="scr/类型/轰炸机.png" alt="轰炸机">
+            </div>
+            <div class="tooltip-option" data-value="指令" data-type="type">
+                <img src="scr/类型/指令.png" alt="指令">
+            </div>
+            <div class="tooltip-option" data-value="反制指令" data-type="type">
+                <img src="scr/类型/反制指令.png" alt="反制指令">
+            </div>
+        </div>
     </div>
     
-    <div class="filter-group">
-        <label for="mobile-command-point-select">指挥点:</label>
-        <select id="mobile-command-point-select">
-            <option value="">全部</option>
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7+">7+</option>
-        </select>
+    <div class="tooltip-section">
+        <h4>指挥点</h4>
+        <div class="tooltip-options" id="command-point-options">
+            <div class="tooltip-option" data-value="0" data-type="command-point">
+                <img src="scr/指挥点/0.png" alt="0">
+            </div>
+            <div class="tooltip-option" data-value="1" data-type="command-point">
+                <img src="scr/指挥点/1.png" alt="1">
+            </div>
+            <div class="tooltip-option" data-value="2" data-type="command-point">
+                <img src="scr/指挥点/2.png" alt="2">
+            </div>
+            <div class="tooltip-option" data-value="3" data-type="command-point">
+                <img src="scr/指挥点/3.png" alt="3">
+            </div>
+            <div class="tooltip-option" data-value="4" data-type="command-point">
+                <img src="scr/指挥点/4.png" alt="4">
+            </div>
+            <div class="tooltip-option" data-value="5" data-type="command-point">
+                <img src="scr/指挥点/5.png" alt="5">
+            </div>
+            <div class="tooltip-option" data-value="6" data-type="command-point">
+                <img src="scr/指挥点/6.png" alt="6">
+            </div>
+            <div class="tooltip-option" data-value="7+" data-type="command-point">
+                <img src="scr/指挥点/7+.png" alt="7+">
+            </div>
+        </div>
     </div>
     
-    <div class="filter-group">
-        <label for="mobile-status-select">状态:</label>
-        <select id="mobile-status-select">
-            <option value="">全部</option>
-            <option value="true">活跃</option>
-            <option value="false">预备</option>
-        </select>
+    <div class="tooltip-section">
+        <h4>状态</h4>
+        <div class="tooltip-options" id="status-options">
+            <div class="tooltip-option" data-value="true" data-type="status">
+                <span>活跃</span>
+            </div>
+            <div class="tooltip-option" data-value="false" data-type="status">
+                <span>预备</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="tooltip-section">
+        <h4>老兵</h4>
+        <div class="tooltip-options" id="veteran-options">
+            <div class="tooltip-option" data-value="true" data-type="veteran">
+                <span>显示/隐藏</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="tooltip-section">
+        <h4>衍生</h4>
+        <div class="tooltip-options" id="derived-options">
+            <div class="tooltip-option" data-value="true" data-type="derived">
+                <span>显示/隐藏</span>
+            </div>
+        </div>
     </div>
     
-    <div class="filter-group">
-        <label for="mobile-setting-select">设置:</label>
-        <select id="mobile-setting-select">
-            <option value="">全部</option>
-            <option value="秘密行動">秘密行動</option>
-            <option value="海战">海战</option>
-            <option value="世纪大战">世纪大战</option>
-            <option value="血与铁">血与铁</option>
-            <option value="冬季战争">冬季战争</option>
-            <option value="战友">战友</option>
-            <option value="军团">军团</option>
-            <option value="突破">突破</option>
-            <option value="战区">战区</option>
-            <option value="忠诚">忠诚</option>
-            <option value="基础">基础</option>
-        </select>
-    </div>
-    
-    <div class="filter-group">
-        <label for="mobile-special-select">特殊:</label>
-        <select id="mobile-special-select">
-            <option value="">无</option>
-            <option value="总部">总部</option>
-            <option value="卡背">卡背</option>
-        </select>
-    </div>
-    
-    <div class="filter-group">
-        <label for="mobile-search-input">搜索:</label>
-        <input type="text" id="mobile-search-input" placeholder="搜索卡牌名称或描述...">
+    <div class="tooltip-section">
+        <button class="reset-all-filters-btn">重置所有筛选</button>
     </div>
 </div>
-
     
 
-    <!-- 在 </body> 标签前添加 -->
+    
     <div style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #fff; border-top: 1px solid #ddd; display: flex; justify-content: space-around; padding: 10px 0; z-index: 1000; font-size: 14px;">
         <a href="newimage.html" style="text-decoration: none; color: #1e90ff; text-align: center;">卡图</a>
         <a href="image2.html" style="text-decoration: none; color: #1e90ff; text-align: center;">其他素材</a>
@@ -514,9 +763,9 @@
     <div class="container">
         <h1>KARDS素材库</h1>
 
-        <!-- 桌面版筛选器 -->
+        
         <div class="desktop-filters">
-            <!-- 替换原有的分类选择器为美化后的版本 -->
+            
             <div class="selector-group" style="margin-bottom: 10px;">
               <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
                 <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 5px;">
@@ -628,469 +877,777 @@
         </div>
     </div>
 
-    <script src="js/image.js"></script>
-    <script src="js/image_format.js"></script>
+    <script></script>
+    <script></script>
     
-    <script>
-        // 移动端筛选功能
- document.addEventListener('DOMContentLoaded', function() {
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imageDisplay = document.getElementById('image-display');
+    const countrySelect = document.getElementById('country-select');
+    const raritySelect = document.getElementById('rarity-select');
+    const typeSelect = document.getElementById('type-select');
+    const commandPointSelect = document.getElementById('command-point-select');
+    const statusSelect = document.getElementById('status-select');
+    const settingSelect = document.getElementById('setting-select');
+    const specialSelect = document.getElementById('special-select');
+    const searchInput = document.getElementById('search-input');
+    
+     const mobileSearchInput = document.getElementById('mobile-search-input');
+    if (mobileSearchInput) {
+        
+        mobileSearchInput.addEventListener('input', function() {
+            applyMobileFilter();
+        });
+        
+        
+        mobileSearchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                applyMobileFilter();
+            }
+        });
+    }
+    
+    
+ function applyMobileFilter() {
+    
+    const selectedOptions = document.querySelectorAll('.tooltip-option.selected');
+    
+    
+    const searchKeyword = mobileSearchInput ? mobileSearchInput.value.trim().toLowerCase() : '';
+    
+    
+    const filters = {
+        rarity: [],
+        type: [],
+        commandPoint: [],
+        status: [],
+        veteran: [],
+        derived: [],
+        country: [],
+        setting: [],
+        search: searchKeyword 
+    };
+        
+    
+    selectedOptions.forEach(option => {
+        const type = option.dataset.type;
+        const value = option.dataset.value;
+        
+        switch(type) {
+            case 'rarity':
+                filters.rarity.push(value);
+                break;
+            case 'type':
+                filters.type.push(value);
+                break;
+            case 'command-point':
+                filters.commandPoint.push(value);
+                break;
+            case 'status':
+                filters.status.push(value);
+                break;
+            case 'veteran':
+                filters.veteran.push(value);
+                break;
+            case 'derived':
+                filters.derived.push(value);
+                break;
+            case 'country':
+                filters.country.push(value);
+                break;
+            case 'setting':
+                filters.setting.push(value);
+                break;
+        }
+    });
+    
+    
+    if (filters.country.includes('总部')) {
+        displaySpecialImages('总部');
+        return;
+    }
+    
+    if (filters.country.includes('卡背')) {
+        displaySpecialImages('卡背');
+        return;
+    }
+    
+    
+    if (filters.veteran.length > 0 && filters.veteran[0] === 'true') {
+        displaySpecialImages('老兵');
+        return;
+    }
+    
+    if (filters.derived.length > 0 && filters.derived[0] === 'true') {
+        displaySpecialImages('衍生');
+        return;
+    }
+    
+    
+    filterImagesByMobile(filters);
+}
+
+
+    loadInitialImages();
+    
+    
+    const cardbackIcon = document.getElementById('cardback-icon');
+    const headquartersIcon = document.getElementById('headquarters-icon');
+    
+    if (cardbackIcon) {
+        cardbackIcon.addEventListener('click', function() {
+            
+            document.querySelectorAll('.tooltip-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            
+            displaySpecialImages('卡背');
+        });
+    }
+    
+    if (headquartersIcon) {
+        headquartersIcon.addEventListener('click', function() {
+            
+            document.querySelectorAll('.tooltip-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            
+            displaySpecialImages('总部');
+        });
+    }
+    
+    
+    countrySelect.addEventListener('change', function() {
+        updateFilter('country', this.value);
+        applyFilters();
+    });
+    raritySelect.addEventListener('change', function() {
+        updateFilter('rarity', this.value);
+        applyFilters();
+    });
+    typeSelect.addEventListener('change', function() {
+        updateFilter('type', this.value);
+        applyFilters();
+    });
+    commandPointSelect.addEventListener('change', function() {
+        updateFilter('command-point', this.value);
+        applyFilters();
+    });
+    statusSelect.addEventListener('change', function() {
+        updateFilter('status', this.value);
+        applyFilters();
+    });
+    settingSelect.addEventListener('change', function() {
+        updateFilter('setting', this.value);
+        applyFilters();
+    });
+    specialSelect.addEventListener('change', function() {
+        if (this.value) {
+            displaySpecialImages(this.value);
+        } else {
+            
+            loadInitialImages();
+        }
+    });
+    searchInput.addEventListener('input', applyFilters);
+    
+    
+function loadInitialImages() {
+    imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
+    
+    
+    Promise.all([
+        fetch('data/newk.json').then(response => response.json()),
+        fetch('data/newimages.json').then(response => response.json())
+    ])
+    .then(([cardsData, imagesData]) => {
+        
+        const cardImageMap = createCardImageMap(cardsData, imagesData);
+        
+        
+        const sortedCards = sortCardsByCommandPoint(cardImageMap);
+        
+        
+        const allImages = sortedCards.map(item => ({
+            path: item.imagePath,
+            name: item.imagePath.split('/').pop(),
+            cardData: item.card 
+        }));
+        
+        renderImages(allImages);
+    })
+    .catch(error => {
+        console.error('加载图片出错:', error);
+        imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
+    });
+}
+
+    
+    
+    function createCardImageMap(cardsData, imagesData) {
+        const cardImageMap = [];
+        
+        
+        cardsData.forEach(card => {
+            const country = card.国家;
+            const cardName = card.名称;
+            
+            
+            if (imagesData[country]) {
+                for (const subtype in imagesData[country]) {
+                    const foundImage = imagesData[country][subtype].find(imgPath => 
+                        imgPath.includes(cardName)
+                    );
+                    if (foundImage) {
+                        cardImageMap.push({
+                            card: card,
+                            imagePath: foundImage
+                        });
+                        break;
+                    }
+                }
+            }
+        });
+        
+        return cardImageMap;
+    }
+    
+    
+    function sortCardsByCommandPoint(cards) {
+        return cards.sort((a, b) => {
+            const cpA = parseInt(a.card.详细信息?.["指挥点"]) || 0;
+            const cpB = parseInt(b.card.详细信息?.["指挥点"]) || 0;
+            return cpA - cpB;
+        });
+    }
+    
+    
+    function updateFilter(type, value) {
+        let selectElement;
+        switch(type) {
+            case 'country':
+                selectElement = document.getElementById('country-select');
+                break;
+            case 'rarity':
+                selectElement = document.getElementById('rarity-select');
+                break;
+            case 'type':
+                selectElement = document.getElementById('type-select');
+                break;
+            case 'command-point':
+                selectElement = document.getElementById('command-point-select');
+                break;
+            case 'status':
+                selectElement = document.getElementById('status-select');
+                break;
+            case 'setting':
+                selectElement = document.getElementById('setting-select');
+                break;
+        }
+        
+        if (selectElement) {
+            
+            const currentValues = selectElement.value ? selectElement.value.split(',') : [];
+            const valueIndex = currentValues.indexOf(value);
+            
+            if (valueIndex > -1) {
+                
+                currentValues.splice(valueIndex, 1);
+            } else {
+                
+                currentValues.push(value);
+            }
+            
+            selectElement.value = currentValues.join(',');
+            
+            
+            syncMobileFilters(type, selectElement.value);
+        }
+    }
+    
+    
+    function applyFilters() {
+        const filters = {
+            country: countrySelect.value ? countrySelect.value.split(',') : [],
+            rarity: raritySelect.value ? raritySelect.value.split(',') : [],
+            type: typeSelect.value ? typeSelect.value.split(',') : [],
+            commandPoint: commandPointSelect.value ? commandPointSelect.value.split(',') : [],
+            status: statusSelect.value ? statusSelect.value.split(',') : [],
+            setting: settingSelect.value ? settingSelect.value.split(',') : [],
+            special: specialSelect.value,
+            search: searchInput.value.trim().toLowerCase()
+        };
+        
+        if (filters.special) {
+            displaySpecialImages(filters.special);
+        } else if (hasActiveFilters(filters)) {
+            displayFilteredImages(filters);
+        } else {
+            
+            loadInitialImages();
+        }
+    }
+    
+    
+    function hasActiveFilters(filters) {
+        return filters.country.length > 0 || filters.rarity.length > 0 || filters.type.length > 0 || 
+               filters.commandPoint.length > 0 || filters.status.length > 0 || filters.setting.length > 0 || 
+               filters.search;
+    }
+    
+    
+    function displaySpecialImages(category) {
+        imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
+        
+        fetch('data/newimages.json')
+            .then(response => response.json())
+            .then(imagesData => {
+                if (imagesData[category] && Array.isArray(imagesData[category])) {
+                    const imagePaths = imagesData[category].map(imgPath => ({
+                        path: imgPath,
+                        name: imgPath.split('/').pop()
+                    }));
+                    renderImages(imagePaths);
+                } else {
+                    imageDisplay.innerHTML = '<div class="no-images">未找到相关图片</div>';
+                }
+            })
+            .catch(error => {
+                console.error('加载图片出错:', error);
+                imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
+            });
+    }
+    
+    
+function displayFilteredImages(filters) {
+    imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
+    
+    
+    Promise.all([
+        fetch('data/newk.json').then(response => response.json()),
+        fetch('data/newimages.json').then(response => response.json())
+    ])
+    .then(([cardsData, imagesData]) => {
+        
+        let filteredCards = cardsData;
+        
+        
+        if (filters.country.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.country.includes(card.国家)
+            );
+        }
+        
+        
+        if (filters.rarity.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.rarity.includes(card.详细信息?.稀有度)
+            );
+        }
+        
+        
+        if (filters.type.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.type.includes(card.详细信息?.类型)
+            );
+        }
+        
+        
+        if (filters.commandPoint.length > 0) {
+            filteredCards = filteredCards.filter(card => {
+                const commandPoint = card.详细信息?.["指挥点"];
+                if (filters.commandPoint.includes("7+")) {
+                    if (parseInt(commandPoint) >= 7) {
+                        return true;
+                    }
+                }
+                return filters.commandPoint.includes(commandPoint);
+            });
+        }
+        
+        
+        if (filters.status.length > 0) {
+            filteredCards = filteredCards.filter(card => {
+                const isActive = card.详细信息?.活跃 === true || card.详细信息?.活跃 === "true";
+                const statusStr = isActive ? "true" : "false";
+                return filters.status.includes(statusStr);
+            });
+        }
+        
+        
+        if (filters.setting.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.setting.includes(card.详细信息?.设置)
+            );
+        }
+        
+        
+        if (filters.search) {
+            filteredCards = filteredCards.filter(card => 
+                card.名称.toLowerCase().includes(filters.search) ||
+                (card.描述 && card.描述.toLowerCase().includes(filters.search))
+            );
+        }
+        
+        
+        const cardImageMap = createCardImageMap(filteredCards, imagesData);
+        
+        
+        const sortedCards = sortCardsByCommandPoint(cardImageMap);
+        
+        
+        const filteredImages = sortedCards.map(item => ({
+            path: item.imagePath,
+            name: item.imagePath.split('/').pop(),
+            cardData: item.card 
+        }));
+        
+        if (filteredImages.length === 0) {
+            imageDisplay.innerHTML = '<div class="no-images">未找到匹配的图片</div>';
+        } else {
+            renderImages(filteredImages);
+        }
+    })
+    .catch(error => {
+        console.error('加载图片出错:', error);
+        imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
+    });
+}
+
+    
+    
+function renderImages(images) {
+    let html = '<div class="image-container">';
+    images.forEach(image => {
+        const imagePath = typeof image === 'object' ? image.path : image;
+        const encodedImagePath = encodeImagePath(imagePath);
+        const fileName = imagePath.split('/').pop();
+        const displayName = typeof image === 'object' ? (image.name || fileName) : fileName;
+        const encodedFileName = encodeURIComponent(fileName);
+        
+        
+        let isReserve = false;
+        if (image.cardData) {
+            isReserve = image.cardData.详细信息?.活跃 === "false";
+        }
+        
+        html += `
+            <div class="image-item">
+                <img src="${encodedImagePath}" alt="${displayName}" 
+                     data-url="${encodedImagePath}"
+                     data-filename="${encodedFileName}"
+                     onload="this.parentNode.classList.add('loaded')">
+                ${isReserve ? `<img 
+                    src="image/T_nui-icon-Reserves-gritty-256.png" 
+                    alt="预备" 
+                    class="reserve-icon"
+                >` : ''}
+                <div class="image-name">${displayName}</div>
+            </div>
+        `;
+    });
+    html += '</div>';
+    
+    imageDisplay.innerHTML = html;
+    
+    
+    document.querySelectorAll('.image-item img').forEach(img => {
+        
+        if (!img.classList.contains('reserve-icon')) {
+            new ImageTouchHandler(img);
+        }
+    });
+}
+    
+    
     const mobileFilterBtn = document.getElementById('mobile-filter-btn');
-    const mobileFilterPanel = document.getElementById('mobile-filter-panel');
-    const closeFilterPanel = document.getElementById('close-filter-panel');
+    const mobileFilterOverlay = document.getElementById('mobile-filter-overlay');
+    const mobileFilterTooltip = document.getElementById('mobile-filter-tooltip');
+    const closeMobileTooltip = document.getElementById('close-mobile-tooltip');
     
-    // 获取移动端筛选元素
-    const mobileCountrySelect = document.getElementById('mobile-country-select');
-    const mobileRaritySelect = document.getElementById('mobile-rarity-select');
-    const mobileTypeSelect = document.getElementById('mobile-type-select');
-    const mobileCommandPointSelect = document.getElementById('mobile-command-point-select');
-    const mobileStatusSelect = document.getElementById('mobile-status-select');
-    const mobileSettingSelect = document.getElementById('mobile-setting-select');
-    const mobileSpecialSelect = document.getElementById('mobile-special-select');
-    const mobileSearchInput = document.getElementById('mobile-search-input');
     
-    // 打开筛选面板
     mobileFilterBtn.addEventListener('click', function() {
-        mobileFilterPanel.classList.add('active');
+        mobileFilterOverlay.style.display = 'block';
+        mobileFilterTooltip.style.display = 'block';
         document.body.style.overflow = 'hidden';
     });
     
-    // 关闭筛选面板
-    closeFilterPanel.addEventListener('click', function() {
-        mobileFilterPanel.classList.remove('active');
+    
+    closeMobileTooltip.addEventListener('click', function() {
+        mobileFilterOverlay.style.display = 'none';
+        mobileFilterTooltip.style.display = 'none';
         document.body.style.overflow = 'auto';
     });
     
-    // 点击面板外部关闭
-    mobileFilterPanel.addEventListener('click', function(e) {
-        if (e.target === mobileFilterPanel) {
-            mobileFilterPanel.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
+    
+    mobileFilterOverlay.addEventListener('click', function() {
+        mobileFilterOverlay.style.display = 'none';
+        mobileFilterTooltip.style.display = 'none';
+        document.body.style.overflow = 'auto';
     });
     
-    // 为所有移动端筛选器添加事件监听器
-    mobileCountrySelect.addEventListener('change', applyMobileFilters);
-    mobileRaritySelect.addEventListener('change', applyMobileFilters);
-    mobileTypeSelect.addEventListener('change', applyMobileFilters);
-    mobileCommandPointSelect.addEventListener('change', applyMobileFilters);
-    mobileStatusSelect.addEventListener('change', applyMobileFilters);
-    mobileSettingSelect.addEventListener('change', applyMobileFilters);
-    mobileSpecialSelect.addEventListener('change', applyMobileFilters);
-    mobileSearchInput.addEventListener('input', applyMobileFilters);
     
-    // 应用移动端筛选
-    function applyMobileFilters() {
-        const filters = {
-            country: mobileCountrySelect.value,
-            rarity: mobileRaritySelect.value,
-            type: mobileTypeSelect.value,
-            commandPoint: mobileCommandPointSelect.value,
-            status: mobileStatusSelect.value,
-            setting: mobileSettingSelect.value,
-            special: mobileSpecialSelect.value,
-            search: mobileSearchInput.value.trim().toLowerCase()
-        };
-        
-        displayFilteredImages(filters);
-        mobileFilterPanel.classList.remove('active');
-        document.body.style.overflow = 'auto';
-    }
-});
-        
-        // 添加一个新函数用于处理包含中文的图片路径
-        function encodeImagePath(path) {
-            // 将路径中的每个部分进行编码，但保持分隔符不变
-            return path.split('/').map(part => encodeURIComponent(part)).join('/');
-        }
-
-        // 获取所有元素引用
-        const countrySelect = document.getElementById('country-select');
-        const raritySelect = document.getElementById('rarity-select');
-        const typeSelect = document.getElementById('type-select');
-        const commandPointSelect = document.getElementById('command-point-select');
-        const statusSelect = document.getElementById('status-select');
-        const settingSelect = document.getElementById('setting-select');
-        const specialSelect = document.getElementById('special-select'); // 新增特殊选择器
-        const searchInput = document.getElementById('search-input');
-        const imageDisplay = document.getElementById('image-display');
-
-        // 页面加载时显示所有图片
-        window.addEventListener('DOMContentLoaded', function() {
-            loadAllImages();
-            // 为所有筛选器添加事件监听器
-            countrySelect.addEventListener('change', applyFilters);
-            raritySelect.addEventListener('change', applyFilters);
-            typeSelect.addEventListener('change', applyFilters);
-            commandPointSelect.addEventListener('change', applyFilters);
-            statusSelect.addEventListener('change', applyFilters);
-            settingSelect.addEventListener('change', applyFilters);
-            specialSelect.addEventListener('change', applyFilters); // 添加特殊选择器监听
-            searchInput.addEventListener('input', applyFilters);
+    document.querySelectorAll('.tooltip-option').forEach(option => {
+        option.addEventListener('click', function() {
+            const type = this.dataset.type;
+            const value = this.dataset.value;
+            
+            
+            if (type === 'country' && (value === '总部' || value === '卡背')) {
+                
+                document.querySelectorAll('.tooltip-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                
+                this.classList.add('selected');
+                
+                
+                displaySpecialImages(value);
+                return;
+            }
+            
+            
+            this.classList.toggle('selected');
+            
+            
+            applyMobileFilter();
         });
+    });
+    
 
-        // 应用所有筛选条件
-        function applyFilters() {
-            const filters = {
-                country: countrySelect.value,
-                rarity: raritySelect.value,
-                type: typeSelect.value,
-                commandPoint: commandPointSelect.value,
-                status: statusSelect.value,
-                setting: settingSelect.value,
-                special: specialSelect.value, // 添加特殊筛选
-                search: searchInput.value.trim().toLowerCase()
+    
+ function filterImagesByMobile(filters) {
+    imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
+    
+    
+    Promise.all([
+        fetch('data/newk.json').then(response => response.json()),
+        fetch('data/newimages.json').then(response => response.json())
+    ])
+    .then(([cardsData, imagesData]) => {
+        
+        let filteredCards = cardsData;
+        
+        
+        if (filters.country.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.country.includes(card.国家)
+            );
+        }
+        
+        
+        if (filters.rarity.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.rarity.includes(card.详细信息?.稀有度)
+            );
+        }
+        
+        
+        if (filters.type.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.type.includes(card.详细信息?.类型)
+            );
+        }
+        
+        
+        if (filters.commandPoint.length > 0) {
+            filteredCards = filteredCards.filter(card => {
+                const commandPoint = card.详细信息?.["指挥点"];
+                if (filters.commandPoint.includes("7+")) {
+                    if (parseInt(commandPoint) >= 7) {
+                        return true;
+                    }
+                }
+                return filters.commandPoint.includes(commandPoint);
+            });
+        }
+        
+        
+        if (filters.status.length > 0) {
+            filteredCards = filteredCards.filter(card => {
+                const isActive = card.详细信息?.活跃 === true || card.详细信息?.活跃 === "true";
+                const statusStr = isActive ? "true" : "false";
+                return filters.status.includes(statusStr);
+            });
+        }
+        
+        
+        if (filters.setting.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.setting.includes(card.详细信息?.设置)
+            );
+        }
+        
+        
+        if (filters.search) {
+            filteredCards = filteredCards.filter(card => {
+                
+                const nameMatch = card.名称.toLowerCase().includes(filters.search);
+                const descMatch = card.描述 && card.描述.toLowerCase().includes(filters.search);
+                
+                
+                let fileNameMatch = false;
+                const country = card.国家;
+                const cardName = card.名称;
+                
+                if (imagesData[country]) {
+                    for (const subtype in imagesData[country]) {
+                        const foundImage = imagesData[country][subtype].find(imgPath => 
+                            imgPath.includes(cardName)
+                        );
+                        if (foundImage) {
+                            const fileName = foundImage.split('/').pop().toLowerCase();
+                            fileNameMatch = fileName.includes(filters.search);
+                            break;
+                        }
+                    }
+                }
+                
+                return nameMatch || descMatch || fileNameMatch;
+            });
+        }
+        
+        
+        const cardImageMap = createCardImageMap(filteredCards, imagesData);
+        
+        
+        const sortedCards = sortCardsByCommandPoint(cardImageMap);
+        
+        
+        const filteredImages = sortedCards.map(item => ({
+            path: item.imagePath,
+            name: item.imagePath.split('/').pop(),
+            cardData: item.card 
+        }));
+        
+        if (filteredImages.length === 0) {
+            imageDisplay.innerHTML = '<div class="no-images">未找到匹配的图片</div>';
+        } else {
+            renderImages(filteredImages);
+        }
+    })
+    .catch(error => {
+        console.error('加载图片出错:', error);
+        imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
+    });
+}
+    
+    
+    function syncMobileFilters(type, value) {
+        
+        document.querySelectorAll(`.tooltip-option[data-type="${type}"]`).forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        
+        if (value) {
+            const values = value.split(',');
+            values.forEach(val => {
+                const selectedOption = document.querySelector(`.tooltip-option[data-type="${type}"][data-value="${val}"]`);
+                if (selectedOption) {
+                    selectedOption.classList.add('selected');
+                }
+            });
+        }
+    }
+    
+    
+    class ImageTouchHandler {
+        constructor(element) {
+            this.element = element;
+            this.touchStartTime = 0;
+            this.touchTimer = null;
+            this.touchHandled = false;
+            
+            this.init();
+        }
+        
+        init() {
+            this.element.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
+            this.element.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false });
+            this.element.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
+            this.element.addEventListener('contextmenu', (e) => this.handleContextMenu(e));
+        }
+        
+        handleTouchStart(event) {
+            this.touchStartTime = Date.now();
+            this.touchHandled = false;
+            clearTimeout(this.touchTimer);
+            
+            this.touchTimer = setTimeout(() => {
+                if (!this.touchHandled) {
+                    this.downloadImage();
+                    this.touchHandled = true;
+                }
+            }, 800);
+        }
+        
+        handleTouchMove(event) {
+            clearTimeout(this.touchTimer);
+            this.touchHandled = true;
+        }
+        
+        handleTouchEnd(event) {
+            clearTimeout(this.touchTimer);
+            this.touchHandled = true;
+        }
+        
+        handleContextMenu(event) {
+            event.preventDefault();
+            this.downloadImage();
+        }
+        
+        downloadImage() {
+            const url = this.element.dataset.url;
+            const filename = decodeURIComponent(this.element.dataset.filename);
+            
+            if (url.endsWith('.avif')) {
+                this.convertAndDownloadAvif(url, filename);
+            } else {
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+        
+        convertAndDownloadAvif(avifUrl, originalFilename) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                
+                canvas.toBlob(function(blob) {
+                    const pngUrl = URL.createObjectURL(blob);
+                    const pngFilename = originalFilename.replace('.avif', '.png');
+                    
+                    const link = document.createElement('a');
+                    link.href = pngUrl;
+                    link.download = pngFilename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    URL.revokeObjectURL(pngUrl);
+                }, 'image/png');
             };
             
-            displayFilteredImages(filters);
+            img.src = avifUrl;
         }
-
-        // 根据筛选条件显示图片
-        async function displayFilteredImages(filters) {
-            imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
-            
-            try {
-                // 获取卡牌数据
-                const response = await fetch('data/newk.json');
-                if (!response.ok) {
-                    throw new Error('newk.json 网络响应错误');
-                }
-                const cardsData = await response.json();
-                
-                // 根据筛选条件过滤卡牌
-                let filteredCards = cardsData.filter(card => {
-                    // 处理特殊筛选（总部/卡背）
-                    if (filters.special) {
-                        if (card.国家 !== filters.special) {
-                            return false;
-                        }
-                    } 
-                    // 处理常规国家筛选
-                    else if (filters.country && card.国家 !== filters.country) {
-                        return false;
-                    }
-                    
-                    // 稀有度筛选 - 确保进行字符串比较
-                    if (filters.rarity && card.详细信息?.稀有度 !== filters.rarity) {
-                        return false;
-                    }
-                    
-                    // 类型筛选 - 确保进行字符串比较
-                    if (filters.type && card.详细信息?.类型 !== filters.type) {
-                        return false;
-                    }
-                    
-                    // 指挥点筛选 - 处理7+的情况
-                    if (filters.commandPoint) {
-                        const cardCommandPoint = card.详细信息?.["指挥点"];
-                        if (filters.commandPoint === "7+") {
-                            // 7+ 选项，匹配指挥点大于等于7的卡牌
-                            if (!cardCommandPoint || parseInt(cardCommandPoint) < 7) {
-                                return false;
-                            }
-                        } else {
-                            // 其他选项，精确匹配
-                            if (cardCommandPoint !== filters.commandPoint) {
-                                return false;
-                            }
-                        }
-                    }
-                    
-                    // 状态筛选 - 确保进行字符串比较
-                    if (filters.status !== "" && filters.status !== undefined) {
-                        if (card.详细信息?.活跃 !== filters.status) {
-                            return false;
-                        }
-                    }
-                    
-                    // 设置筛选 - 确保进行字符串比较
-                    if (filters.setting && card.详细信息?.设置 !== filters.setting) {
-                        return false;
-                    }
-                    
-                    // 搜索筛选
-                    if (filters.search && !card.名称.toLowerCase().includes(filters.search)) {
-                        return false;
-                    }
-                    
-                    return true;
-                });
-                
-                // 获取对应的图片路径
-                const imagesResponse = await fetch('data/newimages.json');
-                if (!imagesResponse.ok) {
-                    throw new Error('newimages.json 网络响应错误');
-                }
-                const imagesData = await imagesResponse.json();
-                
-                // 构建图片列表
-                let imagePaths = [];
-                filteredCards.forEach(card => {
-                    const country = card.国家;
-                    const cardName = card.名称;
-                    
-                    // 在图片数据中查找对应的图片
-                    if (imagesData[country]) {
-                        for (const subtype in imagesData[country]) {
-                            const foundImage = imagesData[country][subtype].find(imgPath => 
-                                imgPath.includes(cardName)
-                            );
-                            if (foundImage) {
-                                imagePaths.push({
-                                    path: foundImage,
-                                    name: cardName,
-                                    cardData: card
-                                });
-                                break;
-                            }
-                        }
-                    }
-                });
-                
-                // 如果是特殊筛选（总部/卡背），直接从imagesData中获取
-                if (filters.special && imagesData[filters.special]) {
-                    const specialData = imagesData[filters.special];
-                    if (Array.isArray(specialData)) {
-                        // 总部和卡背是数组格式
-                        specialData.forEach(imgPath => {
-                            imagePaths.push({
-                                path: imgPath,
-                                name: imgPath.split('/').pop()
-                            });
-                        });
-                    }
-                }
-                
-                if (imagePaths.length === 0) {
-                    imageDisplay.innerHTML = '<div class="no-images">未找到匹配的图片</div>';
-                    return;
-                }
-                
-                renderImages(imagePaths);
-                
-            } catch (error) {
-                console.error('加载图片出错:', error);
-                imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
-            }
-        }
-
-        // 加载所有图片并按指挥点排序
-        async function loadAllImages() {
-            imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
-            
-            try {
-                // 获取图片数据
-                const response = await fetch('data/newimages.json');
-                if (!response.ok) {
-                    throw new Error('newimages.json 网络响应错误');
-                }
-                const imagesData = await response.json();
-                
-                // 收集所有图片路径
-                let allImages = [];
-                for (const country in imagesData) {
-                    if (!imagesData.hasOwnProperty(country)) continue;
-                    
-                    const countryData = imagesData[country];
-                    
-                    // 如果国家数据是数组格式（总部、卡背等没有子类型）
-                    if (Array.isArray(countryData)) {
-                        countryData.forEach(imagePath => {
-                            const fileName = imagePath.split('/').pop();
-                            allImages.push({
-                                path: imagePath,
-                                name: fileName
-                            });
-                        });
-                    } 
-                    // 如果国家数据是对象格式（有子类型：金卡、银卡等）
-                    else {
-                        for (const subtype in countryData) {
-                            if (!countryData.hasOwnProperty(subtype)) continue;
-                            
-                            countryData[subtype].forEach(imagePath => {
-                                const fileName = imagePath.split('/').pop();
-                                allImages.push({
-                                    path: imagePath,
-                                    name: fileName
-                                });
-                            });
-                        }
-                    }
-                }
-                
-                if (allImages.length === 0) {
-                    imageDisplay.innerHTML = '<div class="no-images">暂无图片</div>';
-                    return;
-                }
-                
-                // 按指挥点排序
-                allImages = await sortImagesByCommandPoint(allImages);
-                renderImages(allImages);
-                
-            } catch (error) {
-                console.error('加载图片出错:', error);
-                imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
-            }
-        }
-
-        // 按指挥点排序图片
-        async function sortImagesByCommandPoint(images) {
-            try {
-                // 获取卡牌数据
-                const response = await fetch('data/newk.json');
-                if (!response.ok) {
-                    throw new Error('newk.json 网络响应错误');
-                }
-                const cardsData = await response.json();
-                
-                // 创建图片到卡牌的映射
-                const imageToCardMap = {};
-                images.forEach(image => {
-                    const fileName = image.name;
-                    // 查找匹配的卡牌数据
-                    const matchingCard = cardsData.find(card => 
-                        fileName.includes(card.名称)
-                    );
-                    if (matchingCard) {
-                        imageToCardMap[fileName] = matchingCard;
-                    }
-                });
-                
-                // 按指挥点排序
-                images.sort((a, b) => {
-                    const cardA = imageToCardMap[a.name];
-                    const cardB = imageToCardMap[b.name];
-                    
-                    if (!cardA && !cardB) return 0;
-                    if (!cardA) return 1;
-                    if (!cardB) return -1;
-                    
-                    const cpA = parseInt(cardA.详细信息?.["指挥点"]) || 0;
-                    const cpB = parseInt(cardB.详细信息?.["指挥点"]) || 0;
-                    
-                    return cpA - cpB;
-                });
-                
-                return images;
-            } catch (error) {
-                console.error('排序图片时出错:', error);
-                return images; // 出错时返回未排序的图片
-            }
-        }
-
-        // 渲染图片列表
-        function renderImages(images) {
-            let html = '<div class="image-container">';
-            images.forEach(image => {
-                // 处理图片路径
-                const imagePath = typeof image === 'object' ? image.path : image;
-                const encodedImagePath = encodeImagePath(imagePath);
-                const fileName = imagePath.split('/').pop();
-                const displayName = typeof image === 'object' ? (image.name || fileName) : fileName;
-                const encodedFileName = encodeURIComponent(fileName);
-                
-                // 检查是否为预备卡牌
-                const isReserve = typeof image === 'object' && image.cardData && 
-                                 image.cardData.详细信息 && 
-                                 image.cardData.详细信息.活跃 === "false";
-                
-                html += `
-                    <div class="image-item">
-                        <img src="${encodedImagePath}" alt="${displayName}" 
-                             data-url="${encodedImagePath}"
-                             data-filename="${encodedFileName}"
-                             onload="this.parentNode.classList.add('loaded')">
-                        ${isReserve ? `<img class="reserve-icon" src="image/T_nui-icon-Reserves-gritty-256.png" alt="预备">` : ''}
-                    </div>
-                `;
-            });
-            html += '</div>';
-            
-            imageDisplay.innerHTML = html;
-            
-            // 为所有图片添加触摸事件
-            document.querySelectorAll('.image-item img').forEach(img => {
-                // 只对非预备图标添加事件
-                if (!img.classList.contains('reserve-icon')) {
-                    new ImageTouchHandler(img);
-                }
-            });
-        }
-
-        // 图片触摸处理类
-        class ImageTouchHandler {
-            constructor(element) {
-                this.element = element;
-                this.touchStartTime = 0;
-                this.touchTimer = null;
-                this.touchHandled = false;
-                
-                this.init();
-            }
-            
-            init() {
-                // 添加触摸事件监听器
-                this.element.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
-                this.element.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false });
-                this.element.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
-                this.element.addEventListener('contextmenu', (e) => this.handleContextMenu(e));
-            }
-            
-            handleTouchStart(event) {
-                this.touchStartTime = Date.now();
-                this.touchHandled = false;
-                clearTimeout(this.touchTimer);
-                
-                // 长按800ms后触发下载
-                this.touchTimer = setTimeout(() => {
-                    if (!this.touchHandled) {
-                        this.downloadImage();
-                        this.touchHandled = true;
-                    }
-                }, 800);
-            }
-            
-            handleTouchMove(event) {
-                // 如果用户移动手指，取消长按下载
-                clearTimeout(this.touchTimer);
-                this.touchHandled = true;
-            }
-            
-            handleTouchEnd(event) {
-                // 如果用户提前结束触摸，取消长按下载
-                clearTimeout(this.touchTimer);
-                this.touchHandled = true;
-            }
-            
-            handleContextMenu(event) {
-                // 右键菜单触发下载
-                event.preventDefault();
-                this.downloadImage();
-            }
-            
-   downloadImage() {
-        const url = this.element.dataset.url;
-        const filename = decodeURIComponent(this.element.dataset.filename);
-        
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
     }
-}
-
-// 为了兼容性，也保留全局函数
-function downloadImage(event, url, filename) {
-    event.preventDefault();
-    event.stopPropagation();
     
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
+    
+    function encodeImagePath(path) {
+        
+        return path.split('/').map(part => encodeURIComponent(part)).join('/');
+    }
+});
 </script>
