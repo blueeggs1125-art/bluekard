@@ -15,12 +15,12 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <title>FUCK 1939</title>
     <style>
-        
+        /* 添加到<style>标签内的其他样式后面 */
 .image-item .image-name {
     display: none;
 }
 
-
+/* 如果只想在某些屏幕尺寸下隐藏文件名，可以使用媒体查询 */
 @media (max-width: 768px) {
     .image-item .image-name {
         display: none;
@@ -129,7 +129,7 @@
             grid-column: 1 / -1;
         }
         
-        
+        /* 添加导航链接样式 */
         .nav-link {
             display: block;
             text-align: center;
@@ -143,7 +143,7 @@
             text-decoration: underline;
         }
         
-        
+        /* 统一的页面载入动画 */
         @keyframes pageSlideIn {
             from {
                 opacity: 0;
@@ -155,38 +155,38 @@
             }
         }
 
-        
+        /* 应用到所有页面容器 */
         .container {
             animation: pageSlideIn 0.4s ease-out forwards;
         }
 
-        
+        /* 为已有动画的页面调整动画 */
         .content {
             animation: pageSlideIn 0.4s ease-out forwards;
         }
 
-        
+        /* 视频列表动画 */
         .video-list {
             animation: pageSlideIn 0.4s ease-out forwards;
         }
 
-        
+        /* 音效容器动画 */
         #sound-display {
             animation: pageSlideIn 0.4s ease-out forwards;
         }
 
-        
+        /* 图片容器动画 */
         #image-display {
             animation: pageSlideIn 0.4s ease-out forwards;
         }
 
-        
+        /* 导航栏动画 */
         .bottom-nav {
             animation: pageSlideIn 0.4s ease-out 0.1s forwards;
             animation-fill-mode: both;
         }
 
-        
+        /* 初始状态设置 */
         .container,
         .content,
         .video-list,
@@ -196,7 +196,7 @@
             opacity: 0;
         }
 
-        
+        /* 延迟显示内容，避免闪烁 */
         @media (prefers-reduced-motion: reduce) {
             .container,
             .content,
@@ -209,12 +209,12 @@
             }
         }
         
-        
+        /* 在现有样式基础上添加 */
         .container {
-            padding-bottom: 60px; 
+            padding-bottom: 60px; /* 为底部导航栏留出空间 */
         }
 
-        
+        /* 底部按钮样式 */
         .bottom-button-container {
             position: fixed;
             bottom: 60px;
@@ -240,7 +240,7 @@
             background-color: #0066cc;
         }
         
-        
+        /* 预备图标样式 */
         .image-item .reserve-icon {
             position: absolute;
             bottom: 5px;
@@ -250,7 +250,7 @@
             z-index: 10;
         }
         
-        
+        /* 移动端筛选按钮 */
         .mobile-filter-btn {
             position: fixed;
             bottom: 80px;
@@ -271,7 +271,7 @@
             display: none;
         }
         
-        
+        /* 移动端筛选面板 */
         .mobile-filter-panel {
             position: fixed;
             top: 0;
@@ -365,7 +365,7 @@
                 font-size: 20px;
             }
             
-            
+            /* 在移动端隐藏桌面版筛选器 */
             .desktop-filters {
                 display: none;
             }
@@ -396,7 +396,7 @@
                 height: 16px;
             }
         }
-        
+        /* 添加以下CSS样式到<style>标签中 */
 
 .mobile-filter-overlay {
     position: fixed;
@@ -548,7 +548,7 @@
     transition: all 0.3s ease;
 }
 
-
+/* 模态框样式 */
 .modal {
     display: none;
     position: fixed;
@@ -576,12 +576,12 @@
 
     
 
-  
+  <!-- 替换现有的移动端筛选按钮和面板代码 -->
 
-
+<!-- 移动端筛选按钮 -->
 <div class="mobile-filter-btn" id="mobile-filter-btn">+</div>
 
-
+<!-- 移动端筛选面板 -->
 <div class="mobile-filter-overlay" id="mobile-filter-overlay"></div>
 
 <div class="mobile-filter-tooltip" id="mobile-filter-tooltip">
@@ -590,7 +590,7 @@
         <button class="close-tooltip" id="close-mobile-tooltip">×</button>
     </div>
     
-    
+    <!-- 将搜索框添加到国家筛选部分上方 -->
     <div class="tooltip-section">
         <h4>搜索</h4>
         <input type="text" id="mobile-search-input" placeholder="搜索卡牌名称或描述..." style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd;">
@@ -635,7 +635,7 @@
         </div>
     </div>
 
-    
+    <!-- 其他筛选部分保持不变 -->
     <div class="tooltip-section">
         <h4>稀有度</h4>
         <div class="tooltip-options" id="rarity-options">
@@ -751,7 +751,7 @@
 </div>
     
 
-    
+    <!-- 在 </body> 标签前添加 -->
     <div style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #fff; border-top: 1px solid #ddd; display: flex; justify-content: space-around; padding: 10px 0; z-index: 1000; font-size: 14px;">
         <a href="newimage.html" style="text-decoration: none; color: #1e90ff; text-align: center;">卡图</a>
         <a href="image2.html" style="text-decoration: none; color: #1e90ff; text-align: center;">其他素材</a>
@@ -763,9 +763,9 @@
     <div class="container">
         <h1>KARDS素材库</h1>
 
-        
+        <!-- 桌面版筛选器 -->
         <div class="desktop-filters">
-            
+            <!-- 替换原有的分类选择器为美化后的版本 -->
             <div class="selector-group" style="margin-bottom: 10px;">
               <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
                 <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 5px;">
@@ -877,8 +877,8 @@
         </div>
     </div>
 
-    <script></script>
-    <script></script>
+    <script src="js/image.js"></script>
+    <script src="js/image_format.js"></script>
     
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -894,12 +894,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
      const mobileSearchInput = document.getElementById('mobile-search-input');
     if (mobileSearchInput) {
-        
+        // 添加输入事件监听
         mobileSearchInput.addEventListener('input', function() {
             applyMobileFilter();
         });
         
-        
+        // 添加回车键事件监听
         mobileSearchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 applyMobileFilter();
@@ -907,15 +907,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    
+    // 修改 applyMobileFilter 函数以正确处理搜索
  function applyMobileFilter() {
-    
+    // 获取所有选中的选项
     const selectedOptions = document.querySelectorAll('.tooltip-option.selected');
     
-    
+    // 获取搜索关键词
     const searchKeyword = mobileSearchInput ? mobileSearchInput.value.trim().toLowerCase() : '';
     
-    
+    // 构建筛选条件对象
     const filters = {
         rarity: [],
         type: [],
@@ -925,10 +925,10 @@ document.addEventListener('DOMContentLoaded', function() {
         derived: [],
         country: [],
         setting: [],
-        search: searchKeyword 
+        search: searchKeyword // 添加搜索关键词
     };
         
-    
+    // 分类选中的选项
     selectedOptions.forEach(option => {
         const type = option.dataset.type;
         const value = option.dataset.value;
@@ -961,7 +961,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    
+    // 如果选择了特殊分类，直接显示
     if (filters.country.includes('总部')) {
         displaySpecialImages('总部');
         return;
@@ -972,7 +972,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    
+    // 如果选择了老兵或衍生，需要特殊处理
     if (filters.veteran.length > 0 && filters.veteran[0] === 'true') {
         displaySpecialImages('老兵');
         return;
@@ -983,42 +983,42 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    
+    // 应用筛选到图片（添加这一行）
     filterImagesByMobile(filters);
 }
 
 
     loadInitialImages();
     
-    
+    // 特殊图标点击事件处理
     const cardbackIcon = document.getElementById('cardback-icon');
     const headquartersIcon = document.getElementById('headquarters-icon');
     
     if (cardbackIcon) {
         cardbackIcon.addEventListener('click', function() {
-            
+            // 清除所有选中状态
             document.querySelectorAll('.tooltip-option').forEach(option => {
                 option.classList.remove('selected');
             });
             
-            
+            // 显示卡背图片
             displaySpecialImages('卡背');
         });
     }
     
     if (headquartersIcon) {
         headquartersIcon.addEventListener('click', function() {
-            
+            // 清除所有选中状态
             document.querySelectorAll('.tooltip-option').forEach(option => {
                 option.classList.remove('selected');
             });
             
-            
+            // 显示总部图片
             displaySpecialImages('总部');
         });
     }
     
-    
+    // 桌面版筛选器事件 - 改为多选支持
     countrySelect.addEventListener('change', function() {
         updateFilter('country', this.value);
         applyFilters();
@@ -1047,33 +1047,33 @@ document.addEventListener('DOMContentLoaded', function() {
         if (this.value) {
             displaySpecialImages(this.value);
         } else {
-            
+            // 如果没有选择特殊分类，显示所有图片
             loadInitialImages();
         }
     });
     searchInput.addEventListener('input', applyFilters);
     
-    
+    // 加载初始图片（所有普通卡牌图片，不包括总部、卡背、衍生、老兵）
 function loadInitialImages() {
     imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
     
-    
+    // 并行获取卡牌数据和图片数据
     Promise.all([
         fetch('data/newk.json').then(response => response.json()),
         fetch('data/newimages.json').then(response => response.json())
     ])
     .then(([cardsData, imagesData]) => {
-        
+        // 创建卡牌和图片的映射关系
         const cardImageMap = createCardImageMap(cardsData, imagesData);
         
-        
+        // 按指挥点排序
         const sortedCards = sortCardsByCommandPoint(cardImageMap);
         
-        
+        // 只提取图片信息，但保留 cardData 用于判断是否为预备卡牌
         const allImages = sortedCards.map(item => ({
             path: item.imagePath,
             name: item.imagePath.split('/').pop(),
-            cardData: item.card 
+            cardData: item.card // 保留 cardData 信息
         }));
         
         renderImages(allImages);
@@ -1085,16 +1085,16 @@ function loadInitialImages() {
 }
 
     
-    
+    // 创建卡牌和图片的映射关系
     function createCardImageMap(cardsData, imagesData) {
         const cardImageMap = [];
         
-        
+        // 遍历所有卡牌
         cardsData.forEach(card => {
             const country = card.国家;
             const cardName = card.名称;
             
-            
+            // 在图片数据中查找对应的图片
             if (imagesData[country]) {
                 for (const subtype in imagesData[country]) {
                     const foundImage = imagesData[country][subtype].find(imgPath => 
@@ -1114,7 +1114,7 @@ function loadInitialImages() {
         return cardImageMap;
     }
     
-    
+    // 按指挥点排序卡牌
     function sortCardsByCommandPoint(cards) {
         return cards.sort((a, b) => {
             const cpA = parseInt(a.card.详细信息?.["指挥点"]) || 0;
@@ -1123,7 +1123,7 @@ function loadInitialImages() {
         });
     }
     
-    
+    // 更新筛选器函数（支持多选）
     function updateFilter(type, value) {
         let selectElement;
         switch(type) {
@@ -1148,26 +1148,26 @@ function loadInitialImages() {
         }
         
         if (selectElement) {
-            
+            // 对于所有筛选条件，使用多选逻辑
             const currentValues = selectElement.value ? selectElement.value.split(',') : [];
             const valueIndex = currentValues.indexOf(value);
             
             if (valueIndex > -1) {
-                
+                // 如果已选中，则移除
                 currentValues.splice(valueIndex, 1);
             } else {
-                
+                // 如果未选中，则添加
                 currentValues.push(value);
             }
             
             selectElement.value = currentValues.join(',');
             
-            
+            // 同步移动端筛选器
             syncMobileFilters(type, selectElement.value);
         }
     }
     
-    
+    // 应用筛选条件
     function applyFilters() {
         const filters = {
             country: countrySelect.value ? countrySelect.value.split(',') : [],
@@ -1185,19 +1185,19 @@ function loadInitialImages() {
         } else if (hasActiveFilters(filters)) {
             displayFilteredImages(filters);
         } else {
-            
+            // 没有筛选条件时显示所有普通卡牌
             loadInitialImages();
         }
     }
     
-    
+    // 检查是否有激活的筛选条件
     function hasActiveFilters(filters) {
         return filters.country.length > 0 || filters.rarity.length > 0 || filters.type.length > 0 || 
                filters.commandPoint.length > 0 || filters.status.length > 0 || filters.setting.length > 0 || 
                filters.search;
     }
     
-    
+    // 显示特殊分类图片
     function displaySpecialImages(category) {
         imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
         
@@ -1220,41 +1220,41 @@ function loadInitialImages() {
             });
     }
     
-    
+    // 根据筛选条件显示图片
 function displayFilteredImages(filters) {
     imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
     
-    
+    // 并行获取卡牌数据和图片数据
     Promise.all([
         fetch('data/newk.json').then(response => response.json()),
         fetch('data/newimages.json').then(response => response.json())
     ])
     .then(([cardsData, imagesData]) => {
-        
+        // 筛选卡牌
         let filteredCards = cardsData;
         
-        
+        // 应用国家筛选
         if (filters.country.length > 0) {
             filteredCards = filteredCards.filter(card => 
                 filters.country.includes(card.国家)
             );
         }
         
-        
+        // 应用稀有度筛选
         if (filters.rarity.length > 0) {
             filteredCards = filteredCards.filter(card => 
                 filters.rarity.includes(card.详细信息?.稀有度)
             );
         }
         
-        
+        // 应用类型筛选
         if (filters.type.length > 0) {
             filteredCards = filteredCards.filter(card => 
                 filters.type.includes(card.详细信息?.类型)
             );
         }
         
-        
+        // 应用指挥点筛选
         if (filters.commandPoint.length > 0) {
             filteredCards = filteredCards.filter(card => {
                 const commandPoint = card.详细信息?.["指挥点"];
@@ -1267,7 +1267,7 @@ function displayFilteredImages(filters) {
             });
         }
         
-        
+        // 应用状态筛选
         if (filters.status.length > 0) {
             filteredCards = filteredCards.filter(card => {
                 const isActive = card.详细信息?.活跃 === true || card.详细信息?.活跃 === "true";
@@ -1276,14 +1276,14 @@ function displayFilteredImages(filters) {
             });
         }
         
-        
+        // 应用设置筛选
         if (filters.setting.length > 0) {
             filteredCards = filteredCards.filter(card => 
                 filters.setting.includes(card.详细信息?.设置)
             );
         }
         
-        
+        // 应用搜索筛选 - 这是新添加的部分
         if (filters.search) {
             filteredCards = filteredCards.filter(card => 
                 card.名称.toLowerCase().includes(filters.search) ||
@@ -1291,17 +1291,17 @@ function displayFilteredImages(filters) {
             );
         }
         
-        
+        // 创建卡牌和图片的映射关系
         const cardImageMap = createCardImageMap(filteredCards, imagesData);
         
-        
+        // 按指挥点排序
         const sortedCards = sortCardsByCommandPoint(cardImageMap);
         
-        
+        // 只提取图片信息，但保留 cardData 用于判断是否为预备卡牌
         const filteredImages = sortedCards.map(item => ({
             path: item.imagePath,
             name: item.imagePath.split('/').pop(),
-            cardData: item.card 
+            cardData: item.card // 保留 cardData 信息
         }));
         
         if (filteredImages.length === 0) {
@@ -1317,7 +1317,7 @@ function displayFilteredImages(filters) {
 }
 
     
-    
+    // 渲染图片列表
 function renderImages(images) {
     let html = '<div class="image-container">';
     images.forEach(image => {
@@ -1327,7 +1327,7 @@ function renderImages(images) {
         const displayName = typeof image === 'object' ? (image.name || fileName) : fileName;
         const encodedFileName = encodeURIComponent(fileName);
         
-        
+        // 如果 image 对象包含 cardData，则检查是否为预备卡牌
         let isReserve = false;
         if (image.cardData) {
             isReserve = image.cardData.详细信息?.活跃 === "false";
@@ -1352,67 +1352,67 @@ function renderImages(images) {
     
     imageDisplay.innerHTML = html;
     
-    
+    // 为所有图片添加触摸事件
     document.querySelectorAll('.image-item img').forEach(img => {
-        
+        // 只为卡牌图片添加触摸事件，不为预备图标添加
         if (!img.classList.contains('reserve-icon')) {
             new ImageTouchHandler(img);
         }
     });
 }
     
-    
+    // 移动端筛选功能
     const mobileFilterBtn = document.getElementById('mobile-filter-btn');
     const mobileFilterOverlay = document.getElementById('mobile-filter-overlay');
     const mobileFilterTooltip = document.getElementById('mobile-filter-tooltip');
     const closeMobileTooltip = document.getElementById('close-mobile-tooltip');
     
-    
+    // 打开筛选悬浮框
     mobileFilterBtn.addEventListener('click', function() {
         mobileFilterOverlay.style.display = 'block';
         mobileFilterTooltip.style.display = 'block';
         document.body.style.overflow = 'hidden';
     });
     
-    
+    // 关闭筛选悬浮框
     closeMobileTooltip.addEventListener('click', function() {
         mobileFilterOverlay.style.display = 'none';
         mobileFilterTooltip.style.display = 'none';
         document.body.style.overflow = 'auto';
     });
     
-    
+    // 点击遮罩层关闭
     mobileFilterOverlay.addEventListener('click', function() {
         mobileFilterOverlay.style.display = 'none';
         mobileFilterTooltip.style.display = 'none';
         document.body.style.overflow = 'auto';
     });
     
-    
+    // 移动端筛选选项点击事件
     document.querySelectorAll('.tooltip-option').forEach(option => {
         option.addEventListener('click', function() {
             const type = this.dataset.type;
             const value = this.dataset.value;
             
-            
+            // 特殊处理：如果点击的是国家选项且值为特殊分类
             if (type === 'country' && (value === '总部' || value === '卡背')) {
-                
+                // 清除所有选中状态
                 document.querySelectorAll('.tooltip-option').forEach(opt => {
                     opt.classList.remove('selected');
                 });
                 
-                
+                // 选中当前选项
                 this.classList.add('selected');
                 
-                
+                // 显示对应图片
                 displaySpecialImages(value);
                 return;
             }
             
-            
+            // 对于所有筛选条件，使用多选
             this.classList.toggle('selected');
             
-            
+            // 立即应用筛选
             applyMobileFilter();
         });
     });
@@ -1422,37 +1422,37 @@ function renderImages(images) {
  function filterImagesByMobile(filters) {
     imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
     
-    
+    // 并行获取卡牌数据和图片数据
     Promise.all([
         fetch('data/newk.json').then(response => response.json()),
         fetch('data/newimages.json').then(response => response.json())
     ])
     .then(([cardsData, imagesData]) => {
-        
+        // 筛选卡牌
         let filteredCards = cardsData;
         
-        
+        // 应用国家筛选
         if (filters.country.length > 0) {
             filteredCards = filteredCards.filter(card => 
                 filters.country.includes(card.国家)
             );
         }
         
-        
+        // 应用稀有度筛选
         if (filters.rarity.length > 0) {
             filteredCards = filteredCards.filter(card => 
                 filters.rarity.includes(card.详细信息?.稀有度)
             );
         }
         
-        
+        // 应用类型筛选
         if (filters.type.length > 0) {
             filteredCards = filteredCards.filter(card => 
                 filters.type.includes(card.详细信息?.类型)
             );
         }
         
-        
+        // 应用指挥点筛选
         if (filters.commandPoint.length > 0) {
             filteredCards = filteredCards.filter(card => {
                 const commandPoint = card.详细信息?.["指挥点"];
@@ -1465,7 +1465,7 @@ function renderImages(images) {
             });
         }
         
-        
+        // 应用状态筛选
         if (filters.status.length > 0) {
             filteredCards = filteredCards.filter(card => {
                 const isActive = card.详细信息?.活跃 === true || card.详细信息?.活跃 === "true";
@@ -1474,21 +1474,21 @@ function renderImages(images) {
             });
         }
         
-        
+        // 应用设置筛选
         if (filters.setting.length > 0) {
             filteredCards = filteredCards.filter(card => 
                 filters.setting.includes(card.详细信息?.设置)
             );
         }
         
-        
+        // 应用搜索筛选
         if (filters.search) {
             filteredCards = filteredCards.filter(card => {
-                
+                // 搜索卡牌名称和描述
                 const nameMatch = card.名称.toLowerCase().includes(filters.search);
                 const descMatch = card.描述 && card.描述.toLowerCase().includes(filters.search);
                 
-                
+                // 搜索文件名
                 let fileNameMatch = false;
                 const country = card.国家;
                 const cardName = card.名称;
@@ -1510,17 +1510,17 @@ function renderImages(images) {
             });
         }
         
-        
+        // 创建卡牌和图片的映射关系
         const cardImageMap = createCardImageMap(filteredCards, imagesData);
         
-        
+        // 按指挥点排序
         const sortedCards = sortCardsByCommandPoint(cardImageMap);
         
-        
+        // 只提取图片信息，但保留 cardData 用于判断是否为预备卡牌
         const filteredImages = sortedCards.map(item => ({
             path: item.imagePath,
             name: item.imagePath.split('/').pop(),
-            cardData: item.card 
+            cardData: item.card // 保留 cardData 信息
         }));
         
         if (filteredImages.length === 0) {
@@ -1535,9 +1535,9 @@ function renderImages(images) {
     });
 }
     
-    
+    // 同步移动端筛选器
     function syncMobileFilters(type, value) {
-        
+        // 同步移动端悬浮框中的选项选中状态
         document.querySelectorAll(`.tooltip-option[data-type="${type}"]`).forEach(opt => {
             opt.classList.remove('selected');
         });
@@ -1553,7 +1553,7 @@ function renderImages(images) {
         }
     }
     
-    
+    // 图片触摸处理类
     class ImageTouchHandler {
         constructor(element) {
             this.element = element;
@@ -1644,9 +1644,9 @@ function renderImages(images) {
         }
     }
     
-    
+    // 添加一个新函数用于处理包含中文的图片路径
     function encodeImagePath(path) {
-        
+        // 将路径中的每个部分进行编码，但保持分隔符不变
         return path.split('/').map(part => encodeURIComponent(part)).join('/');
     }
 });
