@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>留言板</title>
-  <script></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
     * {
       margin: 0;
@@ -168,7 +168,7 @@
     .message-content {
       color: #555;
       line-height: 1.5;
-      
+      /* 添加以下属性以支持换行 */
       white-space: pre-wrap;
       word-wrap: break-word;
       margin-left: 50px;
@@ -359,7 +359,7 @@
       margin-bottom: 10px;
     }
 
-    
+    /* 底部导航栏 */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -384,7 +384,7 @@
       font-weight: bold;
     }
 
-    
+    /* 移动端适配 */
     @media (max-width: 768px) {
       .container {
         padding: 0 10px;
@@ -506,12 +506,12 @@
         <div class="loading">加载中...</div>
       </div>
       <div class="pagination" id="pagination">
-        
+        <!-- 数字页码分页控件将在这里生成 -->
       </div>
     </div>
   </div>
 
-  
+  <!-- 底部导航栏 -->
   <div class="bottom-nav">
         <a href="index.html" class="nav-link">主页</a>
         <a href="meie.html" class="nav-link">我的</a>
@@ -655,12 +655,12 @@ list.innerHTML = messagesToShow.map(m => {
         <div class="reply-header">回复 (${messageReplies.length})</div>
         ${messageReplies.map(r => {
           const replyTime = new Date(r.created_at).toLocaleString();
-          
+          // 根据user_id查找用户信息
           const user = allUsers.find(u => u.id == r.user_id);
           const userName = user ? user.user_name : '未知用户';
           const userAvatar = user ? user.avatar_url : null;
           
-          
+          // 添加调试信息
           console.log('回复用户:', userName, '用户详情:', user);
           
           return `
@@ -696,19 +696,19 @@ ${(currentUser && (parseInt(currentUser.admin) === 0 || currentUser.admin === "0
   `;
 }).join('');
   
-  
+  // 绑定回复事件
   bindReplyEvents();
 }
 
 
 async function deleteMessage(messageId) {
-  
+  // 阻止事件冒泡和默认行为
   if (event) {
     event.stopPropagation();
     event.preventDefault();
   }
   
-  
+  // 先获取要删除的留言信息，检查权限
   const { data: message, error: fetchError } = await sb
     .from('kardsdeck')
     .select('user_name')
@@ -721,7 +721,7 @@ async function deleteMessage(messageId) {
     return;
   }
   
-  
+  // 检查权限：管理员或留言发布者才能删除
   const isAdmin = currentUser && (parseInt(currentUser.admin) === 0 || currentUser.admin === "0");
   const isOwner = currentUser && message.user_name === currentUser.user_name;
   
@@ -735,7 +735,7 @@ async function deleteMessage(messageId) {
   }
   
   try {
-    
+    // 先删除所有回复
     const { error: repliesError } = await sb
       .from('replies')
       .delete()
@@ -747,7 +747,7 @@ async function deleteMessage(messageId) {
       return;
     }
     
-    
+    // 再删除留言
     const { error: messageError } = await sb
       .from('kardsdeck')
       .delete()
@@ -784,7 +784,7 @@ async function deleteMessage(messageId) {
         });
       });
       
-      
+      // 发送回复事件
       document.querySelectorAll('.send-reply').forEach(button => {
         button.addEventListener('click', async function() {
           if (!currentUser) {
@@ -805,7 +805,7 @@ async function deleteMessage(messageId) {
             .from('replies')
             .insert([{
               comment_id: parseInt(messageId),
-              user_id: currentUser.id, 
+              user_id: currentUser.id, // 使用用户ID而不是用户名
               content: content
             }]);
             
@@ -833,22 +833,22 @@ async function deleteMessage(messageId) {
 
       let paginationHTML = '';
       
-      
+      // 首页按钮
       if (currentPage > 1) {
         paginationHTML += `<button id="first-page">首页</button>`;
       }
       
-      
+      // 页码按钮
       const maxVisiblePages = 5;
       let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
       let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
       
-      
+      // 调整起始页，确保显示足够的页码
       if (endPage - startPage + 1 < maxVisiblePages) {
         startPage = Math.max(1, endPage - maxVisiblePages + 1);
       }
       
-      
+      // 生成页码按钮
       for (let i = startPage; i <= endPage; i++) {
         if (i === currentPage) {
           paginationHTML += `<button class="active">${i}</button>`;
@@ -857,12 +857,12 @@ async function deleteMessage(messageId) {
         }
       }
       
-      
+      // 末页按钮
       if (currentPage < totalPages) {
         paginationHTML += `<button id="last-page">末页</button>`;
       }
       
-      
+      // 页码信息
       paginationHTML += `
         <div class="page-info">
           第 ${currentPage} 页，共 ${totalPages} 页
@@ -871,8 +871,8 @@ async function deleteMessage(messageId) {
       
       pagination.innerHTML = paginationHTML;
       
-      
-      
+      // 绑定事件
+      // 首页按钮
       if (document.getElementById('first-page')) {
         document.getElementById('first-page').addEventListener('click', () => {
           currentPage = 1;
@@ -881,7 +881,7 @@ async function deleteMessage(messageId) {
         });
       }
       
-      
+      // 末页按钮
       if (document.getElementById('last-page')) {
         document.getElementById('last-page').addEventListener('click', () => {
           currentPage = totalPages;
@@ -890,7 +890,7 @@ async function deleteMessage(messageId) {
         });
       }
       
-      
+      // 页码按钮
       document.querySelectorAll('.pagination button[data-page]').forEach(button => {
         button.addEventListener('click', () => {
           currentPage = parseInt(button.dataset.page);
@@ -928,7 +928,7 @@ async function deleteMessage(messageId) {
       }
     });
 
-    
+    // 退出登录功能
     window.logout = function() {
       localStorage.removeItem('currentUser');
       checkUserLogin();

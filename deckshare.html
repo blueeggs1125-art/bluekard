@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>卡组分享</title>
-  <script></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
     * {
       margin: 0;
@@ -95,7 +95,7 @@
   background-color: #e0e0e0;
 }
 
-
+/* 移动端适配 */
 @media (max-width: 768px) {
   .deck-content, .deck-footer {
     margin-left: 43px;
@@ -199,7 +199,7 @@
     }
 
     textarea {
-      min-height: 60px; 
+      min-height: 60px; /* 降低卡组代码输入框高度 */
       resize: vertical;
     }
 
@@ -310,17 +310,17 @@
       margin-top: 10px;
     }
 
-    
+    /* 新增样式：控制标题和卡组代码之间的间距 */
     .deck-content > div:not(:last-child) {
       margin-bottom: 5px;
     }
 
-    
+    /* 留言部分增加更大的间距 */
     .deck-message {
       margin-top: 10px;
     }
 
-    
+    /* 复制按钮样式 */
     .copy-btn {
       background-color: #f0f0f0;
       color: #333;
@@ -430,7 +430,7 @@
       margin-bottom: 10px;
     }
 
-    
+    /* 浮动按钮 */
     .floating-button {
       position: fixed;
       bottom: 80px;
@@ -471,7 +471,7 @@
       height: 24px;
     }
 
-    
+    /* 模态框样式 */
     .modal {
       display: none;
       position: fixed;
@@ -547,7 +547,7 @@
       background-color: #999;
     }
 
-    
+    /* 新增的横向排列样式 */
     .form-row {
       display: flex;
       gap: 15px;
@@ -561,11 +561,11 @@
 
     .form-row select {
       width: 100%;
-      padding: 8px; 
-      font-size: 14px; 
+      padding: 8px; /* 减小下拉框内边距 */
+      font-size: 14px; /* 减小字体大小 */
     }
 
-    
+    /* 底部导航栏 */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -590,7 +590,7 @@
       font-weight: bold;
     }
 
-    
+    /* 移动端适配 */
     @media (max-width: 768px) {
       .container {
         padding: 0 10px;
@@ -637,7 +637,7 @@
         width: 95%;
       }
       
-      
+      /* 移动端横向表单调整 */
       .form-row {
         flex-direction: column;
         gap: 0;
@@ -719,10 +719,10 @@
     </div>
   </div>
 
-  
+  <!-- 浮动按钮 -->
   <div class="floating-button" id="uploadButton"></div>
 
-  
+  <!-- 发布卡组模态框 -->
   <div class="modal" id="uploadModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -787,23 +787,23 @@
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     function copyToClipboard(text, button) {
-  
+  // 保存原始按钮文本
   const originalText = button.textContent;
   
-  
+  // 尝试使用现代 Clipboard API
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(text).then(() => {
-      
+      // 复制成功
       button.textContent = '已复制';
       setTimeout(() => {
         button.textContent = originalText;
       }, 2000);
     }).catch(err => {
-      
+      // 复制失败，回退到传统方法
       fallbackCopyTextToClipboard(text, button, originalText);
     });
   } else {
-    
+    // 回退到传统方法
     fallbackCopyTextToClipboard(text, button, originalText);
   }
 }
@@ -812,7 +812,7 @@ function fallbackCopyTextToClipboard(text, button, originalText) {
   const textArea = document.createElement("textarea");
   textArea.value = text;
   
-  
+  // 避免滚动到底部
   textArea.style.top = "0";
   textArea.style.left = "0";
   textArea.style.position = "fixed";
@@ -847,12 +847,12 @@ function fallbackCopyTextToClipboard(text, button, originalText) {
     let allUsers = [];
     let currentUser = null;
 
-    
+    // 页面加载时检查用户登录状态
     document.addEventListener('DOMContentLoaded', function() {
       checkUserLogin();
       loadDecks();
       
-      
+      // 为浮动按钮添加点击事件
       document.getElementById('uploadButton').addEventListener('click', function() {
         if (currentUser) {
           document.getElementById('uploadModal').style.display = 'flex';
@@ -862,7 +862,7 @@ function fallbackCopyTextToClipboard(text, button, originalText) {
         }
       });
       
-      
+      // 模态框关闭事件
       document.getElementById('closeModal').addEventListener('click', function() {
         document.getElementById('uploadModal').style.display = 'none';
       });
@@ -871,7 +871,7 @@ function fallbackCopyTextToClipboard(text, button, originalText) {
         document.getElementById('uploadModal').style.display = 'none';
       });
       
-      
+      // 点击模态框外部关闭
       window.addEventListener('click', function(event) {
         const modal = document.getElementById('uploadModal');
         if (event.target === modal) {
@@ -879,7 +879,7 @@ function fallbackCopyTextToClipboard(text, button, originalText) {
         }
       });
       
-      
+      // 发布卡组事件
       document.getElementById('submitDeck').addEventListener('click', submitDeck);
     });
 
@@ -922,7 +922,7 @@ async function loadDecks() {
 
   console.log('加载到的卡组数据:', decks);
 
-  
+  // 获取用户数据 (确保选择 id, user_name, avatar_url, admin 字段)
   const { data: users, error: usersError } = await sb
     .from('zhuce')
     .select('id, user_name, avatar_url, admin');
@@ -957,18 +957,18 @@ function renderDecks() {
 
   listElement.innerHTML = currentDecks.map(deck => {
     console.log('处理卡组:', deck);
-    
+    // 通过 user_name 查找用户信息（卡组表中存储的是 user_name）
     const user = allUsers.find(u => u.user_name === deck.user_name);
     console.log('找到用户:', user);
     
-    
+    // 如果找不到用户，使用默认值
     const displayUser = user || { user_name: deck.user_name || '未知用户', avatar_url: null };
     
-    
+    // 处理日期显示，防止显示1970年
     let createdAt = '未知时间';
     if (deck.created_at) {
       const date = new Date(deck.created_at);
-      
+      // 检查日期是否有效
       if (!isNaN(date.getTime())) {
         createdAt = date.toLocaleString();
       }
@@ -976,7 +976,7 @@ function renderDecks() {
 
     return `
       <div class="deck-item">
-        
+        <!-- 用户头像与名字 -->
         <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
           ${displayUser.avatar_url ? 
             `<img src="${displayUser.avatar_url}" alt="头像" style="width:40px;height:40px;border-radius:50%;" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCI+PHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjZTBkMGUwIi8+PHRleHQgeD0iMjUiIHk9IjI4IiBmb250LXNpemU9IjIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5Ij8/PC90ZXh0Pjwvc3ZnPg=='; this.onerror=null;">` :
@@ -991,7 +991,7 @@ function renderDecks() {
           </div>
         </div>
 
-        
+        <!-- 标题、卡组代码、留言 -->
         <div style="line-height:1.3; margin-left:48px; margin-top:2px; margin-bottom:100px;">
           <div><strong>标题:</strong> ${deck.title || '无标题'}</div>
           <div style="display:flex; align-items:flex-start; gap:10px; flex-wrap:wrap;">
@@ -1001,7 +1001,7 @@ function renderDecks() {
           <div><strong>留言:</strong> ${deck.message || '无'}</div>
         </div>
 
-        
+        <!-- 类型/造价/状态 -->
         <div style="font-size:0.85em; display:flex; gap:12px; margin-left:48px; justify-content:space-between; align-items:center; flex-wrap:wrap;">
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
             <span>类型: ${deck.type || '无'}</span>
@@ -1025,12 +1025,12 @@ function renderDecks() {
       
       let paginationHTML = '';
       
-      
+      // 首页按钮
       if (currentPage > 1) {
         paginationHTML += '<button id="first-page">首页</button>';
       }
       
-      
+      // 页码按钮
       const pageRange = 5;
       let startPage = Math.max(1, currentPage - Math.floor(pageRange/2));
       let endPage = startPage + pageRange - 1;
@@ -1048,7 +1048,7 @@ function renderDecks() {
         }
       }
       
-      
+      // 末页按钮
       if (currentPage < totalPages) {
         paginationHTML += '<button id="last-page">末页</button>';
       }
@@ -1061,7 +1061,7 @@ function renderDecks() {
       
       paginationElement.innerHTML = paginationHTML;
       
-      
+      // 绑定分页事件
       if (document.getElementById('first-page')) {
         document.getElementById('first-page').addEventListener('click', () => {
           currentPage = 1;
@@ -1087,7 +1087,7 @@ function renderDecks() {
       });
     }
 
-    
+    // 发布卡组功能
  async function submitDeck() {
   const title = document.getElementById('deckTitle').value.trim();
   const cardCode = document.getElementById('cardCode').value.trim();
@@ -1111,7 +1111,7 @@ function renderDecks() {
       .from('decxfx')
       .insert([
         {
-          user_name: currentUser.user_name, 
+          user_name: currentUser.user_name, // 保存用户名而不是用户ID
           title: title,
           cardcode: cardCode,
           message: message,
@@ -1140,7 +1140,7 @@ function renderDecks() {
   }
 }
     
-    
+    // 重置表单
     function resetForm() {
       document.getElementById('deckTitle').value = '';
       document.getElementById('cardCode').value = '';
