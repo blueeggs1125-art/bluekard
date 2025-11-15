@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" sizes="16x16" href="../icon/16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../icon/32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="../icon/48x48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="../icon/64x64.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="../icon/128x128.png">
+    <link rel="icon" type="image/png" sizes="256x256" href="../icon/256x256.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../icon/512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../icon/180x180.png">
+    <link rel="stylesheet" href="../css/assets/sound/sound.css">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <title>FUCK 1939</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+        }
+        
+        /* 添加分类选择样式 */
+        .category-selector {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .category-selector select {
+            padding: 8px 15px;
+            font-size: 16px;
+            border: 2px solid #1e90ff;
+            border-radius: 5px;
+            background-color: white;
+            color: #333;
+            cursor: pointer;
+        }
+        
+        .sound-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .sound-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            background-color: white;
+            aspect-ratio: 1/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .sound-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .sound-item .sound-name {
+            padding: 10px;
+            font-size: 14px;
+            text-align: center;
+            color: #333;
+            word-break: break-word;
+        }
+        
+        .no-sounds {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-style: italic;
+            grid-column: 1 / -1;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+        
+        /* 添加导航链接样式 */
+        .nav-link {
+            display: block;
+            text-align: center;
+            margin: 15px 0;
+            color: #1e90ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .sound-container {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 10px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .sound-container {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 8px;
+            }
+            
+            .sound-item .sound-name {
+                font-size: 12px;
+                padding: 5px;
+            }
+        }
+        
+        audio {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+
+        <!-- 添加分类选择器 -->
+        <div class="category-selector">
+            <select id="category-select">
+                <option value="all">全部音效</option>
+            </select>
+        </div>
+        
+        <div id="sound-display">
+            <div class="loading">加载中...</div>
+        </div>
+    </div>
+    <style>
+/* 在现有样式基础上添加 */
+.container {
+    padding-bottom: 60px; /* 为底部导航栏留出空间 */
+}
+</style>
+
+
+
+    <audio id="audio-player"></audio>
+    <script src="../js/daohanglan2.js"></script>
+    <script>
+        // 音频文件数据 - 从files.json获取
+        let soundFiles = [];
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initSoundPage);
+        
+async function initSoundPage() {
+    const soundDisplay = document.getElementById('sound-display');
+    
+    try {
+        // 获取音效文件列表
+        const response = await fetch('../sound/files.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        soundFiles = await response.json();
+        
+        if (soundFiles.length === 0) {
+            soundDisplay.innerHTML = '<div class="no-sounds">暂无音效文件</div>';
+            return;
+        }
+        
+        // 过滤出MP3文件
+        const mp3Sounds = soundFiles.filter(sound => 
+            sound.toLowerCase().endsWith('.mp3')
+        );
+        
+        if (mp3Sounds.length === 0) {
+            soundDisplay.innerHTML = '<div class="no-sounds">暂无MP3音效文件</div>';
+            return;
+        }
+        
+        // 创建分类选择器
+        createCategorySelector(mp3Sounds);
+        
+        // 显示所有音效
+        displaySounds(mp3Sounds);
+        
+    } catch (error) {
+        console.error('加载音效出错:', error);
+        soundDisplay.innerHTML = '<div class="no-sounds">加载音效失败</div>';
+    }
+}
+
+        // 创建分类选择器
+        function createCategorySelector(sounds) {
+            // 获取所有分类
+            const categories = new Set();
+            sounds.forEach(sound => {
+                const pathParts = sound.split('/');
+                if (pathParts.length > 2) {
+                    categories.add(pathParts[1]); // 添加子文件夹名作为分类
+                }
+            });
+            
+            // 获取选择器元素
+            const select = document.getElementById('category-select');
+            
+            // 添加分类选项
+            Array.from(categories).sort().forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                select.appendChild(option);
+            });
+            
+            // 添加事件监听器
+            select.addEventListener('change', function() {
+                const selectedCategory = this.value;
+                filterSoundsByCategory(sounds, selectedCategory);
+            });
+        }
+        
+        // 根据分类过滤音效
+        function filterSoundsByCategory(sounds, category) {
+            let filteredSounds = sounds;
+            
+            if (category !== 'all') {
+                filteredSounds = sounds.filter(sound => {
+                    const pathParts = sound.split('/');
+                    return pathParts.length > 2 && pathParts[1] === category;
+                });
+            }
+            
+            displaySounds(filteredSounds);
+        }
+        
+        // 显示音效按钮
+        function displaySounds(sounds) {
+            const soundDisplay = document.getElementById('sound-display');
+            
+            if (sounds.length === 0) {
+                soundDisplay.innerHTML = '<div class="no-sounds">该分类下暂无音效文件</div>';
+                return;
+            }
+            
+            let html = '<div class="sound-container">';
+            sounds.forEach(sound => {
+                const fileName = sound.split('/').pop().replace('.mp3', '').replace('.MP3', '');
+                html += `
+                    <div class="sound-item" 
+                         data-src="${sound}" 
+                         data-filename="${sound.split('/').pop()}">
+                        <div class="sound-name">${fileName}</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            soundDisplay.innerHTML = html;
+            
+            // 为每个音效按钮添加事件监听器
+            document.querySelectorAll('.sound-item').forEach(item => {
+                // PC端事件
+                item.addEventListener('click', () => {
+                    playSound(item.getAttribute('data-src'));
+                });
+                
+                item.addEventListener('contextmenu', (event) => {
+                    event.preventDefault();
+                    downloadSound(event, item.getAttribute('data-src'), item.getAttribute('data-filename'));
+                });
+                
+                // 移动端事件
+                item.addEventListener('touchstart', (event) => {
+                    handleTouchStart(event, item.getAttribute('data-src'), item.getAttribute('data-filename'));
+                });
+                
+                item.addEventListener('touchend', handleTouchEnd);
+                item.addEventListener('touchmove', handleTouchMove);
+            });
+        }
+        
+        // 播放音效
+        function playSound(src) {
+            const audioPlayer = document.getElementById('audio-player');
+            // 停止当前播放的音效
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            
+            // 播放新音效
+            audioPlayer.src = src;
+            audioPlayer.play();
+        }
+        
+        // 下载音效文件
+        function downloadSound(event, url, filename) {
+            event.preventDefault();
+            
+            const link = document.createElement('a');
+            link.href = url;
+            // 解码文件名用于下载
+            link.download = decodeURIComponent(filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // 移动端触摸处理
+        let longPressTimer;
+        
+        function handleTouchStart(event, url, filename) {
+            longPressTimer = setTimeout(() => {
+                downloadSound(event, url, filename);
+            }, 1000); // 长按1秒触发下载
+        }
+        
+        function handleTouchEnd() {
+            clearTimeout(longPressTimer);
+        }
+        
+        function handleTouchMove() {
+            clearTimeout(longPressTimer);
+        }
+    </script>
+
+<style>
+/* 统一的页面载入动画 */
+@keyframes pageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 应用到所有页面容器 */
+.container {
+    animation: pageSlideIn 0.4s ease-out forwards;
+}
+
+/* 为已有动画的页面调整动画 */
+.content {
+    animation: pageSlideIn 0.4s ease-out forwards;
+}
+
+/* 视频列表动画 */
+.video-list {
+    animation: pageSlideIn 0.4s ease-out forwards;
+}
+
+/* 音效容器动画 */
+#sound-display {
+    animation: pageSlideIn 0.4s ease-out forwards;
+}
+
+/* 图片容器动画 */
+#image-display {
+    animation: pageSlideIn 0.4s ease-out forwards;
+}
+
+/* 导航栏动画 */
+.bottom-nav {
+    animation: pageSlideIn 0.4s ease-out 0.1s forwards;
+    animation-fill-mode: both;
+}
+
+/* 初始状态设置 */
+.container,
+.content,
+.video-list,
+#sound-display,
+#image-display,
+.bottom-nav {
+    opacity: 0;
+}
+
+/* 延迟显示内容，避免闪烁 */
+@media (prefers-reduced-motion: reduce) {
+    .container,
+    .content,
+    .video-list,
+    #sound-display,
+    #image-display,
+    .bottom-nav {
+        animation: none;
+        opacity: 1;
+    }
+}
+</style>
+
+</body>
+</html>

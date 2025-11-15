@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/assets/loadaim/loadaim.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加载动画</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        .container {
+            flex-grow: 1;
+            padding: 10px;
+            overflow: auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .video-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .video-item {
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        video {
+            width: 100%;
+            height: auto;
+        }
+        
+        .video-title {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* 底部导航栏 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+            font-size: 14px;
+        }
+
+        .bottom-nav a {
+            text-decoration: none;
+            color: #1e90ff;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 5px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <style>
+/* 统一的页面载入动画 */
+@keyframes pageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 应用到所有页面容器 */
+.container {
+    animation: pageSlideIn 0.4s ease-out forwards;
+}
+
+/* 为已有动画的页面调整动画 */
+.content {
+    animation: pageSlideIn 0.4s ease-out forwards;
+}
+
+/* 视频列表动画 */
+.video-list {
+    animation: pageSlideIn 0.4s ease-out forwards;
+}
+
+/* 音效容器动画 */
+#sound-display {
+    animation: pageSlideIn 0.4s ease-out forwards;
+}
+
+/* 图片容器动画 */
+#image-display {
+    animation: pageSlideIn 0.4s ease-out forwards;
+}
+
+/* 导航栏动画 */
+.bottom-nav {
+    animation: pageSlideIn 0.4s ease-out 0.1s forwards;
+    animation-fill-mode: both;
+}
+
+/* 初始状态设置 */
+.container,
+.content,
+.video-list,
+#sound-display,
+#image-display,
+.bottom-nav {
+    opacity: 0;
+}
+
+/* 延迟显示内容，避免闪烁 */
+@media (prefers-reduced-motion: reduce) {
+    .container,
+    .content,
+    .video-list,
+    #sound-display,
+    #image-display,
+    .bottom-nav {
+        animation: none;
+        opacity: 1;
+    }
+}
+</style>
+    <div class="container">
+
+        
+        <div class="video-list">
+            <div class="video-item">
+                <video controls>
+                    <source src="../video/冬季战争2021_.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+                <div class="video-title">冬季战争2021</div>
+            </div>
+            
+            <div class="video-item">
+                <video controls>
+                    <source src="../video/冬季战争2021_noLights.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+                <div class="video-title">冬季战争2021_noLights</div>
+            </div>
+            
+            <div class="video-item">
+                <video controls>
+                    <source src="../video/海战.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+                <div class="video-title">海战</div>
+            </div>
+            
+            <div class="video-item">
+                <video controls>
+                    <source src="../video/军团背景.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+                <div class="video-title">军团背景</div>
+            </div>
+            
+            <div class="video-item">
+                <video controls>
+                    <source src="../video/突破.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+                <div class="video-title">突破</div>
+            </div>
+            
+            <div class="video-item">
+                <video controls>
+                    <source src="../video/突破_ios.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+                <div class="video-title">突破_ios</div>
+            </div>
+            
+            <div class="video-item">
+                <video controls>
+                    <source src="../video/血与铁2024.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+                <div class="video-title">血与铁2024</div>
+            </div>
+            
+            <div class="video-item">
+                <video controls>
+                    <source src="../video/战区2022.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+                <div class="video-title">战区2022</div>
+            </div>
+            
+            <div class="video-item">
+                <video controls>
+                    <source src="../video/战区2022_2.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+                <div class="video-title">战区2022_2</div>
+            </div>
+        </div>
+    </div>
+
+        <script src="../js/daohanglan2.js"></script>
+</body>
+</html>

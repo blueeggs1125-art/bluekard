@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" sizes="16x16" href="icon/16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icon/32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="icon/48x48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="icon/64x64.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="icon/128x128.png">
+    <link rel="icon" type="image/png" sizes="256x256" href="icon/256x256.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon/512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon/180x180.png">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>图片编辑器 - KARDS素材库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 60px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+        }
+        
+        .selector-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: white;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .image-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .image-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            background-color: white;
+            aspect-ratio: 2/3; 
+            cursor: grab;
+        }
+        
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            -webkit-touch-callout: default;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .image-item .image-name {
+            padding: 5px;
+            font-size: 11px;
+            text-align: center;
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .no-images {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-style: italic;
+            grid-column: 1 / -1;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+        
+        /* 添加导航链接样式 */
+        .nav-link {
+            display: block;
+            text-align: center;
+            margin: 15px 0;
+            color: #1e90ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* 编辑器区域样式 */
+        .editor-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px 0;
+        }
+        
+        .editor-toolbar button {
+            flex: 1;
+            min-width: 80px;
+            padding: 10px 15px;
+            background-color: #1e90ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        .editor-toolbar button:hover {
+            background-color: #0066cc;
+        }
+        
+        .editor-toolbar button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .editor-canvas-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background-color: #f0f0f0;
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .editor-canvas-container.drag-over {
+            border-color: #1e90ff;
+            background-color: #e6f4ff;
+        }
+        
+        .editor-placeholder {
+            color: #999;
+            text-align: center;
+        }
+        
+        .editor-image {
+            max-width: 100%;
+            max-height: 100%;
+            position: absolute;
+            cursor: move;
+        }
+        
+        .save-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+        
+        .save-button:hover:not(:disabled) {
+            background-color: #218838;
+        }
+        
+        .save-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .image-container {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+                gap: 8px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            .editor-toolbar button {
+                min-width: 70px;
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .image-container {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                gap: 5px;
+            }
+            
+            .image-item .image-name {
+                font-size: 8px;
+                padding: 2px;
+            }
+            
+            .editor-toolbar {
+                gap: 5px;
+            }
+            
+            .editor-toolbar button {
+                min-width: 60px;
+                padding: 6px 8px;
+                font-size: 12px;
+            }
+        }
+        
+        /* 页面载入动画 */
+        @keyframes pageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .container {
+            animation: pageSlideIn 0.4s ease-out forwards;
+        }
+        
+        .container {
+            opacity: 0;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .container {
+                animation: none;
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>图片编辑器</h1>
+        
+        <div class="selector-group">
+            <label for="search-input">搜索图片:</label>
+            <input type="text" id="search-input" placeholder="输入关键词搜索图片...">
+        </div>
+        
+        <div class="selector-group">
+            <label for="country-select">选择国家/类型:</label>
+            <select id="country-select">
+                <option value="">请选择...</option>
+                <option value="苏联">苏联</option>
+                <option value="美国">美国</option>
+                <option value="德国">德国</option>
+                <option value="日本">日本</option>
+                <option value="英国">英国</option>
+                <option value="波兰">波兰</option>
+                <option value="法国">法国</option>
+                <option value="意大利">意大利</option>
+                <option value="芬兰">芬兰</option>
+                <option value="总部">总部</option>
+                <option value="卡背">卡背</option>
+            </select>
+        </div>
+        
+        <div class="selector-group" id="subtype-group" style="display: none;">
+            <label for="subtype-select">选择卡牌类型:</label>
+            <select id="subtype-select">
+                <option value="">请选择...</option>
+            </select>
+        </div>
+        
+        <div id="image-display">
+            <div class="no-images">请先选择国家/类型或搜索关键词</div>
+        </div>
+        
+        <div class="editor-section">
+            <div class="editor-toolbar">
+                <button id="crop-btn" disabled>图片裁剪</button>
+                <button id="auto-remove-bg-btn" disabled>自动抠图</button>
+                <button id="manual-remove-bg-btn" disabled>手动抠图</button>
+            </div>
+            
+            <div class="editor-canvas-container" id="editor-canvas">
+                <div class="editor-placeholder" id="editor-placeholder">
+                    请从上方拖拽图片到此区域进行编辑
+                </div>
+            </div>
+            
+            <button class="save-button" id="save-btn" disabled>保存图片</button>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div style="position: fixed; bottom: 0; left: 0; right: 0; background-color: #fff; border-top: 1px solid #ddd; display: flex; justify-content: space-around; padding: 10px 0; z-index: 1000; font-size: 14px;">
+        <a href="index.html" style="text-decoration: none; color: #1e90ff; text-align: center;">卡图</a>
+        <a href="image2.html" style="text-decoration: none; color: #1e90ff; text-align: center;">其他素材</a>
+        <a href="suck.html" style="text-decoration: none; color: #1e90ff; text-align: center;">音效库</a>
+        <a href="zaza.html" style="text-decoration: none; color: #1e90ff; text-align: center;">加载动画</a>
+        <a href="team.html" style="text-decoration: none; color: #1e90ff; text-align: center;">关于</a>
+    </div>
+
+    <script src="js/mar.js"></script>
+</body>
+</html>

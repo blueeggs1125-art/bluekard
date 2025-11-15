@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" sizes="16x16" href="../icon/16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../icon/32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="../icon/48x48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="../icon/64x64.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="../icon/128x128.png">
+    <link rel="icon" type="image/png" sizes="256x256" href="../icon/256x256.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../icon/512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../icon/180x180.png">
+    <link rel="stylesheet" href="../css/assets/cardimage/cardimage.css">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <title>FUCK 1939</title>
+    <style>
+        /* 添加到<style>标签内的其他样式后面 */
+.image-item .image-name {
+    display: none;
+}
+
+/* 如果只想在某些屏幕尺寸下隐藏文件名，可以使用媒体查询 */
+@media (max-width: 768px) {
+    .image-item .image-name {
+        display: none;
+    }
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+        }
+        
+        .selector-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: white;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .image-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .image-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            background-color: white;
+            aspect-ratio: 2/3; 
+        }
+        
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            -webkit-touch-callout: default;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .image-item .image-name {
+            padding: 5px;
+            font-size: 11px;
+            text-align: center;
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .no-images {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-style: italic;
+            grid-column: 1 / -1;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+        
+        /* 添加导航链接样式 */
+        .nav-link {
+            display: block;
+            text-align: center;
+            margin: 15px 0;
+            color: #1e90ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* 统一的页面载入动画 */
+        @keyframes pageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 应用到所有页面容器 */
+        .container {
+            animation: pageSlideIn 0.4s ease-out forwards;
+        }
+
+        /* 为已有动画的页面调整动画 */
+        .content {
+            animation: pageSlideIn 0.4s ease-out forwards;
+        }
+
+        /* 视频列表动画 */
+        .video-list {
+            animation: pageSlideIn 0.4s ease-out forwards;
+        }
+
+        /* 音效容器动画 */
+        #sound-display {
+            animation: pageSlideIn 0.4s ease-out forwards;
+        }
+
+        /* 图片容器动画 */
+        #image-display {
+            animation: pageSlideIn 0.4s ease-out forwards;
+        }
+
+        /* 导航栏动画 */
+        .bottom-nav {
+            animation: pageSlideIn 0.4s ease-out 0.1s forwards;
+            animation-fill-mode: both;
+        }
+
+        /* 初始状态设置 */
+        .container,
+        .content,
+        .video-list,
+        #sound-display,
+        #image-display,
+        .bottom-nav {
+            opacity: 0;
+        }
+
+        /* 延迟显示内容，避免闪烁 */
+        @media (prefers-reduced-motion: reduce) {
+            .container,
+            .content,
+            .video-list,
+            #sound-display,
+            #image-display,
+            .bottom-nav {
+                animation: none;
+                opacity: 1;
+            }
+        }
+        
+        /* 在现有样式基础上添加 */
+        .container {
+            padding-bottom: 60px; /* 为底部导航栏留出空间 */
+        }
+
+        /* 底部按钮样式 */
+        .bottom-button-container {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+
+        .bottom-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #1e90ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .bottom-button:hover {
+            background-color: #0066cc;
+        }
+        
+        /* 预备图标样式 */
+        .image-item .reserve-icon {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            z-index: 10;
+        }
+        
+        /* 移动端筛选按钮 */
+        .mobile-filter-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #1e90ff;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 1001;
+            display: none;
+        }
+        
+        /* 移动端筛选面板 */
+        .mobile-filter-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            z-index: 1002;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            padding: 20px;
+            display: none;
+        }
+        
+        .mobile-filter-panel.active {
+            transform: translateY(0);
+            display: block;
+        }
+        
+        .filter-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .filter-panel-header h2 {
+            margin: 0;
+            color: #333;
+        }
+        
+        .close-filter-panel {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .filter-group {
+            margin-bottom: 15px;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .filter-group select, .filter-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: white;
+            font-size: 16px;
+        }
+        
+        .apply-filters-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #1e90ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .apply-filters-btn:hover {
+            background-color: #0066cc;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .image-container {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+                gap: 8px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            /* 在移动端隐藏桌面版筛选器 */
+            .desktop-filters {
+                display: none;
+            }
+            
+            .mobile-filter-btn {
+                display: flex;
+            }
+            
+            .image-item .reserve-icon {
+                width: 20px;
+                height: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .image-container {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                gap: 5px;
+            }
+            
+            .image-item .image-name {
+                font-size: 8px;
+                padding: 2px;
+            }
+            
+            .image-item .reserve-icon {
+                width: 16px;
+                height: 16px;
+            }
+        }
+        /* 添加以下CSS样式到<style>标签中 */
+
+.mobile-filter-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: none;
+}
+
+.mobile-filter-tooltip {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e0e0e0; 
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 2001;
+    display: none;
+    width: 90%;
+    max-width: 400px;
+    height: 80%;
+    max-height: 500px;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.tooltip-header h3 {
+    margin: 0;
+    color: #333;
+}
+
+.close-tooltip {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
+
+.tooltip-section {
+    margin-bottom: 20px;
+}
+
+.tooltip-section h4 {
+    margin: 0 0 10px 0;
+    color: #555;
+    font-size: 16px;
+}
+
+.tooltip-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tooltip-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.tooltip-option:hover {
+    background-color: #f0f0f0;
+}
+
+.tooltip-option.selected {
+    background-color: #1e90ff;
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.tooltip-option img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-bottom: 5px;
+}
+
+.tooltip-option span {
+    font-size: 12px;
+    text-align: center;
+}
+
+.command-point-tooltip img {
+    filter: drop-shadow(0 0 2px rgba(0,0,0,0.8));
+    background-color: #968d8d; 
+    border-radius: 4px; 
+    padding: 2px;
+}
+
+.reset-all-filters-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #616568;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.reset-all-filters-btn:hover {
+    background-color: #49535a;
+}
+
+.special-icons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.special-icon {
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.special-icon:hover {
+    transform: scale(1.05);
+}
+
+.special-icon img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    background: transparent;
+    border-radius: 8px;
+    padding: 8px;
+    transition: all 0.3s ease;
+}
+
+/* 模态框样式 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+}
+    </style>
+</head>
+<body>
+    <div class="bottom-button-container">
+        <a href="https://blueeggs1125-art.github.io/im/" class="bottom-button" target="_blank">卡图原画（非海报）</a>
+    </div>
+
+    
+
+  <!-- 替换现有的移动端筛选按钮和面板代码 -->
+
+<!-- 移动端筛选按钮 -->
+<div class="mobile-filter-btn" id="mobile-filter-btn">+</div>
+
+<!-- 移动端筛选面板 -->
+<div class="mobile-filter-overlay" id="mobile-filter-overlay"></div>
+
+<div class="mobile-filter-tooltip" id="mobile-filter-tooltip">
+    <div class="tooltip-header">
+        <h3>筛选条件</h3>
+        <button class="close-tooltip" id="close-mobile-tooltip">×</button>
+    </div>
+    
+    <!-- 将搜索框添加到国家筛选部分上方 -->
+    <div class="tooltip-section">
+        <h4>搜索</h4>
+        <input type="text" id="mobile-search-input" placeholder="搜索卡牌名称或描述..." style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd;">
+    </div>
+    
+    <div class="tooltip-section">
+        <h4>国家</h4>
+        <div class="tooltip-options" id="country-options">
+            <div class="tooltip-option" data-value="德国" data-type="country">
+                <img src="../image2/国家图标/德国/FactionIcon_GER_256_Color.png" alt="德国">
+            </div>
+            <div class="tooltip-option" data-value="英国" data-type="country">
+                <img src="../image2/国家图标/英国/FactionIcon_BRI_256_Color.png" alt="英国">
+            </div>
+            <div class="tooltip-option" data-value="苏联" data-type="country">
+                <img src="../image2/国家图标/苏联/FactionIcon_SOV_256_Color.png" alt="苏联">
+            </div>
+            <div class="tooltip-option" data-value="美国" data-type="country">
+                <img src="../image2/国家图标/美国/FactionIcon_USA_256_Color.png" alt="美国">
+            </div>
+            <div class="tooltip-option" data-value="日本" data-type="country">
+                <img src="../image2/国家图标/日本/FactionIcon_JAP_256_Color.png" alt="日本">
+            </div>
+            <div class="tooltip-option" data-value="法国" data-type="country">
+                <img src="../image2/国家图标/法国/FactionIcon_FRA_256_Color.png" alt="法国">
+            </div>
+            <div class="tooltip-option" data-value="意大利" data-type="country">
+                <img src="../image2/国家图标/意大利/FactionIcon_ITA_256_Color.png" alt="意大利">
+            </div>
+            <div class="tooltip-option" data-value="波兰" data-type="country">
+                <img src="../image2/国家图标/波兰/FactionIcon_POL_512_Color.png" alt="波兰">
+            </div>
+            <div class="tooltip-option" data-value="芬兰" data-type="country">
+                <img src="../image2/国家图标/芬兰/FactionIcon_FIN_1024_Color.png" alt="芬兰">    
+            </div>
+            <div class="special-icon" id="cardback-icon" title="卡背">
+                <img src="../image/ToW_set_card_back_c.png" alt="卡背" style="width: 60px; height: 60px; object-fit: contain; background: transparent; border-radius: 8px; padding: 8px; cursor: pointer;">
+            </div>
+            <div class="special-icon" id="headquarters-icon" title="总部">
+                <img src="../image/53villers-bocage.png" alt="总部" style="width: 60px; height: 60px; object-fit: contain; background: transparent; border-radius: 8px; padding: 8px; cursor: pointer;">
+            </div>
+        </div>
+    </div>
+
+    <!-- 其他筛选部分保持不变 -->
+    <div class="tooltip-section">
+        <h4>稀有度</h4>
+        <div class="tooltip-options" id="rarity-options">
+            <div class="tooltip-option" data-value="精英" data-type="rarity">
+                <img src="../scr/稀有度/精英.png" alt="精英">
+                <span>精英</span>
+            </div>
+            <div class="tooltip-option" data-value="特殊" data-type="rarity">
+                <img src="../scr/稀有度/特殊.png" alt="特殊">
+                <span>特殊</span>
+            </div>
+            <div class="tooltip-option" data-value="限定" data-type="rarity">
+                <img src="../scr/稀有度/限定.png" alt="限定">
+                <span>限定</span>
+            </div>
+            <div class="tooltip-option" data-value="普通" data-type="rarity">
+                <img src="../scr/稀有度/普通.png" alt="普通">
+                <span>普通</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="tooltip-section">
+        <h4>类型</h4>
+        <div class="tooltip-options" id="type-options">
+            <div class="tooltip-option" data-value="步兵" data-type="type">
+                <img src="../scr/类型/步兵.png" alt="步兵">
+            </div>
+            <div class="tooltip-option" data-value="坦克" data-type="type">
+                <img src="../scr/类型/坦克.png" alt="坦克">
+            </div>
+            <div class="tooltip-option" data-value="火炮" data-type="type">
+                <img src="../scr/类型/火炮.png" alt="火炮">
+            </div>
+            <div class="tooltip-option" data-value="战斗机" data-type="type">
+                <img src="../scr/类型/战斗机.png" alt="战斗机">
+            </div>
+            <div class="tooltip-option" data-value="轰炸机" data-type="type">
+                <img src="../scr/类型/轰炸机.png" alt="轰炸机">
+            </div>
+            <div class="tooltip-option" data-value="指令" data-type="type">
+                <img src="../scr/类型/指令.png" alt="指令">
+            </div>
+            <div class="tooltip-option" data-value="反制指令" data-type="type">
+                <img src="../scr/类型/反制指令.png" alt="反制指令">
+            </div>
+        </div>
+    </div>
+    
+    <div class="tooltip-section">
+        <h4>指挥点</h4>
+        <div class="tooltip-options" id="command-point-options">
+            <div class="tooltip-option" data-value="0" data-type="command-point">
+                <img src="../scr/指挥点/0.png" alt="0">
+            </div>
+            <div class="tooltip-option" data-value="1" data-type="command-point">
+                <img src="../scr/指挥点/1.png" alt="1">
+            </div>
+            <div class="tooltip-option" data-value="2" data-type="command-point">
+                <img src="../scr/指挥点/2.png" alt="2">
+            </div>
+            <div class="tooltip-option" data-value="3" data-type="command-point">
+                <img src="../scr/指挥点/3.png" alt="3">
+            </div>
+            <div class="tooltip-option" data-value="4" data-type="command-point">
+                <img src="../scr/指挥点/4.png" alt="4">
+            </div>
+            <div class="tooltip-option" data-value="5" data-type="command-point">
+                <img src="../scr/指挥点/5.png" alt="5">
+            </div>
+            <div class="tooltip-option" data-value="6" data-type="command-point">
+                <img src="../scr/指挥点/6.png" alt="6">
+            </div>
+            <div class="tooltip-option" data-value="7+" data-type="command-point">
+                <img src="../scr/指挥点/7+.png" alt="7+">
+            </div>
+        </div>
+    </div>
+    
+    <div class="tooltip-section">
+        <h4>状态</h4>
+        <div class="tooltip-options" id="status-options">
+            <div class="tooltip-option" data-value="true" data-type="status">
+                <span>活跃</span>
+            </div>
+            <div class="tooltip-option" data-value="false" data-type="status">
+                <span>预备</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="tooltip-section">
+        <h4>老兵</h4>
+        <div class="tooltip-options" id="veteran-options">
+            <div class="tooltip-option" data-value="true" data-type="veteran">
+                <span>显示/隐藏</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="tooltip-section">
+        <h4>衍生</h4>
+        <div class="tooltip-options" id="derived-options">
+            <div class="tooltip-option" data-value="true" data-type="derived">
+                <span>显示/隐藏</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="tooltip-section">
+        <button class="reset-all-filters-btn">重置所有筛选</button>
+    </div>
+</div>
+
+    
+    <div class="container">
+
+        <!-- 桌面版筛选器 -->
+        <div class="desktop-filters">
+            <!-- 替换原有的分类选择器为美化后的版本 -->
+            <div class="selector-group" style="margin-bottom: 10px;">
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 5px;">
+                  <label for="country-select" style="font-size: 14px; white-space: nowrap;">国家:</label>
+                  <select id="country-select" style="padding: 6px 10px; border: 2px solid #1e90ff; border-radius: 5px; background-color: white; color: #333; font-size: 14px; cursor: pointer; min-width: 80px;">
+                    <option value="">全部</option>
+                    <option value="苏联">苏联</option>
+                    <option value="美国">美国</option>
+                    <option value="德国">德国</option>
+                    <option value="日本">日本</option>
+                    <option value="英国">英国</option>
+                    <option value="波兰">波兰</option>
+                    <option value="法国">法国</option>
+                    <option value="意大利">意大利</option>
+                    <option value="芬兰">芬兰</option>
+                  </select>
+                </div>
+
+                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 5px;">
+                  <label for="rarity-select" style="font-size: 14px; white-space: nowrap;">稀有度:</label>
+                  <select id="rarity-select" style="padding: 6px 10px; border: 2px solid #1e90ff; border-radius: 5px; background-color: white; color: #333; font-size: 14px; cursor: pointer; min-width: 80px;">
+                    <option value="">全部</option>
+                    <option value="精英">精英</option>
+                    <option value="特殊">特殊</option>
+                    <option value="限定">限定</option>
+                    <option value="普通">普通</option>
+                  </select>
+                </div>
+
+                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 5px;">
+                  <label for="type-select" style="font-size: 14px; white-space: nowrap;">类型:</label>
+                  <select id="type-select" style="padding: 6px 10px; border: 2px solid #1e90ff; border-radius: 5px; background-color: white; color: #333; font-size: 14px; cursor: pointer; min-width: 80px;">
+                    <option value="">全部</option>
+                    <option value="步兵">步兵</option>
+                    <option value="坦克">坦克</option>
+                    <option value="火炮">火炮</option>
+                    <option value="战斗机">战斗机</option>
+                    <option value="轰炸机">轰炸机</option>
+                    <option value="指令">指令</option>
+                    <option value="反制指令">反制指令</option>
+                  </select>
+                </div>
+
+                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 5px;">
+                  <label for="command-point-select" style="font-size: 14px; white-space: nowrap;">指挥点:</label>
+                  <select id="command-point-select" style="padding: 6px 10px; border: 2px solid #1e90ff; border-radius: 5px; background-color: white; color: #333; font-size: 14px; cursor: pointer; min-width: 60px;">
+                    <option value="">全部</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7+">7+</option>
+                  </select>
+                </div>
+
+                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 5px;">
+                  <label for="status-select" style="font-size: 14px; white-space: nowrap;">状态:</label>
+                  <select id="status-select" style="padding: 6px 10px; border: 2px solid #1e90ff; border-radius: 5px; background-color: white; color: #333; font-size: 14px; cursor: pointer; min-width: 80px;">
+                    <option value="">全部</option>
+                    <option value="true">活跃</option>
+                    <option value="false">预备</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="selector-group" style="margin-bottom: 10px;">
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 5px;">
+                  <label for="setting-select" style="font-size: 14px; white-space: nowrap;">设置:</label>
+                  <select id="setting-select" style="padding: 6px 10px; border: 2px solid #1e90ff; border-radius: 5px; background-color: white; color: #333; font-size: 14px; cursor: pointer; min-width: 100px;">
+                    <option value="">全部</option>
+                    <option value="秘密行動">秘密行動</option>
+                    <option value="海战">海战</option>
+                    <option value="世纪大战">世纪大战</option>
+                    <option value="血与铁">血与铁</option>
+                    <option value="冬季战争">冬季战争</option>
+                    <option value="战友">战友</option>
+                    <option value="军团">军团</option>
+                    <option value="突破">突破</option>
+                    <option value="战区">战区</option>
+                    <option value="忠诚">忠诚</option>
+                    <option value="基础">基础</option>
+                  </select>
+                </div>
+
+                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 5px;">
+                  <label for="special-select" style="font-size: 14px; white-space: nowrap;">特殊:</label>
+                  <select id="special-select" style="padding: 6px 10px; border: 2px solid #1e90ff; border-radius: 5px; background-color: white; color: #333; font-size: 14px; cursor: pointer; min-width: 80px;">
+                    <option value="">无</option>
+                    <option value="总部">总部</option>
+                    <option value="卡背">卡背</option>
+                  </select>
+                </div>
+
+                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 5px; flex: 1;">
+                  <label for="search-input" style="font-size: 14px; white-space: nowrap;">搜索:</label>
+                  <input type="text" id="search-input" placeholder="搜索卡牌名称或描述..." style="flex: 1; min-width: 120px; padding: 6px 10px; border: 2px solid #1e90ff; border-radius: 5px; background-color: white; color: #333; font-size: 14px;">
+                </div>
+              </div>
+            </div>
+        </div>
+        
+        <div id="image-display">
+            <div class="no-images">请选择分类或搜索关键词</div>
+        </div>
+    </div>
+
+    <script src="../js/image.js"></script>
+    <script src="../js/daohanglan2.js"></script>
+    <script src="../js/image_format.js"></script>
+    
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imageDisplay = document.getElementById('image-display');
+    const countrySelect = document.getElementById('country-select');
+    const raritySelect = document.getElementById('rarity-select');
+    const typeSelect = document.getElementById('type-select');
+    const commandPointSelect = document.getElementById('command-point-select');
+    const statusSelect = document.getElementById('status-select');
+    const settingSelect = document.getElementById('setting-select');
+    const specialSelect = document.getElementById('special-select');
+    const searchInput = document.getElementById('search-input');
+    
+     const mobileSearchInput = document.getElementById('mobile-search-input');
+    if (mobileSearchInput) {
+        // 添加输入事件监听
+        mobileSearchInput.addEventListener('input', function() {
+            applyMobileFilter();
+        });
+        
+        // 添加回车键事件监听
+        mobileSearchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                applyMobileFilter();
+            }
+        });
+    }
+    
+    // 修改 applyMobileFilter 函数以正确处理搜索
+ function applyMobileFilter() {
+    // 获取所有选中的选项
+    const selectedOptions = document.querySelectorAll('.tooltip-option.selected');
+    
+    // 获取搜索关键词
+    const searchKeyword = mobileSearchInput ? mobileSearchInput.value.trim().toLowerCase() : '';
+    
+    // 构建筛选条件对象
+    const filters = {
+        rarity: [],
+        type: [],
+        commandPoint: [],
+        status: [],
+        veteran: [],
+        derived: [],
+        country: [],
+        setting: [],
+        search: searchKeyword // 添加搜索关键词
+    };
+        
+    // 分类选中的选项
+    selectedOptions.forEach(option => {
+        const type = option.dataset.type;
+        const value = option.dataset.value;
+        
+        switch(type) {
+            case 'rarity':
+                filters.rarity.push(value);
+                break;
+            case 'type':
+                filters.type.push(value);
+                break;
+            case 'command-point':
+                filters.commandPoint.push(value);
+                break;
+            case 'status':
+                filters.status.push(value);
+                break;
+            case 'veteran':
+                filters.veteran.push(value);
+                break;
+            case 'derived':
+                filters.derived.push(value);
+                break;
+            case 'country':
+                filters.country.push(value);
+                break;
+            case 'setting':
+                filters.setting.push(value);
+                break;
+        }
+    });
+    
+    // 如果选择了特殊分类，直接显示
+    if (filters.country.includes('总部')) {
+        displaySpecialImages('总部');
+        return;
+    }
+    
+    if (filters.country.includes('卡背')) {
+        displaySpecialImages('卡背');
+        return;
+    }
+    
+    // 如果选择了老兵或衍生，需要特殊处理
+    if (filters.veteran.length > 0 && filters.veteran[0] === 'true') {
+        displaySpecialImages('老兵');
+        return;
+    }
+    
+    if (filters.derived.length > 0 && filters.derived[0] === 'true') {
+        displaySpecialImages('衍生');
+        return;
+    }
+    
+    // 应用筛选到图片（添加这一行）
+    filterImagesByMobile(filters);
+}
+
+
+    loadInitialImages();
+    
+    // 特殊图标点击事件处理
+    const cardbackIcon = document.getElementById('cardback-icon');
+    const headquartersIcon = document.getElementById('headquarters-icon');
+    
+    if (cardbackIcon) {
+        cardbackIcon.addEventListener('click', function() {
+            // 清除所有选中状态
+            document.querySelectorAll('.tooltip-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // 显示卡背图片
+            displaySpecialImages('卡背');
+        });
+    }
+    
+    if (headquartersIcon) {
+        headquartersIcon.addEventListener('click', function() {
+            // 清除所有选中状态
+            document.querySelectorAll('.tooltip-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // 显示总部图片
+            displaySpecialImages('总部');
+        });
+    }
+    
+    // 桌面版筛选器事件 - 改为多选支持
+    countrySelect.addEventListener('change', function() {
+        updateFilter('country', this.value);
+        applyFilters();
+    });
+    raritySelect.addEventListener('change', function() {
+        updateFilter('rarity', this.value);
+        applyFilters();
+    });
+    typeSelect.addEventListener('change', function() {
+        updateFilter('type', this.value);
+        applyFilters();
+    });
+    commandPointSelect.addEventListener('change', function() {
+        updateFilter('command-point', this.value);
+        applyFilters();
+    });
+    statusSelect.addEventListener('change', function() {
+        updateFilter('status', this.value);
+        applyFilters();
+    });
+    settingSelect.addEventListener('change', function() {
+        updateFilter('setting', this.value);
+        applyFilters();
+    });
+    specialSelect.addEventListener('change', function() {
+        if (this.value) {
+            displaySpecialImages(this.value);
+        } else {
+            // 如果没有选择特殊分类，显示所有图片
+            loadInitialImages();
+        }
+    });
+    searchInput.addEventListener('input', applyFilters);
+    
+    // 加载初始图片（所有普通卡牌图片，不包括总部、卡背、衍生、老兵）
+function loadInitialImages() {
+    imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
+    
+    // 并行获取卡牌数据和图片数据
+    Promise.all([
+        fetch('../data/newk.json').then(response => response.json()),
+        fetch('../data/newimages.json').then(response => response.json())
+    ])
+    .then(([cardsData, imagesData]) => {
+        // 创建卡牌和图片的映射关系
+        const cardImageMap = createCardImageMap(cardsData, imagesData);
+        
+        // 按指挥点排序
+        const sortedCards = sortCardsByCommandPoint(cardImageMap);
+        
+        // 只提取图片信息，但保留 cardData 用于判断是否为预备卡牌
+        const allImages = sortedCards.map(item => ({
+            path: item.imagePath,
+            name: item.imagePath.split('/').pop(),
+            cardData: item.card // 保留 cardData 信息
+        }));
+        
+        renderImages(allImages);
+    })
+    .catch(error => {
+        console.error('加载图片出错:', error);
+        imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
+    });
+}
+
+    
+    // 创建卡牌和图片的映射关系
+    function createCardImageMap(cardsData, imagesData) {
+        const cardImageMap = [];
+        
+        // 遍历所有卡牌
+        cardsData.forEach(card => {
+            const country = card.国家;
+            const cardName = card.名称;
+            
+            // 在图片数据中查找对应的图片
+            if (imagesData[country]) {
+                for (const subtype in imagesData[country]) {
+                    const foundImage = imagesData[country][subtype].find(imgPath => 
+                        imgPath.includes(cardName)
+                    );
+                    if (foundImage) {
+                        cardImageMap.push({
+                            card: card,
+                            imagePath: foundImage
+                        });
+                        break;
+                    }
+                }
+            }
+        });
+        
+        return cardImageMap;
+    }
+    
+    // 按指挥点排序卡牌
+    function sortCardsByCommandPoint(cards) {
+        return cards.sort((a, b) => {
+            const cpA = parseInt(a.card.详细信息?.["指挥点"]) || 0;
+            const cpB = parseInt(b.card.详细信息?.["指挥点"]) || 0;
+            return cpA - cpB;
+        });
+    }
+    
+    // 更新筛选器函数（支持多选）
+    function updateFilter(type, value) {
+        let selectElement;
+        switch(type) {
+            case 'country':
+                selectElement = document.getElementById('country-select');
+                break;
+            case 'rarity':
+                selectElement = document.getElementById('rarity-select');
+                break;
+            case 'type':
+                selectElement = document.getElementById('type-select');
+                break;
+            case 'command-point':
+                selectElement = document.getElementById('command-point-select');
+                break;
+            case 'status':
+                selectElement = document.getElementById('status-select');
+                break;
+            case 'setting':
+                selectElement = document.getElementById('setting-select');
+                break;
+        }
+        
+        if (selectElement) {
+            // 对于所有筛选条件，使用多选逻辑
+            const currentValues = selectElement.value ? selectElement.value.split(',') : [];
+            const valueIndex = currentValues.indexOf(value);
+            
+            if (valueIndex > -1) {
+                // 如果已选中，则移除
+                currentValues.splice(valueIndex, 1);
+            } else {
+                // 如果未选中，则添加
+                currentValues.push(value);
+            }
+            
+            selectElement.value = currentValues.join(',');
+            
+            // 同步移动端筛选器
+            syncMobileFilters(type, selectElement.value);
+        }
+    }
+    
+    // 应用筛选条件
+    function applyFilters() {
+        const filters = {
+            country: countrySelect.value ? countrySelect.value.split(',') : [],
+            rarity: raritySelect.value ? raritySelect.value.split(',') : [],
+            type: typeSelect.value ? typeSelect.value.split(',') : [],
+            commandPoint: commandPointSelect.value ? commandPointSelect.value.split(',') : [],
+            status: statusSelect.value ? statusSelect.value.split(',') : [],
+            setting: settingSelect.value ? settingSelect.value.split(',') : [],
+            special: specialSelect.value,
+            search: searchInput.value.trim().toLowerCase()
+        };
+        
+        if (filters.special) {
+            displaySpecialImages(filters.special);
+        } else if (hasActiveFilters(filters)) {
+            displayFilteredImages(filters);
+        } else {
+            // 没有筛选条件时显示所有普通卡牌
+            loadInitialImages();
+        }
+    }
+    
+    // 检查是否有激活的筛选条件
+    function hasActiveFilters(filters) {
+        return filters.country.length > 0 || filters.rarity.length > 0 || filters.type.length > 0 || 
+               filters.commandPoint.length > 0 || filters.status.length > 0 || filters.setting.length > 0 || 
+               filters.search;
+    }
+    
+    // 显示特殊分类图片
+    function displaySpecialImages(category) {
+        imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
+        
+        fetch('../data/newimages.json')
+            .then(response => response.json())
+            .then(imagesData => {
+                if (imagesData[category] && Array.isArray(imagesData[category])) {
+                    const imagePaths = imagesData[category].map(imgPath => ({
+                        path: imgPath,
+                        name: imgPath.split('/').pop()
+                    }));
+                    renderImages(imagePaths);
+                } else {
+                    imageDisplay.innerHTML = '<div class="no-images">未找到相关图片</div>';
+                }
+            })
+            .catch(error => {
+                console.error('加载图片出错:', error);
+                imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
+            });
+    }
+    
+    // 根据筛选条件显示图片
+function displayFilteredImages(filters) {
+    imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
+    
+    // 并行获取卡牌数据和图片数据
+    Promise.all([
+        fetch('../data/newk.json').then(response => response.json()),
+        fetch('../data/newimages.json').then(response => response.json())
+    ])
+    .then(([cardsData, imagesData]) => {
+        // 筛选卡牌
+        let filteredCards = cardsData;
+        
+        // 应用国家筛选
+        if (filters.country.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.country.includes(card.国家)
+            );
+        }
+        
+        // 应用稀有度筛选
+        if (filters.rarity.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.rarity.includes(card.详细信息?.稀有度)
+            );
+        }
+        
+        // 应用类型筛选
+        if (filters.type.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.type.includes(card.详细信息?.类型)
+            );
+        }
+        
+        // 应用指挥点筛选
+        if (filters.commandPoint.length > 0) {
+            filteredCards = filteredCards.filter(card => {
+                const commandPoint = card.详细信息?.["指挥点"];
+                if (filters.commandPoint.includes("7+")) {
+                    if (parseInt(commandPoint) >= 7) {
+                        return true;
+                    }
+                }
+                return filters.commandPoint.includes(commandPoint);
+            });
+        }
+        
+        // 应用状态筛选
+        if (filters.status.length > 0) {
+            filteredCards = filteredCards.filter(card => {
+                const isActive = card.详细信息?.活跃 === true || card.详细信息?.活跃 === "true";
+                const statusStr = isActive ? "true" : "false";
+                return filters.status.includes(statusStr);
+            });
+        }
+        
+        // 应用设置筛选
+        if (filters.setting.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.setting.includes(card.详细信息?.设置)
+            );
+        }
+        
+        // 应用搜索筛选 - 这是新添加的部分
+        if (filters.search) {
+            filteredCards = filteredCards.filter(card => 
+                card.名称.toLowerCase().includes(filters.search) ||
+                (card.描述 && card.描述.toLowerCase().includes(filters.search))
+            );
+        }
+        
+        // 创建卡牌和图片的映射关系
+        const cardImageMap = createCardImageMap(filteredCards, imagesData);
+        
+        // 按指挥点排序
+        const sortedCards = sortCardsByCommandPoint(cardImageMap);
+        
+        // 只提取图片信息，但保留 cardData 用于判断是否为预备卡牌
+        const filteredImages = sortedCards.map(item => ({
+            path: item.imagePath,
+            name: item.imagePath.split('/').pop(),
+            cardData: item.card // 保留 cardData 信息
+        }));
+        
+        if (filteredImages.length === 0) {
+            imageDisplay.innerHTML = '<div class="no-images">未找到匹配的图片</div>';
+        } else {
+            renderImages(filteredImages);
+        }
+    })
+    .catch(error => {
+        console.error('加载图片出错:', error);
+        imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
+    });
+}
+
+    
+function renderImages(images) {
+    let html = '<div class="image-container">';
+    images.forEach(image => {
+        const imagePath = typeof image === 'object' ? image.path : image;
+        // 自动添加 ../ 前缀以适应 assets 文件夹的位置
+        let correctedImagePath = imagePath;
+        if (!imagePath.startsWith('http') && !imagePath.startsWith('../')) {
+            correctedImagePath = '../' + imagePath;
+        }
+        const encodedImagePath = encodeImagePath(correctedImagePath);
+        const fileName = imagePath.split('/').pop();
+        const displayName = typeof image === 'object' ? (image.name || fileName) : fileName;
+        const encodedFileName = encodeURIComponent(fileName);
+        
+        // 如果 image 对象包含 cardData，则检查是否为预备卡牌
+        let isReserve = false;
+        if (image.cardData) {
+            isReserve = image.cardData.详细信息?.活跃 === "false";
+        }
+        
+        html += `
+            <div class="image-item">
+                <img src="${encodedImagePath}" alt="${displayName}" 
+                     data-url="${encodedImagePath}"
+                     data-filename="${encodedFileName}"
+                     onload="this.parentNode.classList.add('loaded')"
+                     style="cursor: pointer;">
+                ${isReserve ? `<img 
+                    src="../image/T_nui-icon-Reserves-gritty-256.png" 
+                    alt="预备" 
+                    class="reserve-icon"
+                >` : ''}
+                <div class="image-name">${displayName}</div>
+            </div>
+        `;
+    });
+    html += '</div>';
+    
+    imageDisplay.innerHTML = html;
+}
+    
+
+    const mobileFilterBtn = document.getElementById('mobile-filter-btn');
+    const mobileFilterOverlay = document.getElementById('mobile-filter-overlay');
+    const mobileFilterTooltip = document.getElementById('mobile-filter-tooltip');
+    const closeMobileTooltip = document.getElementById('close-mobile-tooltip');
+    
+    // 打开筛选悬浮框
+    mobileFilterBtn.addEventListener('click', function() {
+        mobileFilterOverlay.style.display = 'block';
+        mobileFilterTooltip.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    });
+    
+    // 关闭筛选悬浮框
+    closeMobileTooltip.addEventListener('click', function() {
+        mobileFilterOverlay.style.display = 'none';
+        mobileFilterTooltip.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+    
+    // 点击遮罩层关闭
+    mobileFilterOverlay.addEventListener('click', function() {
+        mobileFilterOverlay.style.display = 'none';
+        mobileFilterTooltip.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+    
+    // 移动端筛选选项点击事件
+    document.querySelectorAll('.tooltip-option').forEach(option => {
+        option.addEventListener('click', function() {
+            const type = this.dataset.type;
+            const value = this.dataset.value;
+            
+            // 特殊处理：如果点击的是国家选项且值为特殊分类
+            if (type === 'country' && (value === '总部' || value === '卡背')) {
+                // 清除所有选中状态
+                document.querySelectorAll('.tooltip-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // 选中当前选项
+                this.classList.add('selected');
+                
+                // 显示对应图片
+                displaySpecialImages(value);
+                return;
+            }
+            
+            // 对于所有筛选条件，使用多选
+            this.classList.toggle('selected');
+            
+            // 立即应用筛选
+            applyMobileFilter();
+        });
+    });
+    
+
+    
+ function filterImagesByMobile(filters) {
+    imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
+    
+    // 并行获取卡牌数据和图片数据
+    Promise.all([
+        fetch('../data/newk.json').then(response => response.json()),
+        fetch('../data/newimages.json').then(response => response.json())
+    ])
+    .then(([cardsData, imagesData]) => {
+        // 筛选卡牌
+        let filteredCards = cardsData;
+        
+        // 应用国家筛选
+        if (filters.country.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.country.includes(card.国家)
+            );
+        }
+        
+        // 应用稀有度筛选
+        if (filters.rarity.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.rarity.includes(card.详细信息?.稀有度)
+            );
+        }
+        
+        // 应用类型筛选
+        if (filters.type.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.type.includes(card.详细信息?.类型)
+            );
+        }
+        
+        // 应用指挥点筛选
+        if (filters.commandPoint.length > 0) {
+            filteredCards = filteredCards.filter(card => {
+                const commandPoint = card.详细信息?.["指挥点"];
+                if (filters.commandPoint.includes("7+")) {
+                    if (parseInt(commandPoint) >= 7) {
+                        return true;
+                    }
+                }
+                return filters.commandPoint.includes(commandPoint);
+            });
+        }
+        
+        // 应用状态筛选
+        if (filters.status.length > 0) {
+            filteredCards = filteredCards.filter(card => {
+                const isActive = card.详细信息?.活跃 === true || card.详细信息?.活跃 === "true";
+                const statusStr = isActive ? "true" : "false";
+                return filters.status.includes(statusStr);
+            });
+        }
+        
+        // 应用设置筛选
+        if (filters.setting.length > 0) {
+            filteredCards = filteredCards.filter(card => 
+                filters.setting.includes(card.详细信息?.设置)
+            );
+        }
+        
+        // 应用搜索筛选
+        if (filters.search) {
+            filteredCards = filteredCards.filter(card => {
+                // 搜索卡牌名称和描述
+                const nameMatch = card.名称.toLowerCase().includes(filters.search);
+                const descMatch = card.描述 && card.描述.toLowerCase().includes(filters.search);
+                
+                // 搜索文件名
+                let fileNameMatch = false;
+                const country = card.国家;
+                const cardName = card.名称;
+                
+                if (imagesData[country]) {
+                    for (const subtype in imagesData[country]) {
+                        const foundImage = imagesData[country][subtype].find(imgPath => 
+                            imgPath.includes(cardName)
+                        );
+                        if (foundImage) {
+                            const fileName = foundImage.split('/').pop().toLowerCase();
+                            fileNameMatch = fileName.includes(filters.search);
+                            break;
+                        }
+                    }
+                }
+                
+                return nameMatch || descMatch || fileNameMatch;
+            });
+        }
+        
+        // 创建卡牌和图片的映射关系
+        const cardImageMap = createCardImageMap(filteredCards, imagesData);
+        
+        // 按指挥点排序
+        const sortedCards = sortCardsByCommandPoint(cardImageMap);
+        
+        // 只提取图片信息，但保留 cardData 用于判断是否为预备卡牌
+        const filteredImages = sortedCards.map(item => ({
+            path: item.imagePath,
+            name: item.imagePath.split('/').pop(),
+            cardData: item.card // 保留 cardData 信息
+        }));
+        
+        if (filteredImages.length === 0) {
+            imageDisplay.innerHTML = '<div class="no-images">未找到匹配的图片</div>';
+        } else {
+            renderImages(filteredImages);
+        }
+    })
+    .catch(error => {
+        console.error('加载图片出错:', error);
+        imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
+    });
+}
+    
+
+    function syncMobileFilters(type, value) {
+
+        document.querySelectorAll(`.tooltip-option[data-type="${type}"]`).forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        
+        if (value) {
+            const values = value.split(',');
+            values.forEach(val => {
+                const selectedOption = document.querySelector(`.tooltip-option[data-type="${type}"][data-value="${val}"]`);
+                if (selectedOption) {
+                    selectedOption.classList.add('selected');
+                }
+            });
+        }
+    }
+    
+
+
+
+function encodeImagePath(path) {
+    // 处理相对路径，确保在 assets 文件夹中正确访问上层目录资源
+    if (path.startsWith('../')) {
+        // 已经有 ../ 前缀，正常处理
+        const parts = path.split('/');
+        return parts.map((part, index) => {
+            // 第一个部分是 ..，不需要编码
+            if (index === 0) return part;
+            return encodeURIComponent(part);
+        }).join('/');
+    } else if (path.startsWith('http')) {
+        // 完整URL，直接返回
+        return path;
+    } else {
+        // 添加 ../ 前缀并编码
+        const parts = path.split('/');
+        return '../' + parts.map(part => encodeURIComponent(part)).join('/');
+    }
+}
+});
+</script>

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+      <link rel="stylesheet" href="../css/sign/sign.css">
+  <title>登录/注册</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+      background-color: #f5f5f5;
+      padding-bottom: 60px;
+    }
+
+
+    /* 优化 h2 标签样式 */
+h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #333;
+  line-height: 1.2; /* 减少行高 */
+  text-align: center; /* 居中对齐 */
+  font-weight: bold;
+}
+
+/* 优化表单容器内的间距 */
+.form-container h2 {
+  margin-top: 0;
+  padding-top: 10px;
+}
+
+/* 优化表单组间距 */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+/* 优化按钮上方间距 */
+#login, #register {
+  margin: 20px auto !important;
+}
+
+/* 在小屏幕上进一步优化 */
+@media (max-width: 480px) {
+  h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  
+  .form-group {
+    margin-bottom: 12px;
+  }
+}
+
+    /* 美化输入框 */
+.form-group input {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.9);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-family: Arial, sans-serif;
+    margin-bottom: 10px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #1e90ff;
+    box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.2);
+}
+
+.form-group input[type="file"] {
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* 按钮居中 */
+.form-container {
+    text-align: center;
+}
+
+.form-container .switch-link {
+    text-align: center;
+}
+
+
+
+/* 响应式调整 */
+@media (max-width: 480px) {
+    .form-container {
+        padding: 20px;
+        margin: 15px;
+    }
+    
+    .form-group input {
+        padding: 12px;
+        font-size: 14px;
+    }
+}
+
+
+    @keyframes pageSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+      font-size: 24px;
+    }
+
+
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+
+
+
+/* 添加到 sign.html 的 <style> 标签中 */
+
+.top-nav {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 60px !important;
+    margin: 0 !important;
+    padding: 0 20px !important;
+}
+
+.top-nav > * {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.menu-btn {
+    margin: 0 !important;
+    padding: 10px !important;
+}
+    
+
+    input[type="file"] {
+      padding: 5px;
+    }
+
+    button {
+      padding: 12px 20px;
+      background-color: #1e90ff;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0066cc;
+    }
+
+    .switch-link {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .switch-link a {
+      cursor: pointer;
+      color: #1e90ff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .switch-link a:hover {
+      text-decoration: underline;
+    }
+
+    .user-info {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      text-align: center;
+      max-width: 350px;
+      margin: 0 auto;
+      display: none; /* 默认隐藏 */
+    }
+
+
+
+    .user-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 10px auto;
+      display: block;
+    }
+
+    .user-details p {
+      margin: 5px 0;
+      color: #555;
+    }
+
+    .no-user {
+      text-align: center;
+      color: #999;
+      font-style: italic;
+      padding: 20px;
+    }
+
+    .error-message {
+      color: #ff0000;
+      font-size: 14px;
+      margin-top: 5px;
+      text-align: center;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 10px;
+      color: #666;
+    }
+
+    /* 底部导航栏 */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #fff;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      z-index: 1000;
+      font-size: 14px;
+    }
+
+    .bottom-nav a {
+      text-decoration: none;
+      color: #1e90ff;
+      text-align: center;
+      flex: 1;
+      padding: 5px 0;
+    }
+
+    .bottom-nav a.active {
+      font-weight: bold;
+    }
+
+    /* 移动端适配 */
+
+    @media (max-width: 480px) {
+      body {
+        padding: 5px;
+      }
+      
+      h1 {
+        font-size: 18px;
+        margin-bottom: 15px;
+      }
+      
+ 
+      
+      
+      input, button {
+        padding: 8px 10px;
+        font-size: 14px;
+      }
+      
+      .user-avatar {
+        width: 60px;
+        height: 60px;
+      }
+      
+      .bottom-nav {
+        padding: 6px 0;
+        font-size: 12px;
+      }
+      
+      .bottom-nav a {
+        padding: 3px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    
+    <div class="form-container" id="login_form">
+      <h2>登录</h2>
+      <div class="form-group">
+        <input id="login_email" type="email" placeholder="请输入邮箱*" required>
+      </div>
+      <div class="form-group">
+        <input id="login_password" type="password" placeholder="请输入密码*" required>
+      </div>
+
+<button id="login" style="
+    /* 布局与对齐 */
+    flex: 1;                                  
+    display: inline-flex;                      
+    align-items: center;                       
+    justify-content: center;                   
+    /* 文本样式 */
+    color: #ffffff;                            
+    font-size: 20px;                           
+    font-weight: bold;                         
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);   
+    /* 大小 */
+    height: 55px;                              
+    min-width: 120px;                          
+    padding: 0 15px;                           
+    /* 圆角与边框 */
+    border-radius: 12px;                        
+    border: none;                               
+    /* 背景与特效 */
+    background: linear-gradient(145deg, rgba(30,144,255,0.85), rgba(222,223,224,0.85));
+    backdrop-filter: blur(18px) saturate(120%);      
+    -webkit-backdrop-filter: blur(18px) saturate(120%); 
+    box-shadow: 0 6px 20px rgba(30,144,255,0.45);     
+    /* 交互效果 */
+    cursor: pointer;                            
+    transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), background-color 0.2s ease, box-shadow 0.2s ease; 
+    /* 间距 */
+    margin-right: 10px;                         
+" 
+onmouseover="this.style.background='linear-gradient(145deg, rgba(30,144,255,0.95), rgba(70,180,255,0.95))'; this.style.boxShadow='0 6px 25px rgba(30,144,255,0.6)';" 
+onmouseout="this.style.background='linear-gradient(145deg, rgba(30,144,255,0.85), rgba(70,180,255,0.85))'; this.style.boxShadow='0 6px 20px rgba(30,144,255,0.45)';"  
+onmousedown="this.style.transform='scale(0.92)';"  
+onmouseup="this.style.transform='scale(1)';">
+登录
+</button>
+
+
+      <div class="switch-link">
+        <p>没有账户？<a id="to_register">点击注册</a></p>
+      </div>
+    </div>
+
+    <div class="form-container" id="register_form" style="display:none;">
+      <h2>注册</h2>
+      <div class="form-group">
+        <input id="reg_name" placeholder="请输入用户名*" required>
+      </div>
+      <div class="form-group">
+        <input id="reg_email" type="email" placeholder="请输入邮箱*" required>
+      </div>
+      <div class="form-group">
+        <input id="reg_password" type="password" placeholder="请输入密码*" required>
+      </div>
+      <div class="form-group">
+        <label for="reg_avatar">头像 (可选):</label>
+        <input type="file" id="reg_avatar" accept="image/*">
+      </div>
+<button id="register" style="
+    /* 布局与对齐 */
+    flex: 1;                                  
+    display: inline-flex;                      
+    align-items: center;                       
+    justify-content: center;                   
+
+    /* 文本样式 */
+    color: #ffffff;                            
+    font-size: 20px;                           
+    font-weight: bold;                         
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);   
+
+    /* 大小 */
+    height: 55px;                              
+    min-width: 120px;                          
+    padding: 0 15px;                           
+
+    /* 圆角与边框 */
+    border-radius: 12px;                        
+    border: none;                               
+
+    /* 背景与特效 */
+    background: linear-gradient(145deg, rgba(30,144,255,0.85), rgba(222,223,224,0.85)); 
+    backdrop-filter: blur(18px) saturate(120%);      
+    -webkit-backdrop-filter: blur(18px) saturate(120%); 
+    box-shadow: 0 6px 20px rgba(30,144,255,0.45);     
+
+    /* 交互效果 */
+    cursor: pointer;                            
+    transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), background-color 0.2s ease, box-shadow 0.2s ease; 
+
+    /* 间距 */
+    margin-right: 10px;                         
+" 
+onmouseover="this.style.background='linear-gradient(145deg, rgba(30,144,255,0.95), rgba(70,180,255,0.95))'; this.style.boxShadow='0 6px 25px rgba(30,144,255,0.6)';" 
+onmouseout="this.style.background='linear-gradient(145deg, rgba(30,144,255,0.85), rgba(70,180,255,0.85))'; this.style.boxShadow='0 6px 20px rgba(30,144,255,0.45)';"  
+onmousedown="this.style.transform='scale(0.92)';"  
+onmouseup="this.style.transform='scale(1)';">
+注册
+</button>
+
+
+      <div class="switch-link">
+        <p>已有账户？<a id="to_login">返回登录</a></p>
+      </div>
+    </div>
+
+    <div class="user-info" id="user_info">
+      <h2>当前用户</h2>
+      <div id="current_user">
+        <div class="no-user">请登录或注册</div>
+      </div>
+    </div>
+  </div>
+<script src="../js/daohanglan.js"></script>
+
+
+  <script>
+    const SUPABASE_URL = "https://fyimdcysosuhwguizroi.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5aW1kY3lzb3N1aHdndWl6cm9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5ODM4MjIsImV4cCI6MjA3NzU1OTgyMn0._QZQCWwhzvQ7r2rarOPa7p9QI3TGAr8vaM1tLNudu1c";
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let currentUser = null;
+
+    const loginForm = document.getElementById('login_form');
+    const registerForm = document.getElementById('register_form');
+    const userInfo = document.getElementById('user_info');
+
+    // 切换到注册
+    document.getElementById('to_register').addEventListener('click', () => {
+      loginForm.style.display = 'none';
+      registerForm.style.display = 'block';
+    });
+
+    // 切换到登录
+    document.getElementById('to_login').addEventListener('click', () => {
+      registerForm.style.display = 'none';
+      loginForm.style.display = 'block';
+    });
+
+    // 检查用户是否已登录
+    function checkUserStatus() {
+      // 这里可以检查本地存储或cookie中的用户信息
+      // 简化示例：假设用户登录后会设置currentUser变量
+      if (currentUser) {
+        userInfo.style.display = 'block';
+      } else {
+        userInfo.style.display = 'none';
+      }
+    }
+
+    // 页面加载时检查用户状态
+    document.addEventListener('DOMContentLoaded', checkUserStatus);
+
+document.getElementById('register').addEventListener('click', async () => {
+  const name = document.getElementById('reg_name').value.trim();
+  const email = document.getElementById('reg_email').value.trim();
+  const password = document.getElementById('reg_password').value.trim();
+  const avatarFile = document.getElementById('reg_avatar').files[0];
+
+  if (!name || !email || !password) {
+    alert('请填写完整信息');
+    return;
+  }
+
+  // 显示加载状态
+  const registerBtn = document.getElementById('register');
+  const originalBtnText = registerBtn.textContent;
+  registerBtn.textContent = '注册中...';
+  registerBtn.disabled = true;
+
+  try {
+    // 先检查用户名是否已存在
+    const { data: existingUsers, error: checkError } = await sb
+      .from('zhuce')
+      .select('user_name')
+      .eq('user_name', name);
+
+    if (checkError) {
+      console.error('检查用户名错误:', checkError);
+      alert('检查用户名时出错: ' + checkError.message);
+      return;
+    }
+
+    if (existingUsers && existingUsers.length > 0) {
+      alert('用户名已存在，请选择其他用户名');
+      return;
+    }
+
+    // 检查邮箱是否已存在
+    const { data: existingEmails, error: emailCheckError } = await sb
+      .from('zhuce')
+      .select('email')
+      .eq('email', email.toLowerCase());
+
+    if (emailCheckError) {
+      console.error('检查邮箱错误:', emailCheckError);
+      alert('检查邮箱时出错: ' + emailCheckError.message);
+      return;
+    }
+
+    if (existingEmails && existingEmails.length > 0) {
+      alert('该邮箱已被注册');
+      return;
+    }
+
+    let avatarURL = null;
+    
+    // 如果用户选择了头像文件，则上传头像
+    if (avatarFile) {
+      try {
+        // 创建完全安全的ASCII文件名
+        const timestamp = Date.now();
+        const randomStr = Math.random().toString(36).substring(2, 10);
+        const originalName = avatarFile.name;
+        const fileExtension = originalName.split('.').pop() || 'jpg';
+        
+        // 确保文件扩展名是安全的ASCII字符
+        const safeExtension = fileExtension.replace(/[^a-zA-Z0-9]/g, '').substring(0, 5) || 'jpg';
+        const safeFileName = `${timestamp}_${randomStr}.${safeExtension}`;
+
+        // 上传头像到存储桶
+        const { data: uploadData, error: uploadError } = await sb.storage
+          .from('public-avatars')
+          .upload(safeFileName, avatarFile, { 
+            cacheControl: '3600', 
+            upsert: false
+          });
+                  
+        if (uploadError) {
+          console.error('头像上传错误:', uploadError);
+          // 不中断注册过程，只是不设置头像
+          avatarURL = null;
+        } else {
+          // 获取公开URL
+          const { data: publicURLData } = sb.storage
+            .from('public-avatars')
+            .getPublicUrl(safeFileName);
+
+          avatarURL = publicURLData.publicUrl;
+        }
+      } catch (uploadErr) {
+        console.error('头像上传异常:', uploadErr);
+        // 不中断注册过程，只是不设置头像
+        avatarURL = null;
+      }
+    }
+
+    // 准备用户数据，确保所有字段都是安全的
+    const userData = {
+      user_name: name.substring(0, 50), // 限制用户名长度
+      email: email.toLowerCase(), // 转换为小写
+      password: password.substring(0, 100), // 限制密码长度
+      avatar_url: avatarURL || null // 如果没有头像则设为null
+      // 不设置 admin 字段，让它默认为 NULL
+    };
+
+    // 插入用户表 (使用zhuce表名)
+    const { data, error: insertError } = await sb.from('zhuce').insert([userData]);
+
+    if (insertError) {
+      console.error('注册错误详情:', insertError);
+      let errorMsg = '注册失败';
+      
+      // 根据错误类型提供更具体的错误信息
+      if (insertError.message.includes('duplicate')) {
+        errorMsg = '该邮箱已被注册';
+      } else if (insertError.message.includes('violates row-level security policy')) {
+        errorMsg = '注册失败：权限不足，请联系管理员';
+      } else if (insertError.message) {
+        errorMsg = `注册失败: ${insertError.message}`;
+      }
+      
+      alert(errorMsg);
+      return;
+    }
+
+    alert('注册成功！请登录');
+    // 自动切回登录
+    registerForm.style.display = 'none';
+    loginForm.style.display = 'block';
+    
+    // 清空表单
+    document.getElementById('reg_name').value = '';
+    document.getElementById('reg_email').value = '';
+    document.getElementById('reg_password').value = '';
+    document.getElementById('reg_avatar').value = '';
+  } catch (error) {
+    console.error('注册过程出错:', error);
+    alert('注册过程中发生错误: ' + error.message);
+  } finally {
+    // 恢复按钮状态
+    registerBtn.textContent = originalBtnText;
+    registerBtn.disabled = false;
+  }
+});
+
+
+ document.getElementById('login').addEventListener('click', async () => {
+  const email = document.getElementById('login_email').value.trim();
+  const password = document.getElementById('login_password').value.trim();
+  if (!email || !password) {
+    alert('请填写邮箱和密码');
+    return;
+  }
+
+  // 显示加载状态
+  const loginBtn = document.getElementById('login');
+  const originalBtnText = loginBtn.textContent;
+  loginBtn.textContent = '登录中...';
+  loginBtn.disabled = true;
+
+  try {
+    // 查询用户 (使用zhuce表名)
+    const { data, error } = await sb.from('zhuce')
+      .select('*')
+      .eq('email', email.toLowerCase())
+      .eq('password', password)
+      .limit(1);
+
+    if (error) {
+      console.error('登录查询错误:', error);
+      alert('登录查询失败: ' + error.message);
+      return;
+    }
+    
+    if (data.length === 0) {
+      alert('邮箱或密码错误');
+      return;
+    }
+
+    currentUser = data[0];
+    console.log('登录用户信息:', currentUser); // 添加调试信息
+    
+    const container = document.getElementById('current_user');
+    container.innerHTML = `
+      ${currentUser.avatar_url ? 
+        `<img src="${currentUser.avatar_url}" alt="头像" class="user-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='">` :
+        `<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4=" alt="默认头像" class="user-avatar">`
+      }
+      <div class="user-details">
+        <p>用户名: ${currentUser.user_name}${(currentUser.admin === 0 || currentUser.admin === "0") ? ' (管理员)' : ''}</p>
+        <p>邮箱: ${currentUser.email}</p>
+      </div>
+    `;
+    
+    // 显示用户信息区域
+    userInfo.style.display = 'block';
+    
+    alert('登录成功');
+    // 保存用户信息到 localStorage (包含所有字段，特别是admin)
+    localStorage.setItem('currentUser', JSON.stringify(data[0]));
+    // 跳转到 meie.html
+    window.location.href = 'meie.html';
+
+    // 清空登录表单
+    document.getElementById('login_email').value = '';
+    document.getElementById('login_password').value = '';
+  } catch (error) {
+    console.error('登录过程出错:', error);
+    alert('登录过程中发生错误: ' + error.message);
+  } finally {
+    // 恢复按钮状态
+    loginBtn.textContent = originalBtnText;
+    loginBtn.disabled = false;
+  }
+});
+  </script>
+</body>
+</html>
