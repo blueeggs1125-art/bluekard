@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/deckgenerator/deckgenerator.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡组生成器</title>
+    <style>
+
+              .tooltip {
+            position: absolute;
+            z-index: 9999;
+            display: none;
+            pointer-events: none;
+        }
+        
+        .tooltip-content {
+            background: transparent;
+            border: none;
+            padding: 5px;
+            border-radius: 4px;
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        .tooltip-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .tooltip-text {
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            margin-top: 5px;
+        }
+        
+        .command-point-tooltip {
+            filter: drop-shadow(0 0 3px rgba(0,0,0,0.8));
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            background-color: #f5f5f5;
+            padding-bottom: 60px; 
+        }
+
+        .card-item {
+            position: relative;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .main-content {
+            flex: 3;
+        }
+        
+        
+        .deck-preview.visible {
+            display: block;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+        }
+        
+        
+        .selector-group h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .country-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .country-option {
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .country-option.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .country-option.selected .country-image {
+            border: 3px solid #1e90ff;
+            box-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
+        }
+        
+        .country-image {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            background: transparent;
+            border-radius: 8px;
+            padding: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .country-name {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #333;
+        }
+        
+        .filter-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .filter-control {
+            min-width: 120px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 3px;
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: white;
+            font-size: 14px;
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 5px;
+            margin-top: 10px;
+        }
+        
+        .card-item {
+            position: relative;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.15);
+            background-color: white;
+            aspect-ratio: 2/3;
+            cursor: pointer;
+        }
+        
+        .card-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .preview-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #555;
+            text-align: center;
+        }
+
+        .reserve-icon {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            z-index: 10;
+        }
+        
+        .deck-code {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            word-break: break-all;
+            min-height: 50px;
+            margin-bottom: 15px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .deck-code.visible {
+            opacity: 1;
+        }
+        
+        .preview-list {
+            list-style: none;
+        }
+        
+        .preview-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .preview-item:last-child {
+            border-bottom: none;
+        }
+        
+        .preview-image {
+            width: 30px;
+            height: 45px;
+            object-fit: contain;
+            margin-right: 8px;
+            background: transparent;
+            border: 1px solid #ddd;
+        }
+        
+        .preview-info {
+            flex: 1;
+        }
+        
+        .preview-name {
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+        
+        .preview-cost {
+            font-size: 11px;
+            color: #1e90ff;
+            font-weight: bold;
+        }
+        
+        .preview-count {
+            font-size: 13px;
+            font-weight: bold;
+            margin-left: 8px;
+            background-color: #1e90ff;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .save-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #1e90ff;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 15px;
+        }
+        
+        .save-btn:hover {
+            background-color: #0066cc;
+        }
+        
+        .save-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .back-btn {
+            display: block;
+            margin: 15px auto;
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            font-size: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            width: 150px;
+        }
+        
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+        
+        .no-cards {
+            text-align: center;
+            padding: 30px 15px;
+            color: #999;
+            font-style: italic;
+            grid-column: 1 / -1;
+            font-size: 14px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px 15px;
+            color: #666;
+            grid-column: 1 / -1;
+            font-size: 14px;
+        }
+        
+        .reserve-icon {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            z-index: 10;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 30% auto;
+            padding: 15px;
+            border: 1px solid #888;
+            width: 80%;
+            text-align: center;
+            border-radius: 5px;
+            animation: modalFadeIn 0.3s;
+        }
+        
+        @keyframes modalFadeIn {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        
+        .modal-button {
+            margin-top: 10px;
+            padding: 6px 15px;
+            background-color: #1e90ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+        
+        .nav-button {
+            padding: 10px 20px;
+            background-color: #1e90ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .nav-button:hover {
+            background-color: #0066cc;
+        }
+        
+        @media (min-width: 768px) {
+            .bottom-nav {
+                display: none;
+            }
+            
+            .deck-preview {
+                display: block !important;
+            }
+            
+            body {
+                padding-bottom: 0;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .cards-container {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                gap: 3px;
+            }
+            
+            .filter-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .selector-group {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            
+            .reserve-icon {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        .mobile-filter-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #1e90ff;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 1001;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-filter-btn {
+                display: flex;
+            }
+            
+            .desktop-filters {
+                display: none;
+            }
+        }
+
+    .mobile-filter-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 2000;
+        display: none;
+    }
+    
+.mobile-filter-tooltip {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e0e0e0; 
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 2001;
+    display: none;
+    width: 90%;
+    max-width: 400px;
+    height: 80%;
+    max-height: 500px;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+    
+    .tooltip-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .tooltip-header h3 {
+        margin: 0;
+        color: #333;
+    }
+    
+    .close-tooltip {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #999;
+    }
+    
+    .tooltip-section {
+        margin-bottom: 20px;
+    }
+    
+    .tooltip-section h4 {
+        margin: 0 0 10px 0;
+        color: #555;
+        font-size: 16px;
+    }
+    
+    .tooltip-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .tooltip-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+    
+    .tooltip-option:hover {
+        background-color: #f0f0f0;
+    }
+    
+.tooltip-option.selected {
+    background-color: #1e90ff;
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+    
+    .tooltip-option img {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+        margin-bottom: 5px;
+    }
+    
+    .tooltip-option span {
+        font-size: 12px;
+        text-align: center;
+    }
+    
+.command-point-tooltip img {
+    filter: drop-shadow(0 0 2px rgba(0,0,0,0.8));
+    background-color: #f10505; 
+    border-radius: 4px; 
+    padding: 2px;
+}
+        
+        .mobile-filter-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            z-index: 2001;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            padding: 20px;
+            display: none;
+        }
+        
+        .mobile-filter-panel.active {
+            transform: translateY(0);
+            display: block;
+        }
+        
+        .filter-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .filter-panel-header h2 {
+            margin: 0;
+            color: #333;
+        }
+        
+        .close-filter-panel {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .filter-group {
+            margin-bottom: 15px;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .filter-group select, .filter-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: white;
+            font-size: 16px;
+        }
+        
+        .deck-preview-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .deck-preview-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            z-index: 1001;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            padding: 20px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .deck-preview-panel.active {
+            transform: translateY(0);
+        }
+        
+        .preview-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .preview-panel-header h2 {
+            margin: 0;
+            color: #333;
+        }
+        
+        .close-preview-panel {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .esc-hint {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+        }
+        
+        .close-preview-btn {
+            padding: 5px 10px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .close-preview-btn:hover {
+            background-color: #c82333;
+        }
+
+        .reset-all-filters-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.reset-all-filters-btn:hover {
+    background-color: #5a6268;
+}
+
+.tooltip-option.selected {
+    background-color: #1e90ff;
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+
+<div id="rarity-tooltip" class="tooltip">
+    <div class="tooltip-content">
+        <img id="rarity-tooltip-image" src="" alt="">
+        <div id="rarity-tooltip-text" class="tooltip-text"></div>
+    </div>
+</div>
+
+<div id="type-tooltip" class="tooltip">
+    <div class="tooltip-content">
+        <img id="type-tooltip-image" src="" alt="">
+    </div>
+</div>
+
+<div id="command-point-tooltip" class="tooltip">
+    <div class="tooltip-content command-point-tooltip">
+        <img id="command-point-tooltip-image" src="" alt="">
+    </div>
+</div>
+
+            
+<div class="mobile-filter-btn" id="mobile-filter-btn">+</div>
+
+<div class="mobile-filter-overlay" id="mobile-filter-overlay"></div>
+
+<div class="mobile-filter-tooltip" id="mobile-filter-tooltip">
+    <div class="tooltip-header">
+        <h3>筛选条件</h3>
+        <button class="close-tooltip" id="close-mobile-tooltip">×</button>
+    </div>
+
+    <div class="tooltip-section">
+        <h4>搜索</h4>
+        <input type="text" id="mobile-search-input" placeholder="搜索卡牌名称或描述..." style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd;">
+    </div>
+
+
+    
+    <div class="tooltip-section">
+        <h4>稀有度</h4>
+        <div class="tooltip-options" id="rarity-options">
+            <div class="tooltip-option" data-value="精英" data-type="rarity">
+                <img src="../scr/稀有度/精英.png" alt="精英">
+                <span>精英</span>
+            </div>
+            <div class="tooltip-option" data-value="特殊" data-type="rarity">
+                <img src="../scr/稀有度/特殊.png" alt="特殊">
+                <span>特殊</span>
+            </div>
+            <div class="tooltip-option" data-value="限定" data-type="rarity">
+                <img src="../scr/稀有度/限定.png" alt="限定">
+                <span>限定</span>
+            </div>
+            <div class="tooltip-option" data-value="普通" data-type="rarity">
+                <img src="../scr/稀有度/普通.png" alt="普通">
+                <span>普通</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="tooltip-section">
+        <h4>类型</h4>
+        <div class="tooltip-options" id="type-options">
+            <div class="tooltip-option" data-value="步兵" data-type="type">
+                <img src="../scr/类型/步兵.png" alt="步兵">
+            </div>
+            <div class="tooltip-option" data-value="坦克" data-type="type">
+                <img src="../scr/类型/坦克.png" alt="坦克">
+            </div>
+            <div class="tooltip-option" data-value="火炮" data-type="type">
+                <img src="../scr/类型/火炮.png" alt="火炮">
+            </div>
+            <div class="tooltip-option" data-value="战斗机" data-type="type">
+                <img src="../scr/类型/战斗机.png" alt="战斗机">
+            </div>
+            <div class="tooltip-option" data-value="轰炸机" data-type="type">
+                <img src="../scr/类型/轰炸机.png" alt="轰炸机">
+            </div>
+            <div class="tooltip-option" data-value="指令" data-type="type">
+                <img src="../scr/类型/指令.png" alt="指令">
+            </div>
+            <div class="tooltip-option" data-value="反制指令" data-type="type">
+                <img src="../scr/类型/反制指令.png" alt="反制指令">
+            </div>
+        </div>
+    </div>
+    
+    <div class="tooltip-section">
+        <h4>指挥点</h4>
+        <div class="tooltip-options" id="command-point-options">
+            <div class="tooltip-option" data-value="0" data-type="command-point">
+                <img src="../scr/指挥点/0.png" alt="0">
+            </div>
+            <div class="tooltip-option" data-value="1" data-type="command-point">
+                <img src="../scr/指挥点/1.png" alt="1">
+            </div>
+            <div class="tooltip-option" data-value="2" data-type="command-point">
+                <img src="../scr/指挥点/2.png" alt="2">
+            </div>
+            <div class="tooltip-option" data-value="3" data-type="command-point">
+                <img src="../scr/指挥点/3.png" alt="3">
+            </div>
+            <div class="tooltip-option" data-value="4" data-type="command-point">
+                <img src="../scr/指挥点/4.png" alt="4">
+            </div>
+            <div class="tooltip-option" data-value="5" data-type="command-point">
+                <img src="../scr/指挥点/5.png" alt="5">
+            </div>
+            <div class="tooltip-option" data-value="6" data-type="command-point">
+                <img src="../scr/指挥点/6.png" alt="6">
+            </div>
+            <div class="tooltip-option" data-value="7+" data-type="command-point">
+                <img src="../scr/指挥点/7+.png" alt="7+">
+            </div>
+        </div>
+    </div>
+    
+    <div class="tooltip-section">
+        <h4>状态</h4>
+        <div class="tooltip-options" id="status-options">
+            <div class="tooltip-option" data-value="true" data-type="status">
+                <span>活跃</span>
+            </div>
+            <div class="tooltip-option" data-value="false" data-type="status">
+                <span>预备</span>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="tooltip-section">
+        <button class="reset-all-filters-btn">重置所有筛选</button>
+    </div>
+</div>
+
+            <div class="selector-group">
+                <h2>选择国家</h2>
+                <div class="country-selector" id="country-selector">
+                    <!-- 国家选项将通过JavaScript动态加载 -->
+                </div>
+            </div>
+            
+            <div class="selector-group desktop-filters">
+                <div class="filter-controls">
+
+                    
+                    <div class="filter-control">
+                        <label for="rarity-select">稀有度:</label>
+                        <select id="rarity-select">
+                            <option value="">全部稀有度</option>
+                            <option value="精英">精英</option>
+                            <option value="特殊">特殊</option>
+                            <option value="限定">限定</option>
+                            <option value="普通">普通</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-control">
+                        <label for="type-select">类型:</label>
+                        <select id="type-select">
+                            <option value="">全部类型</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-control">
+                        <label for="command-point-select">指挥点:</label>
+                        <select id="command-point-select">
+                            <option value="">全部指挥点</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7+">7+</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-control">
+                        <label for="status-select">状态:</label>
+                        <select id="status-select">
+                            <option value="">全部状态</option>
+                            <option value="true">活跃</option>
+                            <option value="false">预备</option>
+                        </select>
+                    </div>
+
+                            <div class="filter-control">
+            <label for="derived-select">衍生:</label>
+            <select id="derived-select">
+                <option value="">全部</option>
+                <option value="true">真</option>
+                <option value="fake">假</option>
+            </select>
+        </div>
+
+                    
+
+                    
+                    <div class="filter-control">
+                        <label for="search-input">搜索卡牌:</label>
+                        <input type="text" id="search-input" placeholder="输入卡牌名称...">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cards-container" id="cards-container">
+                <!-- 卡牌将通过JavaScript动态加载 -->
+                <div class="no-cards">请选择国家以查看卡牌</div>
+            </div>
+            
+            <a href="deckcounalos.html" class="back-btn">返回卡组生成器</a>
+        </div>
+    </div>
+    
+    <div class="deck-preview-overlay" id="deck-preview-overlay">
+        <div class="deck-preview-panel" id="deck-preview-panel">
+            <div class="preview-panel-header">
+                <h2 class="preview-title">卡组预览</h2>
+                <button class="close-preview-panel" id="close-preview-panel">×</button>
+            </div>
+            <div class="deck-code" id="deck-code"></div>
+            <ul class="preview-list" id="preview-list">
+            </ul>
+            <button class="save-btn" id="save-btn" disabled>保存卡组代码</button>
+            <div class="esc-hint">按 ESC 键关闭</div>
+        </div>
+    </div>
+
+
+
+    
+    
+    <div class="bottom-nav">
+         
+         <button class="nav-button" id="toggle-preview" style="
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4); /* 文字阴影更突出 */
+    height: 55px;
+    padding: 0 15px;
+    border-radius: 12px;
+    transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), background-color 0.2s ease, box-shadow 0.2s ease;
+    background: linear-gradient(145deg, rgba(30,144,255,0.85), rgba(222, 223, 224, 0.85)); /* 背景渐变更亮 */
+    border: none;
+    cursor: pointer;
+    backdrop-filter: blur(18px) saturate(120%);
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
+    box-shadow: 0 6px 20px rgba(30,144,255,0.45); /* 增加阴影更浮 */
+    margin-right: 10px;
+    min-width: 120px;
+" 
+onmouseover="this.style.background='linear-gradient(145deg, rgba(30,144,255,0.95), rgba(70,180,255,0.95))'; this.style.boxShadow='0 6px 25px rgba(30,144,255,0.6)';" 
+onmouseout="this.style.background='linear-gradient(145deg, rgba(30,144,255,0.85), rgba(70,180,255,0.85))'; this.style.boxShadow='0 6px 20px rgba(30,144,255,0.45)';"
+onmousedown="this.style.transform='scale(0.92)';"
+onmouseup="this.style.transform='scale(1)';">
+卡组预览
+</button>
+    </div>
+    
+    <div id="limit-modal" class="modal">
+        <div class="modal-content">
+            <p id="modal-message">该类型卡牌已达上限</p>
+            <button class="modal-button" id="modal-close">确定</button>
+        </div>
+    </div>
+
+    <script src="../js/deck/deck_image.js"></script>
+    <script src="../js/deck/deck_main.js"></script>
+    <script src="../js/deck/deck_code.js"></script>
+    <script src="../js/deck/deck_us.js"></script>
+    <script src="../js/daohanglan.js"></script>
+    
+<!-- 替换整个 <script> 标签内容为以下代码 -->
+<script>
+    function initTooltips() {
+        // 稀有度筛选器悬浮框
+        const raritySelect = document.getElementById('rarity-select');
+        const rarityTooltip = document.getElementById('rarity-tooltip');
+        const rarityTooltipImage = document.getElementById('rarity-tooltip-image');
+        const rarityTooltipText = document.getElementById('rarity-tooltip-text');
+        
+        // 类型筛选器悬浮框
+        const typeSelect = document.getElementById('type-select');
+        const typeTooltip = document.getElementById('type-tooltip');
+        const typeTooltipImage = document.getElementById('type-tooltip-image');
+        
+        // 指挥点筛选器悬浮框
+        const commandPointSelect = document.getElementById('command-point-select');
+        const commandPointTooltip = document.getElementById('command-point-tooltip');
+        const commandPointTooltipImage = document.getElementById('command-point-tooltip-image');
+        
+        // 稀有度选项悬浮事件
+        function setupRarityTooltip(selectElement) {
+            if (!selectElement) return;
+            
+            selectElement.addEventListener('mouseenter', function(e) {
+                if (e.target.tagName === 'OPTION' && e.target.value) {
+                    const rarity = e.target.value;
+                    const imagePath = `../scr/稀有度/${rarity}.png`;
+                    if (rarityTooltipImage) rarityTooltipImage.src = imagePath;
+                    if (rarityTooltipText) rarityTooltipText.textContent = rarity;
+                    if (rarityTooltip) {
+                        rarityTooltip.style.display = 'block';
+                        moveTooltip(rarityTooltip, e);
+                    }
+                }
+            });
+            
+            selectElement.addEventListener('mousemove', function(e) {
+                if (selectElement.options[selectElement.selectedIndex].value && rarityTooltip) {
+                    moveTooltip(rarityTooltip, e);
+                }
+            });
+            
+            selectElement.addEventListener('mouseleave', function() {
+                if (rarityTooltip) rarityTooltip.style.display = 'none';
+            });
+        }
+        
+        // 类型选项悬浮事件
+        function setupTypeTooltip(selectElement) {
+            if (!selectElement) return;
+            
+            selectElement.addEventListener('mouseenter', function(e) {
+                if (e.target.tagName === 'OPTION' && e.target.value) {
+                    const type = e.target.value;
+                    const imagePath = `../scr/类型/${type}.png`;
+                    if (typeTooltipImage) typeTooltipImage.src = imagePath;
+                    if (typeTooltip) {
+                        typeTooltip.style.display = 'block';
+                        moveTooltip(typeTooltip, e);
+                    }
+                }
+            });
+            
+            selectElement.addEventListener('mousemove', function(e) {
+                if (selectElement.options[selectElement.selectedIndex].value && typeTooltip) {
+                    moveTooltip(typeTooltip, e);
+                }
+            });
+            
+            selectElement.addEventListener('mouseleave', function() {
+                if (typeTooltip) typeTooltip.style.display = 'none';
+            });
+        }
+        
+        // 指挥点选项悬浮事件
+        function setupCommandPointTooltip(selectElement) {
+            if (!selectElement) return;
+            
+            selectElement.addEventListener('mouseenter', function(e) {
+                if (e.target.tagName === 'OPTION' && e.target.value) {
+                    const commandPoint = e.target.value;
+                    const imagePath = `../scr/指挥点/${commandPoint}.png`;
+                    if (commandPointTooltipImage) commandPointTooltipImage.src = imagePath;
+                    if (commandPointTooltip) {
+                        commandPointTooltip.style.display = 'block';
+                        moveTooltip(commandPointTooltip, e);
+                    }
+                }
+            });
+            
+            selectElement.addEventListener('mousemove', function(e) {
+                if (selectElement.options[selectElement.selectedIndex].value && commandPointTooltip) {
+                    moveTooltip(commandPointTooltip, e);
+                }
+            });
+            
+            selectElement.addEventListener('mouseleave', function() {
+                if (commandPointTooltip) commandPointTooltip.style.display = 'none';
+            });
+        }
+        
+        // 显示悬浮框
+        function showTooltip(tooltip, e) {
+            if (!tooltip) return;
+            tooltip.style.display = 'block';
+            moveTooltip(tooltip, e);
+        }
+        
+        // 移动悬浮框
+        function moveTooltip(tooltip, e) {
+            if (!tooltip) return;
+            const x = e.clientX + 15;
+            const y = e.clientY + 15;
+            tooltip.style.left = x + 'px';
+            tooltip.style.top = y + 'px';
+        }
+        
+        // 为桌面端筛选器设置悬浮框
+        if (raritySelect) setupRarityTooltip(raritySelect);
+        if (typeSelect) setupTypeTooltip(typeSelect);
+        if (commandPointSelect) setupCommandPointTooltip(commandPointSelect);
+    }
+    
+    // 初始化悬浮框
+    initTooltips();
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // 国家选择逻辑
+        const countrySelector = document.getElementById('country-selector');
+        let selectedMainCountry = null;
+        let selectedSecondaryCountry = null;
+        // 保存从URL传递过来的原始国家代码
+        let originalMainCountry = null;
+        let originalSecondaryCountry = null;
+        let originalCountryCode = ""; // 保存原始国家代码字符串，如 "12"
+        
+        // 获取移动端搜索输入框
+        const mobileSearchInput = document.getElementById('mobile-search-input');
+        const searchInput = document.getElementById('search-input');
+        
+        // 添加移动端搜索输入事件监听
+        if (mobileSearchInput) {
+            // 添加输入事件监听
+            mobileSearchInput.addEventListener('input', function() {
+                applyMobileFilter();
+            });
+            
+            // 添加回车键事件监听
+            mobileSearchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    applyMobileFilter();
+                }
+            });
+        }
+        
+        // 添加桌面端搜索输入事件监听
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                // 获取搜索关键词
+                const searchKeyword = searchInput.value.trim().toLowerCase();
+                
+                // 构建筛选条件对象
+                const filters = {
+                    rarity: document.getElementById('rarity-select') ? 
+                        (document.getElementById('rarity-select').value ? document.getElementById('rarity-select').value.split(',') : []) : [],
+                    type: document.getElementById('type-select') ? 
+                        (document.getElementById('type-select').value ? document.getElementById('type-select').value.split(',') : []) : [],
+                    commandPoint: document.getElementById('command-point-select') ? 
+                        (document.getElementById('command-point-select').value ? document.getElementById('command-point-select').value.split(',') : []) : [],
+                    status: document.getElementById('status-select') ? 
+                        (document.getElementById('status-select').value ? document.getElementById('status-select').value.split(',') : []) : [],
+                    derived: document.getElementById('derived-select') ? 
+                        (document.getElementById('derived-select').value ? document.getElementById('derived-select').value.split(',') : []) : [],
+                    search: searchKeyword
+                };
+                
+                // 应用筛选到卡牌
+                filterCardsByDesktop(filters);
+            });
+        }
+        
+        // 应用桌面端筛选
+        function filterCardsByDesktop(filters) {
+            const cardItems = document.querySelectorAll('.card-item');
+            
+            cardItems.forEach(item => {
+                const cardData = JSON.parse(decodeURIComponent(item.dataset.card));
+                const cardRarity = cardData.详细信息?.稀有度 || '';
+                const cardType = cardData.详细信息?.类型 || '';
+                const cardCommandPoint = cardData.详细信息?.["指挥点"] || '';
+                const cardStatus = cardData.详细信息?.活跃 || 'true';
+                const cardDerived = cardData.详细信息?.衍生 || 'fake';
+                const cardName = cardData.名称 || '';
+                const cardDescription = cardData.描述 || '';
+                
+                let show = true;
+                
+                // 稀有度筛选
+                if (filters.rarity.length > 0 && !filters.rarity.includes(cardRarity)) {
+                    show = false;
+                }
+                
+                // 类型筛选
+                if (filters.type.length > 0 && !filters.type.includes(cardType)) {
+                    show = false;
+                }
+                
+                // 指挥点筛选
+                if (filters.commandPoint.length > 0 && !filters.commandPoint.includes(cardCommandPoint)) {
+                    // 特殊处理 7+ 的情况
+                    if (filters.commandPoint.includes("7+")) {
+                        if (parseInt(cardCommandPoint) >= 7) {
+                            show = true; // 如果有 7+ 选项且卡牌指挥点 >= 7，则显示
+                        } else if (!filters.commandPoint.includes(cardCommandPoint)) {
+                            show = false; // 如果没有匹配的指挥点且不是 7+ 情况，则隐藏
+                        }
+                    } else {
+                        show = false;
+                    }
+                }
+                
+                // 状态筛选
+                if (filters.status.length > 0) {
+                    const statusStr = cardStatus === true || cardStatus === "true" ? "true" : "false";
+                    if (!filters.status.includes(statusStr)) {
+                        show = false;
+                    }
+                }
+                
+                // 衍生筛选
+                if (filters.derived.length > 0 && !filters.derived.includes(cardDerived)) {
+                    show = false;
+                }
+                
+                // 搜索筛选
+                if (filters.search && show) {
+                    const nameMatch = cardName.toLowerCase().includes(filters.search);
+                    const descMatch = cardDescription.toLowerCase().includes(filters.search);
+                    show = nameMatch || descMatch;
+                }
+                
+                item.style.display = show ? 'block' : 'none';
+            });
+        }
+        
+        // 修改 applyMobileFilter 函数以包含搜索功能
+        function applyMobileFilter() {
+            // 获取所有选中的选项
+            const selectedOptions = document.querySelectorAll('.tooltip-option.selected');
+            
+            // 获取搜索关键词
+            const searchKeyword = mobileSearchInput ? mobileSearchInput.value.trim().toLowerCase() : '';
+            
+            // 构建筛选条件对象
+            const filters = {
+                rarity: [],
+                type: [],
+                commandPoint: [],
+                status: [],
+                derived: [],
+                search: searchKeyword // 添加搜索关键词
+            };
+            
+            // 分类选中的选项
+            selectedOptions.forEach(option => {
+                const type = option.dataset.type;
+                const value = option.dataset.value;
+                
+                switch(type) {
+                    case 'rarity':
+                        filters.rarity.push(value);
+                        break;
+                    case 'type':
+                        filters.type.push(value);
+                        break;
+                    case 'command-point':
+                        filters.commandPoint.push(value);
+                        break;
+                    case 'status':
+                        filters.status.push(value);
+                        break;
+                    case 'derived':
+                        filters.derived.push(value);
+                        break;
+                }
+            });
+            
+            // 应用筛选到卡牌
+            filterCardsByMobile(filters);
+        }
+        
+        // 修改 filterCardsByMobile 函数以包含搜索功能
+        function filterCardsByMobile(filters) {
+            const cardItems = document.querySelectorAll('.card-item');
+            
+            cardItems.forEach(item => {
+                const cardData = JSON.parse(decodeURIComponent(item.dataset.card));
+                const cardRarity = cardData.详细信息?.稀有度 || '';
+                const cardType = cardData.详细信息?.类型 || '';
+                const cardCommandPoint = cardData.详细信息?.["指挥点"] || '';
+                const cardStatus = cardData.详细信息?.活跃 || 'true';
+                const cardDerived = cardData.详细信息?.衍生 || 'fake';
+                const cardName = cardData.名称 || '';
+                const cardDescription = cardData.描述 || '';
+                
+                let show = true;
+                
+                // 稀有度筛选（多选）
+                if (filters.rarity.length > 0 && !filters.rarity.includes(cardRarity)) {
+                    show = false;
+                }
+                
+                // 类型筛选（多选）
+                if (filters.type.length > 0 && !filters.type.includes(cardType)) {
+                    show = false;
+                }
+                
+                // 指挥点筛选（多选）
+                if (filters.commandPoint.length > 0 && !filters.commandPoint.includes(cardCommandPoint)) {
+                    // 特殊处理 7+ 的情况
+                    if (filters.commandPoint.includes("7+")) {
+                        if (parseInt(cardCommandPoint) >= 7) {
+                            show = true; // 如果有 7+ 选项且卡牌指挥点 >= 7，则显示
+                        } else if (!filters.commandPoint.includes(cardCommandPoint)) {
+                            show = false; // 如果没有匹配的指挥点且不是 7+ 情况，则隐藏
+                        }
+                    } else {
+                        show = false;
+                    }
+                }
+                
+                // 状态筛选（多选）
+                if (filters.status.length > 0) {
+                    const statusStr = cardStatus === true || cardStatus === "true" ? "true" : "false";
+                    if (!filters.status.includes(statusStr)) {
+                        show = false;
+                    }
+                }
+                
+                // 衍生筛选（多选）
+                if (filters.derived.length > 0 && !filters.derived.includes(cardDerived)) {
+                    show = false;
+                }
+                
+                // 搜索筛选 - 添加搜索功能
+                if (filters.search && show) {
+                    const nameMatch = cardName.toLowerCase().includes(filters.search);
+                    const descMatch = cardDescription.toLowerCase().includes(filters.search);
+                    show = nameMatch || descMatch;
+                }
+                
+                item.style.display = show ? 'block' : 'none';
+            });
+        }
+        
+        // 初始化国家图标
+        if (typeof loadCountryIcons === 'function') {
+            loadCountryIcons();
+        }
+        
+        // 从URL参数获取国家代码
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        if (code && code.startsWith('%%')) {
+            parseCountryCodeFromUrl(code);
+        }
+        
+        // 国家图标点击事件 - 只用于视觉反馈和卡牌筛选，不影响代码生成
+        if (countrySelector) {
+            countrySelector.addEventListener('click', function(e) {
+                const countryOption = e.target.closest('.country-option');
+                if (!countryOption || countryOption.style.display === 'none') return;
+                
+                const countryId = parseInt(countryOption.dataset.countryId);
+                
+                // 只允许选择从card.html传递过来的两个国家
+                if (countryId !== originalMainCountry && countryId !== originalSecondaryCountry) {
+                    return;
+                }
+                
+                // 切换选择状态（仅用于视觉反馈和卡牌筛选）
+                countryOption.classList.toggle('selected');
+                
+                // 更新选中状态变量（仅用于卡牌筛选）
+                if (countryId === originalMainCountry) {
+                    selectedMainCountry = countryOption.classList.contains('selected') ? countryId : null;
+                } else if (countryId === originalSecondaryCountry) {
+                    selectedSecondaryCountry = countryOption.classList.contains('selected') ? countryId : null;
+                }
+                
+                // 仅重新加载卡牌，不影响卡组代码
+                loadCardsForDisplay();
+            });
+        }
+
+        function loadCardsForDisplay() {
+            // 触发卡片加载
+            if (selectedMainCountry || selectedSecondaryCountry) {
+                if (typeof loadCardsForCountries === 'function') {
+                    // 设置全局变量以兼容deck_image.js（仅用于卡牌筛选显示）
+                    window.selectedMainCountry = selectedMainCountry;
+                    window.selectedSecondaryCountry = selectedSecondaryCountry;
+                    
+                    loadCardsForCountries();
+                }
+            } else {
+                // 如果没有选中国家，显示提示信息
+                const cardsContainer = document.getElementById('cards-container');
+                if (cardsContainer) {
+                    cardsContainer.innerHTML = '<div class="no-cards">请选择国家以查看卡牌</div>';
+                }
+            }
+        }
+        
+        // 从URL解析国家代码
+        function parseCountryCodeFromUrl(code) {
+            // 格式: %%12|...
+            const countryCode = code.substring(2, 4);
+            const mainCountryId = parseInt(countryCode.charAt(0));
+            const secondaryCountryId = parseInt(countryCode.charAt(1));
+            
+            // 保存原始国家代码字符串，用于卡组代码生成
+            originalCountryCode = countryCode;
+            
+            // 保存原始国家ID
+            originalMainCountry = mainCountryId;
+            originalSecondaryCountry = secondaryCountryId;
+            
+            // 设置默认选中的国家（用于卡牌显示）
+            selectedMainCountry = mainCountryId;
+            selectedSecondaryCountry = secondaryCountryId;
+            
+            // 更新UI选择状态
+            if (mainCountryId) {
+                const mainCountryElement = document.querySelector(`.country-option[data-country-id="${mainCountryId}"]`);
+                if (mainCountryElement) {
+                    mainCountryElement.classList.add('selected');
+                }
+            }
+            
+            if (secondaryCountryId) {
+                const secondaryCountryElement = document.querySelector(`.country-option[data-country-id="${secondaryCountryId}"]`);
+                if (secondaryCountryElement) {
+                    secondaryCountryElement.classList.add('selected');
+                }
+            }
+            
+            // 隐藏其他未选中的国家
+            hideUnselectedCountries();
+            
+            // 自动加载卡牌（不需要点击国家）
+            setTimeout(() => {
+                if (typeof loadCardsForCountries === 'function') {
+                    // 设置全局变量以兼容deck_image.js
+                    window.selectedMainCountry = mainCountryId;
+                    window.selectedSecondaryCountry = secondaryCountryId;
+                    
+                    loadCardsForCountries();
+                }
+            }, 100);
+        }
+        
+        // 隐藏未选中的国家
+        function hideUnselectedCountries() {
+            const countryItems = document.querySelectorAll('.country-option');
+            
+            countryItems.forEach(item => {
+                const countryId = parseInt(item.dataset.countryId);
+                
+                // 只显示从card.html传递过来的两个国家
+                if (countryId !== originalMainCountry && countryId !== originalSecondaryCountry) {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        const mobileFilterBtn = document.getElementById('mobile-filter-btn');
+        const mobileFilterOverlay = document.getElementById('mobile-filter-overlay');
+        const mobileFilterTooltip = document.getElementById('mobile-filter-tooltip');
+        const closeMobileTooltip = document.getElementById('close-mobile-tooltip');
+        
+        // 打开筛选悬浮框
+        if (mobileFilterBtn) {
+            mobileFilterBtn.addEventListener('click', function() {
+                if (mobileFilterOverlay) mobileFilterOverlay.style.display = 'block';
+                if (mobileFilterTooltip) mobileFilterTooltip.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        // 关闭筛选悬浮框
+        if (closeMobileTooltip) {
+            closeMobileTooltip.addEventListener('click', function() {
+                if (mobileFilterOverlay) mobileFilterOverlay.style.display = 'none';
+                if (mobileFilterTooltip) mobileFilterTooltip.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+        }
+
+        // 点击遮罩层关闭
+        if (mobileFilterOverlay) {
+            mobileFilterOverlay.addEventListener('click', function() {
+                mobileFilterOverlay.style.display = 'none';
+                if (mobileFilterTooltip) mobileFilterTooltip.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+        }
+
+        // 选项点击事件
+        document.querySelectorAll('.tooltip-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const type = this.dataset.type;
+                const value = this.dataset.value;
+                
+                // 移除状态和衍生选项的单选限制，全部改为多选
+                this.classList.toggle('selected');
+                
+                // 立即应用筛选
+                applyMobileFilter();
+            });
+        });
+
+        // 重置所有筛选按钮事件
+        const resetAllFiltersBtn = document.querySelector('.reset-all-filters-btn');
+        if (resetAllFiltersBtn) {
+            resetAllFiltersBtn.addEventListener('click', function() {
+                // 清除所有选中状态
+                document.querySelectorAll('.tooltip-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                // 清空搜索框
+                if (mobileSearchInput) {
+                    mobileSearchInput.value = '';
+                }
+                
+                // 重新显示所有卡牌
+                document.querySelectorAll('.card-item').forEach(item => {
+                    item.style.display = 'block';
+                });
+            });
+        }
+
+        // 监听桌面端筛选器变化，同步到移动端
+        const desktopRaritySelect = document.getElementById('rarity-select');
+        const desktopTypeSelect = document.getElementById('type-select');
+        const desktopCommandPointSelect = document.getElementById('command-point-select');
+        const desktopStatusSelect = document.getElementById('status-select');
+        const desktopDerivedSelect = document.getElementById('derived-select');
+        
+        if (desktopRaritySelect) {
+            desktopRaritySelect.addEventListener('change', function() {
+                syncMobileFilters('rarity', this.value);
+            });
+        }
+
+        if (desktopTypeSelect) {
+            desktopTypeSelect.addEventListener('change', function() {
+                syncMobileFilters('type', this.value);
+            });
+        }
+
+        if (desktopCommandPointSelect) {
+            desktopCommandPointSelect.addEventListener('change', function() {
+                syncMobileFilters('command-point', this.value);
+            });
+        }
+
+        if (desktopStatusSelect) {
+            desktopStatusSelect.addEventListener('change', function() {
+                syncMobileFilters('status', this.value);
+                // 同步移动端悬浮框选项状态
+                document.querySelectorAll('.tooltip-option[data-type="status"]').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                if (this.value) {
+                    const selectedOption = document.querySelector(`.tooltip-option[data-type="status"][data-value="${this.value}"]`);
+                    if (selectedOption) {
+                        selectedOption.classList.add('selected');
+                    }
+                }
+            });
+        }
+
+        if (desktopDerivedSelect) {
+            desktopDerivedSelect.addEventListener('change', function() {
+                syncMobileFilters('derived', this.value);
+                // 同步移动端悬浮框选项状态
+                document.querySelectorAll('.tooltip-option[data-type="derived"]').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                if (this.value) {
+                    const selectedOption = document.querySelector(`.tooltip-option[data-type="derived"][data-value="${this.value}"]`);
+                    if (selectedOption) {
+                        selectedOption.classList.add('selected');
+                    }
+                }
+            });
+        }
+        
+        // 同步移动端筛选器
+        function syncMobileFilters(type, value) {
+            // 同步移动端悬浮框中的选项选中状态
+            // 清除同类型所有选项的选中状态
+            if (type === 'status' || type === 'derived') {
+                document.querySelectorAll(`.tooltip-option[data-type="${type}"]`).forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                // 选中对应值的选项
+                if (value) {
+                    const selectedOption = document.querySelector(`.tooltip-option[data-type="${type}"][data-value="${value}"]`);
+                    if (selectedOption) {
+                        selectedOption.classList.add('selected');
+                    }
+                }
+            }
+        }
+        
+        // 卡组预览功能
+        const togglePreviewBtn = document.getElementById('toggle-preview');
+        const deckPreviewOverlay = document.getElementById('deck-preview-overlay');
+        const deckPreviewPanel = document.getElementById('deck-preview-panel');
+        const closePreviewPanel = document.getElementById('close-preview-panel');
+        
+        // 打开卡组预览面板
+        if (togglePreviewBtn) {
+            togglePreviewBtn.addEventListener('click', function() {
+                if (deckPreviewOverlay) deckPreviewOverlay.style.display = 'block';
+                setTimeout(() => {
+                    if (deckPreviewPanel) deckPreviewPanel.classList.add('active');
+                }, 10);
+                document.body.style.overflow = 'hidden';
+            });
+        }
+        
+        // 关闭卡组预览面板函数
+        function closeDeckPreviewPanelFunc() {
+            if (deckPreviewPanel) deckPreviewPanel.classList.remove('active');
+            setTimeout(() => {
+                if (deckPreviewOverlay) deckPreviewOverlay.style.display = 'none';
+            }, 300);
+            document.body.style.overflow = 'auto';
+        }
+        
+        // 关闭卡组预览面板
+        if (closePreviewPanel) {
+            closePreviewPanel.addEventListener('click', closeDeckPreviewPanelFunc);
+        }
+        
+        // 点击遮罩层关闭卡组预览
+        if (deckPreviewOverlay) {
+            deckPreviewOverlay.addEventListener('click', function(e) {
+                if (e.target === deckPreviewOverlay) {
+                    closeDeckPreviewPanelFunc();
+                }
+            });
+        }
+        
+        // ESC键关闭面板
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // 关闭筛选面板
+                const mobileFilterPanel = document.querySelector('.mobile-filter-panel');
+                if (mobileFilterPanel && mobileFilterPanel.classList.contains('active')) {
+                    mobileFilterPanel.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+                
+                // 关闭卡组预览面板
+                if (deckPreviewOverlay && deckPreviewOverlay.style.display === 'block') {
+                    closeDeckPreviewPanelFunc();
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

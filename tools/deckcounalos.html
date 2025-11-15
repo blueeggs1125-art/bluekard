@@ -1,0 +1,367 @@
+<!-- card.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/deckcounalos/deckcounalos.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡组生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+
+        
+        .selector-group {
+            margin-bottom: 30px;
+        }
+        
+        
+        .icons-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+        
+        .icon-item {
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .icon-item.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .icon-item.selected .icon-image {
+            border: 3px solid #1e90ff;
+            box-shadow: 0 0 15px rgba(30, 144, 255, 0.7);
+        }
+        
+        .icon-image {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            background: transparent;
+            border: 2px solid #333;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .icon-name {
+            margin-top: 12px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .countries-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        .country-item {
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .country-item.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .country-item.selected .country-image {
+            border: 3px solid #1e90ff;
+            box-shadow: 0 0 15px rgba(30, 144, 255, 0.7);
+        }
+        
+        .country-image {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            background: transparent;
+            border: 2px solid #333;
+            padding: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .country-name {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .generate-btn {
+            display: block;
+            margin: 40px auto;
+            padding: 15px 40px;
+            background-color: #1e90ff;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .generate-btn:hover {
+            background-color: #0066cc;
+        }
+        
+        .generate-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        @media (max-width: 768px) {
+            .icons-container, .countries-container {
+                gap: 15px;
+            }
+            
+            .icon-image {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .country-image {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .icon-name, .country-name {
+                font-size: 16px;
+            }
+        }
+
+        h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff; /* 亮白文字 */
+    text-align: center;
+    padding: 8px 16px;
+    border-radius: 8px;
+
+    /* 可选半透明背景，让文字在模糊背景上更清晰 */
+
+
+  
+
+    /* 文字阴影增强可读性 */
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+
+    /* 可选轻描边 */
+    -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.25);
+
+    /* 动画效果 */
+    transition: all 0.3s ease;
+}
+
+h2:hover {
+    color: #f0f8ff;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+
+        
+    </style>
+</head>
+<body>
+    <div class="container" >
+        
+        <div class="selector-group">
+            <h2>选择主国</h2>
+            <div class="icons-container" id="main-icons">
+            </div>
+        </div>
+        
+        <div class="selector-group">
+            <h2>选择盟国</h2>
+            <div class="countries-container" id="country-icons">
+            </div>
+        </div>
+        
+        
+        <button class="generate-btn" id="generate-btn" style="
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4); /* 文字阴影更突出 */
+    height: 55px;
+    padding: 0 15px;
+    border-radius: 12px;
+    transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), background-color 0.2s ease, box-shadow 0.2s ease;
+    background: linear-gradient(145deg, rgba(30,144,255,0.85), rgba(222, 223, 224, 0.85)); /* 背景渐变更亮 */
+    border: none;
+    cursor: pointer;
+    backdrop-filter: blur(18px) saturate(120%);
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
+    box-shadow: 0 6px 20px rgba(30,144,255,0.45); /* 增加阴影更浮 */
+    margin-right: 10px;
+    min-width: 120px;
+" 
+onmouseover="this.style.background='linear-gradient(145deg, rgba(30,144,255,0.95), rgba(70,180,255,0.95))'; this.style.boxShadow='0 6px 25px rgba(30,144,255,0.6)';" 
+onmouseout="this.style.background='linear-gradient(145deg, rgba(30,144,255,0.85), rgba(70,180,255,0.85))'; this.style.boxShadow='0 6px 20px rgba(30,144,255,0.45)';"
+onmousedown="this.style.transform='scale(0.92)';"
+onmouseup="this.style.transform='scale(1)';">
+解析代码
+</button>
+    </div>
+    <script src="../js/daohanglan.js"></script>
+
+    <script>
+        const countries = [
+            { id: 1, name: '德国', folder: '德国', iconFolder: '国家图标/德国', iconFile: 'FactionIcon_GER_256_Color.png' },
+            { id: 2, name: '英国', folder: '英国', iconFolder: '国家图标/英国', iconFile: 'Brit2.png' },
+            { id: 3, name: '日本', folder: '日本', iconFolder: '国家图标/日本', iconFile: 'FactionIcon_JAP_256_Color.png' },
+            { id: 4, name: '苏联', folder: '苏联', iconFolder: '国家图标/苏联', iconFile: 'FactionIcon_SOV_256_Color.png' },
+            { id: 5, name: '美国', folder: '美国', iconFolder: '国家图标/美国', iconFile: 'FactionIcon_USA_256_Color.png' },
+            { id: 6, name: '法国', folder: '法国', iconFolder: '国家图标/法国', iconFile: 'FactionIcon_FRA_256_Color.png' },
+            { id: 7, name: '意大利', folder: '意大利', iconFolder: '国家图标/意大利', iconFile: 'FactionIcon_ITA_256_Color.png' },
+            { id: 8, name: '波兰', folder: '波兰', iconFolder: '国家图标/波兰', iconFile: 'FactionIcon_POL_512_Color.png' },
+            { id: 9, name: '芬兰', folder: '芬兰', iconFolder: '国家图标/芬兰', iconFile: 'FactionIcon_FIN_1024_Color.png' }
+        ];
+        
+        let selectedMainCountry = null;
+        let selectedSecondaryCountry = null;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMainIcons();
+            loadCountryIcons();
+            setupEventListeners();
+        });
+        
+        function loadMainIcons() {
+            const mainIconsContainer = document.getElementById('main-icons');
+            const mainCountries = countries.slice(0, 5); 
+            
+            mainCountries.forEach(country => {
+                const iconItem = document.createElement('div');
+                iconItem.className = 'icon-item';
+                iconItem.dataset.countryId = country.id;
+                
+                iconItem.innerHTML = `
+                    <img src="../image2/${country.iconFolder}/${country.iconFile}" alt="${country.name}" class="icon-image">
+                    <div class="icon-name">${country.name}</div>
+                `;
+                
+                mainIconsContainer.appendChild(iconItem);
+            });
+        }
+        
+        function loadCountryIcons() {
+            const countryIconsContainer = document.getElementById('country-icons');
+            
+            countries.forEach(country => {
+                const countryItem = document.createElement('div');
+                countryItem.className = 'country-item';
+                countryItem.dataset.countryId = country.id;
+                
+                countryItem.innerHTML = `
+                    <img src="../image2/${country.iconFolder}/${country.iconFile}" alt="${country.name}" class="country-image">
+                    <div class="country-name">${country.name}</div>
+                `;
+                
+                countryIconsContainer.appendChild(countryItem);
+            });
+        }
+        
+        function setupEventListeners() {
+            document.getElementById('main-icons').addEventListener('click', function(e) {
+                const iconItem = e.target.closest('.icon-item');
+                if (!iconItem) return;
+                
+                const countryId = parseInt(iconItem.dataset.countryId);
+                
+                if (selectedMainCountry === countryId) {
+                    selectedMainCountry = null;
+                    iconItem.classList.remove('selected');
+                } else {
+                    document.querySelectorAll('#main-icons .icon-item.selected').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                    
+                    selectedMainCountry = countryId;
+                    iconItem.classList.add('selected');
+                }
+                
+                updateDisabledState();
+                updateGenerateButton();
+            });
+            
+            document.getElementById('country-icons').addEventListener('click', function(e) {
+                const countryItem = e.target.closest('.country-item');
+                if (!countryItem || countryItem.classList.contains('disabled')) return;
+                
+                const countryId = parseInt(countryItem.dataset.countryId);
+                
+                if (selectedSecondaryCountry === countryId) {
+                    selectedSecondaryCountry = null;
+                    countryItem.classList.remove('selected');
+                } else {
+                    document.querySelectorAll('#country-icons .country-item.selected').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                    
+                    selectedSecondaryCountry = countryId;
+                    countryItem.classList.add('selected');
+                }
+                
+                updateGenerateButton();
+            });
+            
+document.getElementById('generate-btn').addEventListener('click', function() {
+    if (selectedMainCountry && selectedSecondaryCountry) {
+        const code = `%%${selectedMainCountry}${selectedSecondaryCountry}|`;
+        // 修改跳转链接为 tool/deckgenerator.html
+        window.location.href = `../tools/deckgenerator.html?code=${encodeURIComponent(code)}`;
+    }
+});
+        }
+        
+        function updateDisabledState() {
+            const countryItems = document.querySelectorAll('#country-icons .country-item');
+            
+            countryItems.forEach(item => {
+                const countryId = parseInt(item.dataset.countryId);
+                
+                if (selectedMainCountry !== null && countryId === selectedMainCountry) {
+                    item.classList.add('disabled');
+                } else {
+                    item.classList.remove('disabled');
+                }
+            });
+        }
+        
+        function updateGenerateButton() {
+            const generateBtn = document.getElementById('generate-btn');
+            generateBtn.disabled = !(selectedMainCountry && selectedSecondaryCountry);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" sizes="16x16" href="../icon/16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../icon/32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="../icon/48x48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="../icon/64x64.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="../icon/128x128.png">
+    <link rel="icon" type="image/png" sizes="256x256" href="../icon/256x256.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../icon/512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../icon/180x180.png">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../css/team.css">
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <title>FUCK 1939</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh; 
+        }
+
+        .container {
+            flex-grow: 1;
+            padding: 20px;
+            overflow: auto; 
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 28px;
+        }
+
+
+        .content {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            transform: translateX(100%);
+            opacity: 0;
+            transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+            overflow: hidden;
+        }
+
+        .content.animate-in {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+ .image-link-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    flex-wrap: nowrap; /* 关键：防止换行 */
+}
+
+        .content-image {
+            height: 80%;
+            width: auto;
+            max-width: 250px;
+            border-radius: 10px;
+            filter: drop-shadow(0 0 10px rgba(30, 144, 255, 0.8));
+            object-fit: contain;
+            margin-right: 20px;
+            margin-bottom: 15px; 
+        }
+
+        .text-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: left; 
+            width: 100%;
+            max-width: calc(100% - 270px); 
+        }
+
+        .content-link {
+            color: #1e90ff;
+            text-decoration: none;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            word-wrap: break-word; /* 允许长单词换行 */
+        }
+
+        .content-link:hover {
+            text-decoration: underline;
+        }
+
+        .bold-text {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            word-wrap: break-word; /* 允许长单词换行 */
+        }
+
+        .normal-text {
+            font-size: 16px;
+            font-weight: normal;
+            color: #555;
+            word-wrap: break-word; /* 允许长单词换行 */
+        }
+
+        /* 手机适配 */
+       @media (max-width: 768px) {
+    body {
+        padding-bottom: 50px;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .image-link-container {
+        flex-direction: row; /* 保持水平排列 */
+        padding: 15px;
+        flex-wrap: nowrap; /* 防止换行 */
+    }
+
+    /* 其他原有样式保持不变 */
+    .content-image {
+        height: 60%;
+        max-width: 200px;
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    .text-content {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .content-link {
+        font-size: 28px;
+    }
+
+    .bold-text {
+        font-size: 22px;
+    }
+
+    .normal-text {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    .content {
+        padding: 15px;
+    }
+
+    .image-link-container {
+        flex-direction: row; /* 保持水平排列 */
+        padding: 10px;
+        text-align: center;
+        flex-wrap: nowrap; /* 防止换行 */
+    }
+
+    /* 其他原有样式保持不变 */
+    .content-image {
+        height: 40%;
+        max-width: 150px;
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    .text-content {
+        text-align: center;
+        max-width: 100%;
+    }
+
+    .content-link {
+        font-size: 24px;
+    }
+
+    .bold-text {
+        font-size: 20px;
+    }
+
+    .normal-text {
+        font-size: 14px;
+    }
+}
+
+        /* 超窄屏幕适配 */
+        @media (max-width: 320px) {
+            .content-link {
+                font-size: 20px;
+            }
+
+            .bold-text {
+                font-size: 18px;
+            }
+
+            .normal-text {
+                font-size: 12px;
+            }
+
+            .content-image {
+                max-width: 120px;
+            }
+        }
+
+        /* 底部导航栏 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+            font-size: 14px;
+        }
+
+        .bottom-nav a {
+            text-decoration: none;
+            color: #1e90ff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="content">
+            <div class="image-link-container">
+                <img src="../pwp.png" alt="marisa" class="content-image">
+                <div class="text-content">
+                <a href="https://space.bilibili.com/596035099" target="_blank" class="content-link">blueeggs</a>
+                <a href="https://qm.qq.com/q/kagG123KLu" target="_blank" class="qq-link">QQ群</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<div class="bottom-nav" style="
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    height: 55px;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(18px) saturate(120%);
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+">
+    <a href="../index.html" style="
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: #fff;
+        font-size: 16px;
+        height: 100%;
+        padding: 0 15px;
+        border-radius: 12px;
+        transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), background-color 0.2s ease;
+    " onmouseover="this.style.background='rgba(255,255,255,0.12)';" 
+       onmouseout="this.style.background='transparent';"
+       onmousedown="this.style.transform='scale(0.92)';"
+       onmouseup="this.style.transform='scale(1)';">
+        主页
+    </a>
+    <a href="../account/myaccount.html" style="
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: #fff;
+        font-size: 16px;
+        height: 100%;
+        padding: 0 15px;
+        border-radius: 12px;
+        transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), background-color 0.2s ease;
+    " onmouseover="this.style.background='rgba(255,255,255,0.12)';" 
+       onmouseout="this.style.background='transparent';"
+       onmousedown="this.style.transform='scale(0.92)';"
+       onmouseup="this.style.transform='scale(1)';">
+        我的
+    </a>
+    <a href="../support/team.html" style="
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: #fff;
+        font-size: 16px;
+        height: 100%;
+        padding: 0 15px;
+        border-radius: 12px;
+        transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), background-color 0.2s ease;
+    " onmouseover="this.style.background='rgba(255,255,255,0.12)';" 
+       onmouseout="this.style.background='transparent';"
+       onmousedown="this.style.transform='scale(0.92)';"
+       onmouseup="this.style.transform='scale(1)';">
+        关于
+    </a>
+</div>
+<script src="../js/daohanglan.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const content = document.querySelector('.content');
+
+            setTimeout(function () {
+                content.classList.add('animate-in');
+            }, 300);
+        });
+    </script>
+
+</body>
+</html>

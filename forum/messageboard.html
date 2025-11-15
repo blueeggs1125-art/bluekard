@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>留言板</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+      background-color: #f5f5f5;
+      padding-bottom: 60px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      animation: pageSlideIn 0.4s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes pageSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+      font-size: 24px;
+    }
+
+    .message-form {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      background-color: white;
+      font-size: 16px;
+      font-family: Arial, sans-serif;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    button {
+      padding: 12px 20px;
+      background-color: #1e90ff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #0066cc;
+    }
+
+    .messages-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+
+    .messages-header {
+      padding: 15px 20px;
+      background-color: #1e90ff;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .message-list {
+      padding: 0 20px;
+    }
+
+    .message-item {
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .message-item:last-child {
+      border-bottom: none;
+    }
+
+    .message-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .message-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+      object-fit: cover;
+    }
+
+    .default-avatar-small {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+      background-color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #999;
+    }
+
+    .message-user-info {
+      flex: 1;
+    }
+
+    .message-user {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .message-time {
+      color: #999;
+      font-size: 0.85em;
+      margin-left: 5px;
+    }
+
+    .message-content {
+      color: #555;
+      line-height: 1.5;
+      /* 添加以下属性以支持换行 */
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin-left: 50px;
+    }
+
+    .reply-section {
+      margin-top: 15px;
+      margin-left: 50px;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+    }
+
+    .reply-header {
+      font-weight: bold;
+      color: #1e90ff;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .reply-item {
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed #eee;
+    }
+
+    .reply-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .reply-header-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .reply-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 8px;
+      object-fit: cover;
+    }
+
+    .default-avatar-tiny {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 8px;
+      background-color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #999;
+    }
+
+    .reply-user {
+      font-weight: bold;
+      color: #333;
+      font-size: 13px;
+    }
+
+    .reply-time {
+      color: #999;
+      font-size: 12px;
+      margin-left: 5px;
+    }
+
+    .reply-content {
+      color: #666;
+      font-size: 13px;
+      line-height: 1.4;
+      margin-left: 38px;
+    }
+
+    .reply-form {
+      margin-top: 15px;
+      display: none;
+    }
+
+    .reply-form.active {
+      display: block;
+    }
+
+    .reply-form textarea {
+      min-height: 60px;
+      font-size: 14px;
+      padding: 8px;
+    }
+
+    .reply-form button {
+      width: auto;
+      padding: 8px 15px;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .reply-toggle {
+      color: #1e90ff;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 8px;
+      display: inline-block;
+    }
+
+    .reply-toggle:hover {
+      text-decoration: underline;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .pagination button {
+      width: auto;
+      padding: 8px 15px;
+      background-color: #f0f0f0;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .pagination button:hover:not(.active) {
+      background-color: #e0e0e0;
+    }
+
+    .pagination button.active {
+      background-color: #1e90ff;
+      color: white;
+      border-color: #1e90ff;
+    }
+
+    .pagination button:first-child,
+    .pagination button:last-child {
+      background-color: #1e90ff;
+      color: white;
+      border-color: #1e90ff;
+    }
+
+    .pagination .page-info {
+      display: flex;
+      align-items: center;
+      color: #555;
+      font-size: 14px;
+      margin: 0 10px;
+    }
+
+    .no-messages {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+      font-style: italic;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+    }
+
+    .login-prompt {
+      text-align: center;
+      padding: 15px;
+      background-color: #e8f4ff;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      color: #1e90ff;
+    }
+
+    .login-prompt a {
+      color: #1e90ff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .login-prompt a:hover {
+      text-decoration: underline;
+    }
+
+    .user-display {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    /* 底部导航栏 */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #fff;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      z-index: 1000;
+      font-size: 14px;
+    }
+
+    .bottom-nav a {
+      text-decoration: none;
+      color: #1e90ff;
+      text-align: center;
+    }
+
+    .bottom-nav a.active {
+      font-weight: bold;
+    }
+
+    /* 移动端适配 */
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 10px;
+      }
+      
+      h1 {
+        font-size: 20px;
+      }
+      
+      .message-form, .messages-container {
+        border-radius: 0;
+      }
+      
+      .message-form {
+        padding: 15px;
+      }
+      
+      .message-header {
+        margin-bottom: 5px;
+      }
+      
+      .message-avatar, .default-avatar-small {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+        margin-right: 8px;
+      }
+      
+      .message-content, .reply-section {
+        margin-left: 43px;
+      }
+      
+      .reply-avatar, .default-avatar-tiny {
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+        margin-right: 6px;
+      }
+      
+      .reply-content {
+        margin-left: 31px;
+      }
+      
+      .pagination {
+        gap: 3px;
+        padding: 15px 5px;
+      }
+      
+      .pagination button {
+        padding: 6px 10px;
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 18px;
+      }
+      
+      .messages-header {
+        font-size: 16px;
+        padding: 12px 15px;
+      }
+      
+      .message-item {
+        padding: 12px 0;
+      }
+      
+      .message-user {
+        font-size: 14px;
+      }
+      
+      .message-content {
+        font-size: 14px;
+      }
+      
+      .reply-user {
+        font-size: 12px;
+      }
+      
+      .reply-content {
+        font-size: 12px;
+      }
+      
+      .pagination {
+        padding: 10px 5px;
+      }
+      
+      .pagination button {
+        padding: 5px 8px;
+        font-size: 12px;
+      }
+      
+      .pagination .page-info {
+        font-size: 12px;
+        margin: 0 5px;
+      }
+    }
+  </style>
+  
+</head>
+<body>
+  <div class="container">
+    <h1>留言板</h1>
+    
+    <div class="message-form">
+      <div id="loginInfo"></div>
+      <div id="userDisplay" class="user-display" style="display: none;"></div>
+      <div class="form-group">
+        <label for="msg">留言内容:</label>
+        <textarea id="msg" placeholder="输入留言内容"></textarea>
+      </div>
+      <button id="send">发送留言</button>
+    </div>
+
+    <div class="messages-container">
+      <div class="messages-header">所有留言</div>
+      <div class="message-list" id="list">
+        <div class="loading">加载中...</div>
+      </div>
+      <div class="pagination" id="pagination">
+        <!-- 数字页码分页控件将在这里生成 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部导航栏 -->
+  <div class="bottom-nav">
+        <a href="index.html" class="nav-link">主页</a>
+        <a href="meie.html" class="nav-link">我的</a>
+        <a href="team.html" class="nav-link">关于</a>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://fyimdcysosuhwguizroi.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5aW1kY3lzb3N1aHdndWl6cm9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5ODM4MjIsImV4cCI6MjA3NzU1OTgyMn0._QZQCWwhzvQ7r2rarOPa7p9QI3TGAr8vaM1tLNudu1c";
+
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    const MESSAGES_PER_PAGE = 5;
+    let currentPage = 1;
+    let allMessages = [];
+    let allReplies = [];
+    let allUsers = [];
+    let currentUser = null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      checkUserLogin();
+      loadMessages();
+    });
+
+function checkUserLogin() {
+  const userStr = localStorage.getItem('currentUser');
+  if (userStr) {
+    currentUser = JSON.parse(userStr);
+    console.log('当前用户信息:', currentUser);
+    
+    document.getElementById('loginInfo').innerHTML = `
+      <div style="display: flex; align-items: center; margin-bottom: 15px;">
+        ${currentUser.avatar_url ? 
+          `<img src="${currentUser.avatar_url}" alt="头像" class="message-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='" />` :
+          `<div class="default-avatar-small">👤</div>`
+        }
+        <div>
+          <div>已登录为: <strong>${currentUser.user_name}${(currentUser.admin === 0 || currentUser.admin === "0") ? ' (管理员)' : ''}</strong></div>
+          <div style="font-size: 12px; color: #666;">${currentUser.email}</div>
+        </div>
+      </div>
+    `;
+    document.getElementById('userDisplay').textContent = `用户名: ${currentUser.user_name}`;
+    document.getElementById('userDisplay').style.display = 'block';
+  } else {
+    document.getElementById('loginInfo').innerHTML = `
+      <div class="login-prompt">
+        请 <a href="sign.html">登录</a> 以使用完整功能
+      </div>
+    `;
+    document.getElementById('userDisplay').style.display = 'none';
+  }
+}
+async function loadMessages() {
+
+  const { data: messages, error: messagesError } = await sb
+    .from('kardsdeck')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (messagesError) {
+    console.error(messagesError);
+    document.getElementById('list').innerHTML = '<div class="no-messages">加载留言失败</div>';
+    return;
+  }
+
+ 
+  const { data: replies, error: repliesError } = await sb
+    .from('replies')
+    .select('*')
+    .order('created_at', { ascending: true });
+
+  if (repliesError) {
+    console.error(repliesError);
+    document.getElementById('list').innerHTML = '<div class="no-messages">加载回复失败</div>';
+    return;
+  }
+
+
+  const { data: users, error: usersError } = await sb
+    .from('zhuce')
+    .select('id, user_name, avatar_url, admin');
+
+  if (usersError) {
+    console.error(usersError);
+    document.getElementById('list').innerHTML = '<div class="no-messages">加载用户信息失败</div>';
+    return;
+  }
+
+  allMessages = messages;
+  allReplies = replies;
+  allUsers = users; 
+  renderMessages();
+  renderPagination();
+}
+
+
+function renderMessages() {
+  const list = document.getElementById('list');
+  
+  if (allMessages.length === 0) {
+    list.innerHTML = '<div class="no-messages">暂无留言</div>';
+    return;
+  }
+
+  const startIndex = (currentPage - 1) * MESSAGES_PER_PAGE;
+  const endIndex = startIndex + MESSAGES_PER_PAGE;
+  const messagesToShow = allMessages.slice(startIndex, endIndex);
+
+list.innerHTML = messagesToShow.map(m => {
+  const time = new Date(m.created_at).toLocaleString();
+  const messageReplies = allReplies.filter(r => r.comment_id === m.id);
+  
+
+  const messageUser = allUsers.find(u => u.user_name === m.user_name);
+  
+  
+  console.log('留言用户:', m.user_name, '用户详情:', messageUser);
+  
+  return `
+    <div class="message-item" data-message-id="${m.id}">
+      <div class="message-header">
+        ${m.user_name ? (() => {
+     
+          const avatarUrl = messageUser ? messageUser.avatar_url : null;
+          return avatarUrl ? 
+            `<img src="${avatarUrl}" alt="头像" class="message-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='" />` :
+            `<div class="default-avatar-small">👤</div>`;
+        })() : `<div class="default-avatar-small">👤</div>`}
+        <div class="message-user-info">
+          <div class="message-user">
+            ${m.user_name} 
+            ${messageUser && (messageUser.admin === 0 || messageUser.admin === "0") ? '<span style="color:red;font-size:12px;margin-left:5px;">[管理员]</span>' : ''}
+            <span class="message-time">[${time}]</span>
+          </div>
+        </div>
+      </div>
+      <div class="message-content">${m.content}</div>
+      
+      <div class="reply-section">
+        <div class="reply-header">回复 (${messageReplies.length})</div>
+        ${messageReplies.map(r => {
+          const replyTime = new Date(r.created_at).toLocaleString();
+          // 根据user_id查找用户信息
+          const user = allUsers.find(u => u.id == r.user_id);
+          const userName = user ? user.user_name : '未知用户';
+          const userAvatar = user ? user.avatar_url : null;
+          
+          // 添加调试信息
+          console.log('回复用户:', userName, '用户详情:', user);
+          
+          return `
+            <div class="reply-item">
+              <div class="reply-header-info">
+                ${userAvatar ? 
+                  `<img src="${userAvatar}" alt="头像" class="reply-avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWbvueJhzwvdGV4dD48L3N2Zz4='" />` :
+                  `<div class="default-avatar-tiny">👤</div>`}
+                <div class="reply-user">
+                  ${userName} 
+                  ${user && (user.admin === 0 || user.admin === "0") ? '<span style="color:red;font-size:10px;margin-left:3px;">[管理员]</span>' : ''}
+                  <span class="reply-time">[${replyTime}]</span>
+${(currentUser && (parseInt(currentUser.admin) === 0 || currentUser.admin === "0")) || 
+  (currentUser && user && user.id === currentUser.id) ? 
+  `<button class="delete-reply-btn" style="background:none;border:none;color:red;cursor:pointer;margin-left:5px;font-size:10px;min-width:44px;min-height:44px;-webkit-tap-highlight-color: transparent;touch-action: manipulation;" onclick="event.stopPropagation(); deleteReply(${r.id}); return false;">删除</button>` : 
+  ''}
+              </div>
+              <div class="reply-content">${r.content}</div>
+            </div>
+          `;
+        }).join('')}
+        
+        <div class="reply-form" id="replyForm-${m.id}">
+          <textarea id="replyContent-${m.id}" placeholder="输入回复内容"></textarea>
+          <button class="send-reply" data-message-id="${m.id}">发送回复</button>
+        </div>
+        
+        <div class="reply-toggle" data-message-id="${m.id}">
+          ${currentUser ? '回复' : '请登录后回复'}
+        </div>
+      </div>
+    </div>
+  `;
+}).join('');
+  
+  // 绑定回复事件
+  bindReplyEvents();
+}
+
+
+async function deleteMessage(messageId) {
+  // 阻止事件冒泡和默认行为
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+  
+  // 先获取要删除的留言信息，检查权限
+  const { data: message, error: fetchError } = await sb
+    .from('kardsdeck')
+    .select('user_name')
+    .eq('id', messageId)
+    .single();
+    
+  if (fetchError) {
+    console.error('获取留言信息失败:', fetchError);
+    alert('获取留言信息失败: ' + fetchError.message);
+    return;
+  }
+  
+  // 检查权限：管理员或留言发布者才能删除
+  const isAdmin = currentUser && (parseInt(currentUser.admin) === 0 || currentUser.admin === "0");
+  const isOwner = currentUser && message.user_name === currentUser.user_name;
+  
+  if (!isAdmin && !isOwner) {
+    alert('您没有权限删除这条留言');
+    return;
+  }
+  
+  if (!confirm('确定要删除这条留言吗？这将同时删除所有相关回复。')) {
+    return;
+  }
+  
+  try {
+    // 先删除所有回复
+    const { error: repliesError } = await sb
+      .from('replies')
+      .delete()
+      .eq('comment_id', messageId);
+      
+    if (repliesError) {
+      console.error('删除回复失败:', repliesError);
+      alert('删除回复失败: ' + repliesError.message);
+      return;
+    }
+    
+    // 再删除留言
+    const { error: messageError } = await sb
+      .from('kardsdeck')
+      .delete()
+      .eq('id', messageId);
+      
+    if (messageError) {
+      console.error('删除留言失败:', messageError);
+      alert('删除留言失败: ' + messageError.message);
+      return;
+    }
+    
+    alert('删除成功');
+    await loadMessages();
+  } catch (error) {
+    console.error('删除过程中出错:', error);
+    alert('删除过程中出错: ' + error.message);
+  }
+}
+
+
+
+    function bindReplyEvents() {
+      document.querySelectorAll('.reply-toggle').forEach(toggle => {
+        toggle.addEventListener('click', function() {
+          if (!currentUser) {
+            alert('请先登录');
+            window.location.href = 'sign.html';
+            return;
+          }
+          
+          const messageId = this.dataset.messageId;
+          const replyForm = document.getElementById(`replyForm-${messageId}`);
+          replyForm.classList.toggle('active');
+        });
+      });
+      
+      // 发送回复事件
+      document.querySelectorAll('.send-reply').forEach(button => {
+        button.addEventListener('click', async function() {
+          if (!currentUser) {
+            alert('请先登录');
+            window.location.href = 'sign.html';
+            return;
+          }
+          
+          const messageId = this.dataset.messageId;
+          const content = document.getElementById(`replyContent-${messageId}`).value.trim();
+          
+          if (!content) {
+            alert('请输入回复内容');
+            return;
+          }
+          
+          const { error } = await sb
+            .from('replies')
+            .insert([{
+              comment_id: parseInt(messageId),
+              user_id: currentUser.id, // 使用用户ID而不是用户名
+              content: content
+            }]);
+            
+          if (error) {
+            console.error(error);
+            alert('回复发送失败');
+          } else {
+            alert('回复发送成功');
+            document.getElementById(`replyContent-${messageId}`).value = '';
+            document.getElementById(`replyForm-${messageId}`).classList.remove('active');
+            await loadMessages();
+          }
+        });
+      });
+    }
+
+    function renderPagination() {
+      const pagination = document.getElementById('pagination');
+      const totalPages = Math.ceil(allMessages.length / MESSAGES_PER_PAGE);
+      
+      if (totalPages <= 1) {
+        pagination.innerHTML = '';
+        return;
+      }
+
+      let paginationHTML = '';
+      
+      // 首页按钮
+      if (currentPage > 1) {
+        paginationHTML += `<button id="first-page">首页</button>`;
+      }
+      
+      // 页码按钮
+      const maxVisiblePages = 5;
+      let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+      let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+      
+      // 调整起始页，确保显示足够的页码
+      if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+      
+      // 生成页码按钮
+      for (let i = startPage; i <= endPage; i++) {
+        if (i === currentPage) {
+          paginationHTML += `<button class="active">${i}</button>`;
+        } else {
+          paginationHTML += `<button data-page="${i}">${i}</button>`;
+        }
+      }
+      
+      // 末页按钮
+      if (currentPage < totalPages) {
+        paginationHTML += `<button id="last-page">末页</button>`;
+      }
+      
+      // 页码信息
+      paginationHTML += `
+        <div class="page-info">
+          第 ${currentPage} 页，共 ${totalPages} 页
+        </div>
+      `;
+      
+      pagination.innerHTML = paginationHTML;
+      
+      // 绑定事件
+      // 首页按钮
+      if (document.getElementById('first-page')) {
+        document.getElementById('first-page').addEventListener('click', () => {
+          currentPage = 1;
+          renderMessages();
+          renderPagination();
+        });
+      }
+      
+      // 末页按钮
+      if (document.getElementById('last-page')) {
+        document.getElementById('last-page').addEventListener('click', () => {
+          currentPage = totalPages;
+          renderMessages();
+          renderPagination();
+        });
+      }
+      
+      // 页码按钮
+      document.querySelectorAll('.pagination button[data-page]').forEach(button => {
+        button.addEventListener('click', () => {
+          currentPage = parseInt(button.dataset.page);
+          renderMessages();
+          renderPagination();
+        });
+      });
+    }
+
+    document.getElementById('send').addEventListener('click', async () => {
+      if (!currentUser) {
+        alert('请先登录');
+        window.location.href = 'sign.html';
+        return;
+      }
+      
+      const msg = document.getElementById('msg').value.trim();
+      
+      if (!msg) {
+        alert('请输入留言内容');
+        return;
+      }
+
+      const { error } = await sb
+        .from('kardsdeck')
+        .insert([{ user_name: currentUser.user_name, content: msg }]);
+
+      if (error) {
+        console.error(error);
+        alert('发送失败');
+      } else {
+        alert('发送成功');
+        document.getElementById('msg').value = '';
+        await loadMessages();
+      }
+    });
+
+    // 退出登录功能
+    window.logout = function() {
+      localStorage.removeItem('currentUser');
+      checkUserLogin();
+      loadMessages();
+    };
+  </script>
+</body>
+</html>
