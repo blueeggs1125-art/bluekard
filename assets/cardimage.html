@@ -15,6 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="icon" href="../favicon.ico" type="image/x-icon">
     <title>FUCK 1939</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <style>
         /* 添加到<style>标签内的其他样式后面 */
 .image-item .image-name {
@@ -568,6 +569,380 @@
     border-radius: 10px;
     position: relative;
 }
+
+/* 评论指示器 */
+.comment-indicator {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(30, 144, 255, 0.8);
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    z-index: 5;
+    opacity: 0.8;
+}
+
+/* 悬浮窗样式 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content.floating-window {
+    position: absolute;
+    background-color: #fefefe;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    animation: slideUp 0.3s ease-out;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 100%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-header {
+    padding: 15px 20px;
+    background-color: #1e90ff;
+    color: white;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.close-modal {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-modal:hover {
+    color: #ccc;
+}
+
+.modal-body {
+    padding: 15px;
+    overflow-y: auto;
+    flex: 1;
+    max-height: calc(80vh - 180px);
+}
+
+.modal-footer {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    background-color: #f9f9f9;
+    border-radius: 0 0 12px 12px;
+}
+
+.comment-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.comment-item:last-child {
+    border-bottom: none;
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.comment-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 8px;
+    object-fit: cover;
+}
+
+.default-comment-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 8px;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #999;
+}
+
+.comment-user-info {
+    flex: 1;
+}
+
+.comment-user {
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.comment-time {
+    color: #999;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.comment-content {
+    color: #555;
+    line-height: 1.5;
+    margin-left: 38px;
+    font-size: 14px;
+}
+
+.comment-actions {
+    margin-top: 8px;
+    margin-left: 38px;
+    text-align: right;
+}
+
+.delete-comment-btn {
+    background: none;
+    border: 1px solid #ff4d4d;
+    color: #ff4d4d;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.delete-comment-btn:hover {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+.no-comments {
+    text-align: center;
+    padding: 20px;
+    color: #999;
+    font-style: italic;
+    font-size: 14px;
+}
+
+.loading-comments {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-size: 14px;
+}
+
+.comment-input-section textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    min-height: 80px;
+    margin-bottom: 10px;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.submit-comment-btn {
+    padding: 10px 20px;
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.submit-comment-btn:hover {
+    background-color: #0066cc;
+}
+
+.login-prompt {
+    text-align: center;
+    padding: 10px;
+    background: #e8f4ff;
+    border-radius: 6px;
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.login-prompt a {
+    color: #1e90ff;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.login-prompt a:hover {
+    text-decoration: underline;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .modal-content.floating-window {
+        width: 95%;
+        max-height: 90vh;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    .modal-header h3 {
+        font-size: 14px;
+    }
+    
+    .comment-user {
+        font-size: 13px;
+    }
+    
+    .comment-time {
+        font-size: 11px;
+    }
+    
+    .comment-content {
+        font-size: 13px;
+    }
+    
+    .comment-input-section textarea {
+        min-height: 60px;
+        padding: 8px;
+    }
+    
+    .submit-comment-btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content.floating-window {
+        width: 98%;
+        max-height: 95vh;
+        margin: 0 2px;
+    }
+    
+    .modal-header {
+        padding: 12px 15px;
+    }
+    
+    .modal-body {
+        padding: 10px;
+        max-height: calc(95vh - 160px);
+    }
+    
+    .modal-footer {
+        padding: 10px;
+    }
+    
+    .comment-item {
+        padding: 10px 0;
+    }
+    
+    .comment-avatar, .default-comment-avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+    
+    .comment-content {
+        margin-left: 36px;
+    }
+    
+    .comment-actions {
+        margin-left: 36px;
+    }
+}
+
+.image-item:hover .comment-indicator {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .comment-indicator {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+    }
+}
+
+/* 评论指示器 */
+.comment-indicator {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(30, 144, 255, 0.8);
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    z-index: 5;
+    opacity: 0.8;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.image-item:hover .comment-indicator {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .comment-indicator {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+    }
+}
     </style>
 </head>
 <body>
@@ -871,6 +1246,7 @@
     <script src="../js/image.js"></script>
     <script src="../js/daohanglan2.js"></script>
     <script src="../js/image_format.js"></script>
+    <script src="../js/assets/pl.js"></script>
     
 <script>
 document.addEventListener('DOMContentLoaded', function() {
