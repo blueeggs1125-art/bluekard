@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -39,6 +38,16 @@
             text-align: center;
             margin-bottom: 20px;
             color: #333;
+        }
+
+        /* 仅新增：未公开提示文字样式 */
+        .private-notice {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #d32f2f;
+            margin: 0 auto 20px;
+            padding: 10px;
         }
 
         .tier-list {
@@ -108,11 +117,11 @@
             writing-mode: horizontal-tb;
             text-orientation: mixed;
         }
-        
+
         .tier-dropzone.drag-over {
             background-color: #c0c0c0;
         }
-        
+
         .instructions {
             text-align: center;
             margin: 20px 0;
@@ -221,22 +230,26 @@
             margin-bottom: 10px;
         }
 
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-        }
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+    position: relative;
+    z-index: 10;
+}
 
-        .control-btn {
-            padding: 10px 20px;
-            background-color: #1e90ff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
+.control-btn {
+    padding: 10px 20px;
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    position: relative;
+    z-index: 10;
+}
 
         .control-btn:hover {
             background-color: #0d80e0;
@@ -280,22 +293,22 @@
             .tier-row {
                 min-height: 80px;
             }
-            
+
             .tier-label {
                 width: 50px;
                 font-size: 14px;
             }
-            
+
             .gallery {
                 grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
                 gap: 10px;
             }
-            
+
             /* 手机端显示横向滑动条 */
             .horizontal-scroll-container {
                 display: block;
             }
-            
+
             .tier-list {
                 display: none;
             }
@@ -305,19 +318,19 @@
             .tier-row {
                 min-height: 60px;
             }
-            
+
             .tier-label {
                 width: 40px;
                 font-size: 12px;
                 padding: 5px;
             }
-            
+
             .gallery {
                 grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
                 gap: 8px;
             }
         }
-        
+
         /* 横向层级条目样式 */
         .horizontal-tier-item {
             display: flex;
@@ -328,7 +341,7 @@
             margin-bottom: 5px;
             min-width: 700px;
         }
-        
+
         .horizontal-tier-label {
             width: 80px;
             display: flex;
@@ -341,7 +354,7 @@
             color: white;
             writing-mode: horizontal-tb;
         }
-        
+
         .horizontal-tier-dropzone {
             flex: 1;
             background-color: #e0e0e0;
@@ -352,17 +365,17 @@
             gap: 10px;
             min-height: 80px;
         }
-        
+
         .horizontal-tier-dropzone.drag-over {
             background-color: #c0c0c0;
         }
-        
+
         .horizontal-tier-1 .horizontal-tier-label { background-color: #ff0000; }
         .horizontal-tier-2 .horizontal-tier-label { background-color: #ff8000; }
         .horizontal-tier-3 .horizontal-tier-label { background-color: #ffff00; color: #333; }
         .horizontal-tier-4 .horizontal-tier-label { background-color: #ffcc99; color: #333; }
         .horizontal-tier-5 .horizontal-tier-label { background-color: #ffffff; color: #333; }
-        
+
         /* 横屏模式 */
         .landscape-mode {
             display: flex;
@@ -370,44 +383,44 @@
             height: 100vh;
             padding: 0;
         }
-        
+
         .landscape-mode .container {
             display: flex;
             flex-direction: column;
             height: 100%;
             max-width: none;
         }
-        
+
         .landscape-mode .header-section {
             display: none;
         }
-        
+
         .landscape-mode .tier-section {
             flex: 1;
             overflow: auto;
             padding: 10px;
         }
-        
+
         .landscape-mode .gallery-section {
             width: 300px;
             overflow-y: auto;
             padding: 10px;
             border-left: 1px solid #ccc;
         }
-        
+
         .landscape-mode .tier-list,
         .landscape-mode .horizontal-scroll-container {
             display: block;
         }
-        
+
         .landscape-mode .horizontal-scroll-container {
             display: none;
         }
-        
+
         .landscape-mode .tier-row {
             min-height: 80px;
         }
-        
+
         .landscape-mode .tier-label {
             width: 80px;
             writing-mode: horizontal-tb;
@@ -418,8 +431,10 @@
 <div class="container">
     <div class="header-section">
         <h1>KARDS</h1>
+        <!-- 仅新增：未公开提示文字 -->
+        <div class="private-notice">该页面未公开！你只能通过直连进入</div>
         <a href="index.html" class="nav-link">返回素材库</a>
-        
+
         <div class="controls">
             <button class="control-btn" id="save-btn">保存评测</button>
             <button class="control-btn" id="save-image-btn">保存为图片</button>
@@ -427,75 +442,73 @@
             <button class="control-btn" id="portrait-btn" style="display: none;">竖屏模式</button>
         </div>
     </div>
-        
-        <!-- 手机端横向滑动条 -->
+
         <div class="horizontal-scroll-container">
             <div class="horizontal-scroll-content">
                 <div class="horizontal-tier-item horizontal-tier-1" data-tier="1">
                     <div class="horizontal-tier-label">夯</div>
                     <div class="horizontal-tier-dropzone" data-tier="1"></div>
                 </div>
-                
+
                 <div class="horizontal-tier-item horizontal-tier-2" data-tier="2">
                     <div class="horizontal-tier-label">顶级</div>
                     <div class="horizontal-tier-dropzone" data-tier="2"></div>
                 </div>
-                
+
                 <div class="horizontal-tier-item horizontal-tier-3" data-tier="3">
                     <div class="horizontal-tier-label">人上人</div>
                     <div class="horizontal-tier-dropzone" data-tier="3"></div>
                 </div>
-                
+
                 <div class="horizontal-tier-item horizontal-tier-4" data-tier="4">
                     <div class="horizontal-tier-label">NPC</div>
                     <div class="horizontal-tier-dropzone" data-tier="4"></div>
                 </div>
-                
+
                 <div class="horizontal-tier-item horizontal-tier-5" data-tier="5">
                     <div class="horizontal-tier-label">拉完了</div>
                     <div class="horizontal-tier-dropzone" data-tier="5"></div>
                 </div>
             </div>
         </div>
-        
-        <!-- PC端正常显示 -->
+
         <div class="tier-list">
             <div class="tier-row tier-1" data-tier="1">
                 <div class="tier-label">夯</div>
                 <div class="tier-dropzone" data-tier="1"></div>
             </div>
-            
+
             <div class="tier-row tier-2" data-tier="2">
                 <div class="tier-label">顶级</div>
                 <div class="tier-dropzone" data-tier="2"></div>
             </div>
-            
+
             <div class="tier-row tier-3" data-tier="3">
                 <div class="tier-label">人上人</div>
                 <div class="tier-dropzone" data-tier="3"></div>
             </div>
-            
+
             <div class="tier-row tier-4" data-tier="4">
                 <div class="tier-label">NPC</div>
                 <div class="tier-dropzone" data-tier="4"></div>
             </div>
-            
+
             <div class="tier-row tier-5" data-tier="5">
                 <div class="tier-label">拉完了</div>
                 <div class="tier-dropzone" data-tier="5"></div>
             </div>
         </div>
-        
+
         <div class="upload-section">
             <div class="upload-btn" onclick="document.getElementById('file-input').click()">
                 上传图片
             </div>
             <input type="file" id="file-input" accept="image/*" multiple>
-            
+
             <div class="instructions">
-                
+
             </div>
-            
+
             <div class="gallery" id="image-gallery"></div>
         </div>
         <script src="js/picserc.js"></script>
@@ -515,7 +528,7 @@
     function renderGallery() {
         const gallery = document.getElementById('image-gallery');
         gallery.innerHTML = '';
-        
+
         imageData.forEach(img => {
             if (!isImageInAnyTier(img.id)) {
                 const item = document.createElement('div');
@@ -524,17 +537,17 @@
                 item.innerHTML = `
                     <img src="${img.src}" alt="${img.name}" data-id="${img.id}" data-src="${img.src}" data-name="${img.name}">
                 `;
-                
+
                 const imgElement = item.querySelector('img');
                 imgElement.addEventListener('dragstart', handleDragStart);
                 imgElement.addEventListener('dragend', handleDragEnd);
-                
+
                 // 添加触摸事件处理
                 imgElement.addEventListener('touchstart', handleTouchStart);
                 imgElement.addEventListener('touchmove', handleTouchMove);
                 imgElement.addEventListener('touchend', handleTouchEnd);
                 imgElement.addEventListener('contextmenu', handleContextMenu);
-                
+
                 gallery.appendChild(item);
             }
         });
@@ -549,31 +562,31 @@
         });
         document.getElementById('landscape-btn').addEventListener('click', toggleLandscapeMode);
         document.getElementById('portrait-btn').addEventListener('click', togglePortraitMode);
-        
+
         // 为所有拖拽区域添加事件监听（包括横向和纵向）
         document.querySelectorAll('.tier-dropzone, .horizontal-tier-dropzone').forEach(zone => {
             zone.addEventListener('dragover', handleDragOver);
             zone.addEventListener('dragenter', handleDragEnter);
             zone.addEventListener('dragleave', handleDragLeave);
             zone.addEventListener('drop', handleDrop);
-            
+
             // 添加触摸事件支持
             zone.addEventListener('touchenter', handleTouchEnterZone);
             zone.addEventListener('touchleave', handleTouchLeaveZone);
             zone.addEventListener('touchend', handleTouchDropZone);
         });
-        
+
         // 加载保存的数据
         loadTierList();
     });
 
     function handleFileSelect(event) {
         const files = event.target.files;
-        
+
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             if (!file.type.match('image.*')) continue;
-            
+
             const reader = new FileReader();
             reader.onload = function(e) {
                 const id = 'img-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
@@ -586,19 +599,19 @@
             };
             reader.readAsDataURL(file);
         }
-        
+
         event.target.value = '';
     }
 
     // 保存评测列表
     function saveTierList() {
         const tierData = {};
-        
+
         // 收集所有tier中的图片
         for (let i = 1; i <= 5; i++) {
             const tierZones = document.querySelectorAll(`.tier-dropzone[data-tier="${i}"], .horizontal-tier-dropzone[data-tier="${i}"]`);
             tierData[i] = [];
-            
+
             tierZones.forEach(zone => {
                 const images = zone.querySelectorAll('img');
                 images.forEach(img => {
@@ -610,11 +623,11 @@
                 });
             });
         }
-        
+
         // 保存到localStorage
         localStorage.setItem('tierListData', JSON.stringify(tierData));
         localStorage.setItem('tierListImageData', JSON.stringify(imageData));
-        
+
         alert('评测列表已保存！');
     }
 
@@ -623,7 +636,7 @@
 // 保存为图片的函数 - 修复移动端下载问题
 function saveAsImage() {
     const tierList = document.querySelector('.tier-list');
-    
+
     if (!tierList) {
         alert('未找到评测区域');
         return;
@@ -638,24 +651,24 @@ function saveAsImage() {
         imgPreview.src = canvas.toDataURL('image/png');
         imgPreview.style.display = 'none';
         document.body.appendChild(imgPreview);
-        
+
         // 将图像加载到页面后，再触发下载
         imgPreview.onload = function() {
             // 转换为blob格式
             canvas.toBlob(function(blob) {
                 const filename = 'kards-tier-list-' + new Date().getTime() + '.png';
                 const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                
+
                 if (isMobile) {
                     const url = URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = url;
                     link.download = filename;
                     link.style.display = 'none';
-                    
+
                     document.body.appendChild(link);
                     link.click();
-                    
+
                     setTimeout(() => {
                         document.body.removeChild(link);
                         URL.revokeObjectURL(url);
@@ -668,7 +681,7 @@ function saveAsImage() {
                     link.click();
                     document.body.removeChild(link);
                 }
-                
+
                 // 清理临时图片
                 document.body.removeChild(imgPreview);
             }, 'image/png');
@@ -679,14 +692,13 @@ function saveAsImage() {
     });
 }
 
-    
     // 切换横屏模式
     function toggleLandscapeMode() {
         document.body.classList.add('landscape-mode');
         document.getElementById('landscape-btn').style.display = 'none';
         document.getElementById('portrait-btn').style.display = 'block';
     }
-    
+
     // 切换竖屏模式
     function togglePortraitMode() {
         document.body.classList.remove('landscape-mode');
@@ -699,11 +711,11 @@ function saveAsImage() {
         try {
             const savedTierData = localStorage.getItem('tierListData');
             const savedImageData = localStorage.getItem('tierListImageData');
-            
+
             if (savedTierData) {
                 const tierData = JSON.parse(savedTierData);
                 imageData = JSON.parse(savedImageData || '[]');
-                
+
                 // 恢复每个tier中的图片
                 for (let tier = 1; tier <= 5; tier++) {
                     if (tierData[tier]) {
@@ -718,14 +730,14 @@ function saveAsImage() {
                                 newImg.dataset.name = imgData.name;
                                 newImg.className = 'draggable-image';
                                 newImg.draggable = true;
-                                
+
                                 newImg.addEventListener('dragstart', handleDragStart);
                                 newImg.addEventListener('dragend', handleDragEnd);
                                 newImg.addEventListener('touchstart', handleTouchStart);
                                 newImg.addEventListener('touchmove', handleTouchMove);
                                 newImg.addEventListener('touchend', handleTouchEnd);
                                 newImg.addEventListener('contextmenu', handleContextMenu);
-                                
+
                                 zone.appendChild(newImg);
                             }
                         });
@@ -749,7 +761,7 @@ function saveAsImage() {
                 }
             }
         }
-        
+
         // 检查横向层级
         for (let i = 1; i <= 5; i++) {
             const tierZone = document.querySelector(`.horizontal-tier-dropzone[data-tier="${i}"]`);
@@ -772,13 +784,13 @@ function saveAsImage() {
                 draggedFromTier = parentZone.dataset.tier;
             }
         }
-        
+
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/html', draggedElement.outerHTML);
         e.dataTransfer.setData('image-id', draggedElement.dataset.id);
         e.dataTransfer.setData('image-src', draggedElement.dataset.src);
         e.dataTransfer.setData('image-name', draggedElement.dataset.name);
-        
+
         setTimeout(() => {
             draggedElement.style.opacity = '0.4';
         }, 0);
@@ -808,12 +820,12 @@ function saveAsImage() {
     function handleDrop(e) {
         e.preventDefault();
         this.classList.remove('drag-over');
-        
+
         if (draggedElement) {
             const imageId = draggedElement.dataset.id;
             const imageSrc = draggedElement.dataset.src;
             const imageName = draggedElement.dataset.name;
-            
+
             if (draggedFromGallery) {
                 const newImg = document.createElement('img');
                 newImg.src = imageSrc || draggedElement.src;
@@ -822,38 +834,38 @@ function saveAsImage() {
                 newImg.dataset.name = imageName || draggedElement.alt;
                 newImg.className = 'draggable-image';
                 newImg.draggable = true;
-                
+
                 newImg.addEventListener('dragstart', handleDragStart);
                 newImg.addEventListener('dragend', handleDragEnd);
-                
+
                 // 添加触摸事件处理
                 newImg.addEventListener('touchstart', handleTouchStart);
                 newImg.addEventListener('touchmove', handleTouchMove);
                 newImg.addEventListener('touchend', handleTouchEnd);
                 newImg.addEventListener('contextmenu', handleContextMenu);
-                
+
                 this.appendChild(newImg);
                 renderGallery(); 
             } else {
                 this.appendChild(draggedElement);
-                
+
                 if (draggedFromTier && draggedFromTier != this.dataset.tier) {
                     renderGallery();
                 }
             }
         }
     }
-    
+
     // 触摸开始事件（图片）
     function handleTouchStart(e) {
         e.preventDefault();
         e.stopPropagation();
-        
+
         // 获取触摸点
         const touch = e.touches[0];
         touchStartX = touch.clientX;
         touchStartY = touch.clientY;
-        
+
         // 设置拖拽元素
         draggedElement = e.target;
         draggedFromGallery = !draggedElement.closest('.tier-dropzone, .horizontal-tier-dropzone');
@@ -863,9 +875,9 @@ function saveAsImage() {
                 draggedFromTier = parentZone.dataset.tier;
             }
         }
-        
+
         isDragging = true;
-        
+
         // 创建拖拽图像
         dragImage = draggedElement.cloneNode(true);
         dragImage.style.position = 'fixed';
@@ -875,35 +887,35 @@ function saveAsImage() {
         dragImage.style.zIndex = '9999';
         dragImage.style.opacity = '0.8';
         document.body.appendChild(dragImage);
-        
+
         // 更新拖拽图像位置
         updateDragImagePosition(touch.clientX, touch.clientY);
-        
+
         // 添加视觉反馈
         draggedElement.style.opacity = '0.4';
     }
-    
+
     // 触摸移动事件（图片）
     function handleTouchMove(e) {
         if (!isDragging || !dragImage) return;
-        
+
         e.preventDefault();
         e.stopPropagation();
-        
+
         const touch = e.touches[0];
-        
+
         // 更新拖拽图像位置
         updateDragImagePosition(touch.clientX, touch.clientY);
-        
+
         // 检查是否在放置区域上
         const elementUnderTouch = document.elementFromPoint(touch.clientX, touch.clientY);
         const dropZone = elementUnderTouch ? elementUnderTouch.closest('.tier-dropzone, .horizontal-tier-dropzone') : null;
-        
+
         // 更新当前放置区域的高亮状态
         if (currentDropZone && currentDropZone !== dropZone) {
             currentDropZone.classList.remove('drag-over');
         }
-        
+
         if (dropZone) {
             dropZone.classList.add('drag-over');
             currentDropZone = dropZone;
@@ -911,37 +923,37 @@ function saveAsImage() {
             currentDropZone = null;
         }
     }
-    
+
     // 触摸结束事件（图片）
     function handleTouchEnd(e) {
         if (!isDragging) return;
-        
+
         e.preventDefault();
         e.stopPropagation();
-        
+
         // 移除拖拽图像
         if (dragImage && dragImage.parentNode) {
             dragImage.parentNode.removeChild(dragImage);
         }
-        
+
         // 恢复视觉效果
         if (draggedElement) {
             draggedElement.style.opacity = '1';
         }
-        
+
         // 如果当前在放置区域上，执行放置操作
         if (currentDropZone) {
             currentDropZone.classList.remove('drag-over');
             handleTouchDrop(currentDropZone);
         }
-        
+
         // 重置状态
         isDragging = false;
         draggedElement = null;
         dragImage = null;
         currentDropZone = null;
     }
-    
+
     // 更新拖拽图像位置
     function updateDragImagePosition(x, y) {
         if (dragImage) {
@@ -949,15 +961,15 @@ function saveAsImage() {
             dragImage.style.top = (y - 50) + 'px';
         }
     }
-    
+
     // 处理触摸放置
     function handleTouchDrop(dropZone) {
         if (!draggedElement) return;
-        
+
         const imageId = draggedElement.dataset.id;
         const imageSrc = draggedElement.dataset.src;
         const imageName = draggedElement.dataset.name;
-        
+
         if (draggedFromGallery) {
             // 从画廊拖拽来的图片
             const newImg = document.createElement('img');
@@ -967,30 +979,30 @@ function saveAsImage() {
             newImg.dataset.name = imageName || draggedElement.alt;
             newImg.className = 'draggable-image';
             newImg.draggable = true;
-            
+
             newImg.addEventListener('dragstart', handleDragStart);
             newImg.addEventListener('dragend', handleDragEnd);
-            
+
             // 添加触摸事件处理
             newImg.addEventListener('touchstart', handleTouchStart);
             newImg.addEventListener('touchmove', handleTouchMove);
             newImg.addEventListener('touchend', handleTouchEnd);
             newImg.addEventListener('contextmenu', handleContextMenu);
-            
+
             dropZone.appendChild(newImg);
             renderGallery();
         } else {
             // 从一个tier移动到另一个tier
             // 直接移动元素而不是复制
             dropZone.appendChild(draggedElement);
-            
+
             // 如果是从不同tier移动过来的，需要重新渲染画廊
             if (draggedFromTier && draggedFromTier != dropZone.dataset.tier) {
                 renderGallery();
             }
         }
     }
-    
+
     // 区域触摸进入事件
     function handleTouchEnterZone(e) {
         if (isDragging) {
@@ -998,7 +1010,7 @@ function saveAsImage() {
             currentDropZone = this;
         }
     }
-    
+
     // 区域触摸离开事件
     function handleTouchLeaveZone(e) {
         this.classList.remove('drag-over');
@@ -1006,7 +1018,7 @@ function saveAsImage() {
             currentDropZone = null;
         }
     }
-    
+
     // 区域触摸放置事件
     function handleTouchDropZone(e) {
         if (isDragging && draggedElement) {
@@ -1014,7 +1026,7 @@ function saveAsImage() {
             handleTouchDrop(this);
         }
     }
-    
+
     // 右键菜单事件（防止右键下载）
     function handleContextMenu(e) {
         e.preventDefault();

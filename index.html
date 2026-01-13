@@ -259,6 +259,34 @@
             }
         }
         
+        /* 调整后的文字样式 - 减小间距 */
+        .custom-text-box {
+            text-align: center;
+            padding: 10px 20px; /* 上下内边距从30px改为10px，减小整体高度 */
+            margin: 10px auto; /* 上下外边距从20px改为10px */
+        }
+        
+        .main-text {
+            font-size: 48px; 
+            font-weight: bold; 
+            color: #ffffff; 
+            margin-bottom: 5px; /* 与下方文字间距从10px改为5px */
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .sub-text {
+            font-size: 20px; 
+            color: #ffffff; 
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            margin-bottom: 5px; /* 新增与提示文字的间距 */
+        }
+
+        /* 新增提示文字样式 */
+        .tip-text {
+            font-size: 16px;
+            color: #ffffff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
 
         .update-box {
     border-radius: 12px;
@@ -320,6 +348,12 @@
     <div class="overlay" id="overlay"></div>
 
     <div class="container">
+        <!-- 调整间距并新增提示文字 -->
+        <div class="custom-text-box">
+            <div class="main-text">fk1939.cn</div>
+            <div class="sub-text">热爱1939，更爱你</div>
+            <div class="tip-text">初次使用请点<u>关于</u>导航栏</div>
+        </div>
 
         <div class="update-box">
             <div class="update-title">更新：国土阵线</div>
@@ -402,6 +436,9 @@
         关于
     </a>
 </div>
+
+    <script src="/js/panquan.js"></script>
+
 
     <script>
         const menuBtn = document.querySelector('.menu-btn');
