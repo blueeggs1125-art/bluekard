@@ -13,7 +13,7 @@
     <link rel="manifest" href="site.webmanifest">
     <meta name="theme-color" content="#ffffff">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/team.css">
+    <link rel="stylesheet" href="../css/team.css">
     <link rel="icon" href="../favicon.ico" type="image/x-icon">
     <title>FUCK 1939</title>
     <style>
@@ -44,7 +44,6 @@
             font-size: 28px;
         }
 
-
         .content {
             background: white;
             border-radius: 10px;
@@ -63,15 +62,15 @@
             opacity: 1;
         }
 
- .image-link-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 20px;
-    flex-wrap: nowrap; /* 关键：防止换行 */
-}
+        .image-link-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 20px;
+            flex-wrap: nowrap; /* 关键：防止换行 */
+        }
 
         .content-image {
             height: 80%;
@@ -93,16 +92,40 @@
             max-width: calc(100% - 270px); 
         }
 
+        /* 新增：链接一行显示的样式 */
+        .link-row {
+            display: flex;
+            align-items: center;
+            gap: 20px; /* 两个链接之间的间距 */
+        }
+
         .content-link {
             color: #1e90ff;
             text-decoration: none;
             font-size: 36px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 5px; /* 减小与下方小字的间距 */
             word-wrap: break-word; /* 允许长单词换行 */
         }
 
-        .content-link:hover {
+        /* 新增：QQ链接样式，和bilibili链接保持一致 */
+        .qq-link {
+            color: #1e90ff;
+            text-decoration: none;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            word-wrap: break-word;
+        }
+
+        /* 新增：下方小字样式 */
+        .link-subtext {
+            font-size: 16px;
+            color: #666;
+            margin-left: 2px; /* 与链接对齐 */
+        }
+
+        .content-link:hover, .qq-link:hover {
             text-decoration: underline;
         }
 
@@ -119,104 +142,181 @@
             color: #555;
             word-wrap: break-word; /* 允许长单词换行 */
         }
+        
+        /* 调整：联系文字直接放在content内的样式 */
+        .contact-text {
+            margin-top: 30px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .contact-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .contact-email {
+            font-size: 16px;
+            color: #1e90ff;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .contact-info {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
 
         /* 手机适配 */
        @media (max-width: 768px) {
-    body {
-        padding-bottom: 50px;
-    }
+            body {
+                padding-bottom: 50px;
+            }
 
-    .container {
-        padding: 15px;
-    }
+            .container {
+                padding: 15px;
+            }
 
-    h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
+            h1 {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
 
-    .image-link-container {
-        flex-direction: row; /* 保持水平排列 */
-        padding: 15px;
-        flex-wrap: nowrap; /* 防止换行 */
-    }
+            .image-link-container {
+                flex-direction: row; /* 保持水平排列 */
+                padding: 15px;
+                flex-wrap: nowrap; /* 防止换行 */
+            }
 
-    /* 其他原有样式保持不变 */
-    .content-image {
-        height: 60%;
-        max-width: 200px;
-        margin-right: 0;
-        margin-bottom: 15px;
-    }
+            /* 其他原有样式保持不变 */
+            .content-image {
+                height: 60%;
+                max-width: 200px;
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
 
-    .text-content {
-        max-width: 100%;
-        text-align: center;
-    }
+            .text-content {
+                max-width: 100%;
+                text-align: center;
+            }
 
-    .content-link {
-        font-size: 28px;
-    }
+            /* 适配手机端链接字体大小 */
+            .content-link, .qq-link {
+                font-size: 28px;
+            }
 
-    .bold-text {
-        font-size: 22px;
-    }
+            /* 适配手机端小字大小 */
+            .link-subtext {
+                font-size: 14px;
+            }
 
-    .normal-text {
-        font-size: 14px;
-    }
-}
+            .bold-text {
+                font-size: 22px;
+            }
 
-@media (max-width: 480px) {
-    .container {
-        padding: 10px;
-    }
+            .normal-text {
+                font-size: 14px;
+            }
+            
+            .contact-text {
+                margin-top: 20px;
+                padding: 15px;
+            }
+            
+            .contact-title {
+                font-size: 16px;
+            }
+            
+            .contact-email {
+                font-size: 15px;
+            }
+            
+            .contact-info {
+                font-size: 13px;
+            }
+        }
 
-    h1 {
-        font-size: 20px;
-    }
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
 
-    .content {
-        padding: 15px;
-    }
+            h1 {
+                font-size: 20px;
+            }
 
-    .image-link-container {
-        flex-direction: row; /* 保持水平排列 */
-        padding: 10px;
-        text-align: center;
-        flex-wrap: nowrap; /* 防止换行 */
-    }
+            .content {
+                padding: 15px;
+            }
 
-    /* 其他原有样式保持不变 */
-    .content-image {
-        height: 40%;
-        max-width: 150px;
-        margin-right: 0;
-        margin-bottom: 15px;
-    }
+            .image-link-container {
+                flex-direction: row; /* 保持水平排列 */
+                padding: 10px;
+                text-align: center;
+                flex-wrap: nowrap; /* 防止换行 */
+            }
 
-    .text-content {
-        text-align: center;
-        max-width: 100%;
-    }
+            /* 其他原有样式保持不变 */
+            .content-image {
+                height: 40%;
+                max-width: 150px;
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
 
-    .content-link {
-        font-size: 24px;
-    }
+            .text-content {
+                text-align: center;
+                max-width: 100%;
+            }
 
-    .bold-text {
-        font-size: 20px;
-    }
+            /* 适配小屏手机链接字体大小 */
+            .content-link, .qq-link {
+                font-size: 24px;
+            }
 
-    .normal-text {
-        font-size: 14px;
-    }
-}
+            /* 适配小屏手机小字大小 */
+            .link-subtext {
+                font-size: 13px;
+            }
+
+            .bold-text {
+                font-size: 20px;
+            }
+
+            .normal-text {
+                font-size: 14px;
+            }
+            
+            .contact-text {
+                margin-top: 15px;
+                padding: 12px;
+            }
+            
+            .contact-title {
+                font-size: 15px;
+            }
+            
+            .contact-email {
+                font-size: 14px;
+            }
+            
+            .contact-info {
+                font-size: 12px;
+            }
+        }
 
         /* 超窄屏幕适配 */
         @media (max-width: 320px) {
-            .content-link {
+            .content-link, .qq-link {
                 font-size: 20px;
+            }
+
+            .link-subtext {
+                font-size: 12px;
             }
 
             .bold-text {
@@ -230,117 +330,107 @@
             .content-image {
                 max-width: 120px;
             }
+            
+            .contact-title {
+                font-size: 14px;
+            }
+            
+            .contact-email {
+                font-size: 13px;
+            }
+            
+            .contact-info {
+                font-size: 11px;
+            }
         }
 
         /* 底部导航栏 */
         .bottom-nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: #fff;
-            border-top: 1px solid #ddd;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            height: 55px;
+            background-color: rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
+            align-items: center;
             z-index: 1000;
-            font-size: 14px;
+            backdrop-filter: blur(18px) saturate(120%);
+            -webkit-backdrop-filter: blur(18px) saturate(120%);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
         }
 
         .bottom-nav a {
             text-decoration: none;
-            color: #1e90ff;
-            text-align: center;
+            color: #fff;
+            font-size: 16px;
+            height: 100%;
+            padding: 0 15px;
+            border-radius: 12px;
+            transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
+        <!-- content容器，animate-in动画生效的核心容器 -->
         <div class="content">
             <div class="image-link-container">
                 <img src="../pwp.png" alt="marisa" class="content-image">
                 <div class="text-content">
-                <a href="https://space.bilibili.com/596035099" target="_blank" class="content-link">blueeggs</a>
-                <a href="https://qm.qq.com/q/kagG123KLu" target="_blank" class="qq-link">QQ群</a>
+                    <!-- 链接一行显示区域 -->
+                    <div class="link-row">
+                        <a href="https://space.bilibili.com/596035099" target="_blank" class="content-link">blueeggs</a>
+                        <a href="https://qm.qq.com/q/kagG123KLu" target="_blank" class="qq-link">QQ群</a>
+                    </div>
+                    <!-- 下方小字 -->
+                    <div class="link-subtext"></div>
+                </div>
+            </div>
+            
+            <!-- 联系文字直接放在content容器内（替代原contact-section） -->
+            <div class="contact-text">
+                <div class="contact-title">联系我们</div>
+                <div class="contact-email">Support@fk1939.cn</div>
+                <div class="contact-info">
+                    如果你有任何问题/建议等，请联系Support@fk1939.cn（发送该邮箱）<br>
+                    务必提供详细的信息，这样我们才能更好的解决问题<br>
+                    我们在看到信息时会回复，请勿重复发送、多次发送无意义、重复工单！
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="bottom-nav">
+        <a href="../index.html" onmouseover="this.style.background='rgba(255,255,255,0.12)';" 
+           onmouseout="this.style.background='transparent';"
+           onmousedown="this.style.transform='scale(0.92)';"
+           onmouseup="this.style.transform='scale(1)';">
+            主页
+        </a>
+        <a href="../account/myaccount.html" onmouseover="this.style.background='rgba(255,255,255,0.12)';" 
+           onmouseout="this.style.background='transparent';"
+           onmousedown="this.style.transform='scale(0.92)';"
+           onmouseup="this.style.transform='scale(1)';">
+            我的
+        </a>
+        <a href="../support/team.html" onmouseover="this.style.background='rgba(255,255,255,0.12)';" 
+           onmouseout="this.style.background='transparent';"
+           onmousedown="this.style.transform='scale(0.92)';"
+           onmouseup="this.style.transform='scale(1)';">
+            关于
+        </a>
+    </div>
 
-<div class="bottom-nav" style="
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    height: 55px;
-    background-color: rgba(255, 255, 255, 0.25);
-    border-radius: 20px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(18px) saturate(120%);
-    -webkit-backdrop-filter: blur(18px) saturate(120%);
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
-">
-    <a href="../index.html" style="
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        color: #fff;
-        font-size: 16px;
-        height: 100%;
-        padding: 0 15px;
-        border-radius: 12px;
-        transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), background-color 0.2s ease;
-    " onmouseover="this.style.background='rgba(255,255,255,0.12)';" 
-       onmouseout="this.style.background='transparent';"
-       onmousedown="this.style.transform='scale(0.92)';"
-       onmouseup="this.style.transform='scale(1)';">
-        主页
-    </a>
-    <a href="../account/myaccount.html" style="
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        color: #fff;
-        font-size: 16px;
-        height: 100%;
-        padding: 0 15px;
-        border-radius: 12px;
-        transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), background-color 0.2s ease;
-    " onmouseover="this.style.background='rgba(255,255,255,0.12)';" 
-       onmouseout="this.style.background='transparent';"
-       onmousedown="this.style.transform='scale(0.92)';"
-       onmouseup="this.style.transform='scale(1)';">
-        我的
-    </a>
-    <a href="../support/team.html" style="
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        color: #fff;
-        font-size: 16px;
-        height: 100%;
-        padding: 0 15px;
-        border-radius: 12px;
-        transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), background-color 0.2s ease;
-    " onmouseover="this.style.background='rgba(255,255,255,0.12)';" 
-       onmouseout="this.style.background='transparent';"
-       onmousedown="this.style.transform='scale(0.92)';"
-       onmouseup="this.style.transform='scale(1)';">
-        关于
-    </a>
-</div>
-<script src="../js/daohanglan.js"></script>
+    <script src="../js/daohanglan.js"></script>
+    <script src="/js/panquan.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const content = document.querySelector('.content');
