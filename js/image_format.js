@@ -1,4 +1,4 @@
-// image_format.js
+// image_format.js - 修复登录状态传递问题
 
 // 创建模态框元素 - 优化移动端适配
 function createModal() {
@@ -32,7 +32,10 @@ modal.innerHTML = `
                         <tbody id="details-table"></tbody>
                     </table>
                 </div>
-                <button id="download-btn" style="margin-top: 15px; padding: 10px 20px; background-color: #1e90ff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">下载图片</button>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button id="download-btn" style="flex: 1; padding: 10px 20px; background-color: #1e90ff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">下载图片</button>
+                    <button id="comment-btn" style="flex: 1; padding: 10px 20px; background-color: rgba(30, 144, 255, 0.75); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px);">查看评论</button>
+                </div>
             </div>
         </div>
     </div>
@@ -109,6 +112,30 @@ modal.innerHTML = `
     
     // 添加下载按钮事件
     document.getElementById('download-btn').addEventListener('click', downloadImage);
+    
+    // 添加评论按钮事件 - 修复登录状态传递问题
+    document.getElementById('comment-btn').addEventListener('click', function() {
+        const modalImage = document.getElementById('modal-image');
+        const cardName = document.getElementById('card-name').textContent;
+        if (modalImage && modalImage.src) {
+            // 从localStorage获取用户信息并传递给showCommentsModal
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            // 通过全局函数打开评论模态框
+            if (typeof showCommentsModal === 'function') {
+                showCommentsModal(modalImage.src, cardName);
+            } else {
+                // 如果pl.js还没有加载，延迟执行
+                setTimeout(() => {
+                    if (typeof showCommentsModal === 'function') {
+                        showCommentsModal(modalImage.src, cardName);
+                    } else {
+                        alert('评论功能正在加载中，请稍后再试。');
+                    }
+                }, 100);
+            }
+        }
+    });
 }
 
 function downloadImage() {
@@ -141,7 +168,6 @@ function downloadImage() {
     }
 }
 
-// 优化的AVIF转PNG函数，解决黑角问题
 // 优化的AVIF转PNG函数，解决黑角问题
 function convertAndDownloadAvif(avifUrl, filename) {
     const canvas = document.createElement('canvas');
@@ -417,7 +443,6 @@ function extractKeyPart(fileName) {
 }
 
 // 初始化图片点击事件
-// 修改 initImageClickEvents 函数中的相应部分
 function initImageClickEvents() {
     // 监听图片容器的变化
     const observer = new MutationObserver(function(mutations) {
