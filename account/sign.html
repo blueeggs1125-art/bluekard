@@ -671,14 +671,14 @@ document.getElementById('register').addEventListener('click', async () => {
       </div>
     `;
     
-    // 显示用户信息区域
+    
     userInfo.style.display = 'block';
     
     alert('登录成功');
-    // 保存用户信息到 localStorage (包含所有字段，特别是admin)
+  
     localStorage.setItem('currentUser', JSON.stringify(data[0]));
-    // 跳转到 meie.html
-    window.location.href = 'meie.html';
+    
+    window.location.href = 'myaccount.html';
 
     // 清空登录表单
     document.getElementById('login_email').value = '';
@@ -694,4 +694,5 @@ document.getElementById('register').addEventListener('click', async () => {
 });
   </script>
 </body>
+
 </html>
