@@ -40,7 +40,7 @@
             font-size: 24px;
         }
         
-        /* 添加分类选择样式 */
+     
         .category-selector {
             text-align: center;
             margin-bottom: 20px;
@@ -54,6 +54,7 @@
             background-color: white;
             color: #333;
             cursor: pointer;
+            margin: 0 5px;
         }
         
         .sound-container {
@@ -104,7 +105,7 @@
             grid-column: 1 / -1;
         }
         
-        /* 添加导航链接样式 */
+     
         .nav-link {
             display: block;
             text-align: center;
@@ -152,12 +153,13 @@
 </head>
 <body>
     <div class="container">
-
-
-        <!-- 添加分类选择器 -->
+       
         <div class="category-selector">
-            <select id="category-select">
+            <select id="primary-category-select">
                 <option value="all">全部音效</option>
+            </select>
+            <select id="secondary-category-select" style="display: none;">
+                <option value="">选择二级分类</option>
             </select>
         </div>
         
@@ -166,28 +168,22 @@
         </div>
     </div>
     <style>
-/* 在现有样式基础上添加 */
-.container {
-    padding-bottom: 60px; /* 为底部导航栏留出空间 */
-}
-</style>
-
-
+        .container {
+            padding-bottom: 60px; 
+        }
+    </style>
 
     <audio id="audio-player"></audio>
     <script src="../js/daohanglan2.js"></script>
     <script>
-        // 音频文件数据 - 从files.json获取
-        let soundFiles = [];
-        
-        // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', initSoundPage);
-        
+let soundFiles = [];
+
+document.addEventListener('DOMContentLoaded', initSoundPage);
+
 async function initSoundPage() {
     const soundDisplay = document.getElementById('sound-display');
     
     try {
-        // 获取音效文件列表
         const response = await fetch('../sound/files.json');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -199,21 +195,29 @@ async function initSoundPage() {
             return;
         }
         
-        // 过滤出MP3文件
-        const mp3Sounds = soundFiles.filter(sound => 
-            sound.toLowerCase().endsWith('.mp3')
+        const audioExtensions = ['.mp3', '.wav', '.ogg', '.m4a', '.flac', '.aac', '.wma', '.opus'];
+        const audioSounds = soundFiles.filter(sound => 
+            audioExtensions.some(ext => sound.toLowerCase().endsWith(ext))
         );
         
-        if (mp3Sounds.length === 0) {
-            soundDisplay.innerHTML = '<div class="no-sounds">暂无MP3音效文件</div>';
+        if (audioSounds.length === 0) {
+            soundDisplay.innerHTML = '<div class="no-sounds">暂无音频文件</div>';
             return;
         }
         
-        // 创建分类选择器
-        createCategorySelector(mp3Sounds);
+       
+        const filteredSounds = audioSounds.filter(sound => {
+            const pathParts = sound.split('/');
+            if (pathParts.length >= 3 && pathParts[0] === '..' && pathParts[1] === 'sound') {
+                const primaryCategory = pathParts[2];
+                return primaryCategory !== '其他'; 
+            }
+            return true;
+        });
         
-        // 显示所有音效
-        displaySounds(mp3Sounds);
+        createMultiLevelCategorySelector(filteredSounds);
+        
+        displaySounds(filteredSounds);
         
     } catch (error) {
         console.error('加载音效出错:', error);
@@ -221,204 +225,238 @@ async function initSoundPage() {
     }
 }
 
-        // 创建分类选择器
-        function createCategorySelector(sounds) {
-            // 获取所有分类
-            const categories = new Set();
-            sounds.forEach(sound => {
-                const pathParts = sound.split('/');
-                if (pathParts.length > 2) {
-                    categories.add(pathParts[1]); // 添加子文件夹名作为分类
-                }
-            });
+function createMultiLevelCategorySelector(sounds) {
+    const categoryStructure = {};
+    const hasSubfolders = {};
+    
+    sounds.forEach(sound => {
+        const pathParts = sound.split('/');
+        
+        if (pathParts.length >= 3 && pathParts[0] === '..' && pathParts[1] === 'sound') {
+            const primaryCategory = pathParts[2];
+            const secondaryCategory = pathParts.length > 3 ? pathParts[3] : '';
             
-            // 获取选择器元素
-            const select = document.getElementById('category-select');
+            if (!categoryStructure[primaryCategory]) {
+                categoryStructure[primaryCategory] = new Set();
+            }
             
-            // 添加分类选项
-            Array.from(categories).sort().forEach(category => {
+            if (secondaryCategory) {
+                categoryStructure[primaryCategory].add(secondaryCategory);
+                hasSubfolders[primaryCategory] = true;
+            } else {
+                hasSubfolders[primaryCategory] = hasSubfolders[primaryCategory] || false;
+            }
+        }
+    });
+
+    const primarySelect = document.getElementById('primary-category-select');
+    
+    Object.keys(categoryStructure).sort().forEach(primaryCat => {
+        const option = document.createElement('option');
+        option.value = primaryCat;
+        option.textContent = primaryCat;
+        primarySelect.appendChild(option);
+    });
+
+    const secondarySelect = document.getElementById('secondary-category-select');
+    
+    primarySelect.addEventListener('change', function() {
+        const selectedPrimary = this.value;
+        secondarySelect.innerHTML = '<option value="">选择二级分类</option>';
+        
+       
+        if (selectedPrimary === '单位' && categoryStructure[selectedPrimary] && hasSubfolders[selectedPrimary]) {
+            secondarySelect.style.display = 'inline-block';
+         
+            Array.from(categoryStructure[selectedPrimary]).sort().forEach(secondaryCat => {
                 const option = document.createElement('option');
-                option.value = category;
-                option.textContent = category;
-                select.appendChild(option);
+                option.value = secondaryCat;
+                option.textContent = secondaryCat;
+                secondarySelect.appendChild(option);
             });
-            
-            // 添加事件监听器
-            select.addEventListener('change', function() {
-                const selectedCategory = this.value;
-                filterSoundsByCategory(sounds, selectedCategory);
-            });
+        } else {
+           
+            secondarySelect.style.display = 'none';
         }
         
-        // 根据分类过滤音效
-        function filterSoundsByCategory(sounds, category) {
-            let filteredSounds = sounds;
+        filterSoundsByMultiLevelCategory(sounds, selectedPrimary, secondarySelect.value);
+    });
+    
+    secondarySelect.addEventListener('change', function() {
+        const primarySelect = document.getElementById('primary-category-select');
+        filterSoundsByMultiLevelCategory(sounds, primarySelect.value, this.value);
+    });
+}
+
+function filterSoundsByMultiLevelCategory(sounds, primaryCategory, secondaryCategory) {
+    let filteredSounds = sounds;
+    
+    if (primaryCategory !== 'all') {
+        filteredSounds = filteredSounds.filter(sound => {
+            const pathParts = sound.split('/');
             
-            if (category !== 'all') {
-                filteredSounds = sounds.filter(sound => {
-                    const pathParts = sound.split('/');
-                    return pathParts.length > 2 && pathParts[1] === category;
-                });
+            if (pathParts.length >= 3 && pathParts[0] === '..' && pathParts[1] === 'sound') {
+                if (secondaryCategory) {
+                    return pathParts[2] === primaryCategory && pathParts[3] === secondaryCategory;
+                } else {
+                    return pathParts[2] === primaryCategory;
+                }
             }
-            
-            displaySounds(filteredSounds);
-        }
+            return false;
+        });
+    }
+    
+    displaySounds(filteredSounds);
+}
+
+function displaySounds(sounds) {
+    const soundDisplay = document.getElementById('sound-display');
+    
+    if (sounds.length === 0) {
+        soundDisplay.innerHTML = '<div class="no-sounds">该分类下暂无音效文件</div>';
+        return;
+    }
+    
+    let html = '<div class="sound-container">';
+    sounds.forEach(sound => {
+        const fileName = getFileNameWithoutExtension(sound);
+        html += `
+            <div class="sound-item" 
+                 data-src="${sound}" 
+                 data-filename="${sound.split('/').pop()}">
+                <div class="sound-name">${fileName}</div>
+            </div>
+        `;
+    });
+    html += '</div>';
+    
+    soundDisplay.innerHTML = html;
+
+    document.querySelectorAll('.sound-item').forEach(item => {
+        item.addEventListener('click', () => {
+            playSound(item.getAttribute('data-src'));
+        });
         
-        // 显示音效按钮
-        function displaySounds(sounds) {
-            const soundDisplay = document.getElementById('sound-display');
-            
-            if (sounds.length === 0) {
-                soundDisplay.innerHTML = '<div class="no-sounds">该分类下暂无音效文件</div>';
-                return;
-            }
-            
-            let html = '<div class="sound-container">';
-            sounds.forEach(sound => {
-                const fileName = sound.split('/').pop().replace('.mp3', '').replace('.MP3', '');
-                html += `
-                    <div class="sound-item" 
-                         data-src="${sound}" 
-                         data-filename="${sound.split('/').pop()}">
-                        <div class="sound-name">${fileName}</div>
-                    </div>
-                `;
-            });
-            html += '</div>';
-            
-            soundDisplay.innerHTML = html;
-            
-            // 为每个音效按钮添加事件监听器
-            document.querySelectorAll('.sound-item').forEach(item => {
-                // PC端事件
-                item.addEventListener('click', () => {
-                    playSound(item.getAttribute('data-src'));
-                });
-                
-                item.addEventListener('contextmenu', (event) => {
-                    event.preventDefault();
-                    downloadSound(event, item.getAttribute('data-src'), item.getAttribute('data-filename'));
-                });
-                
-                // 移动端事件
-                item.addEventListener('touchstart', (event) => {
-                    handleTouchStart(event, item.getAttribute('data-src'), item.getAttribute('data-filename'));
-                });
-                
-                item.addEventListener('touchend', handleTouchEnd);
-                item.addEventListener('touchmove', handleTouchMove);
-            });
-        }
-        
-        // 播放音效
-        function playSound(src) {
-            const audioPlayer = document.getElementById('audio-player');
-            // 停止当前播放的音效
-            audioPlayer.pause();
-            audioPlayer.currentTime = 0;
-            
-            // 播放新音效
-            audioPlayer.src = src;
-            audioPlayer.play();
-        }
-        
-        // 下载音效文件
-        function downloadSound(event, url, filename) {
+        item.addEventListener('contextmenu', (event) => {
             event.preventDefault();
-            
-            const link = document.createElement('a');
-            link.href = url;
-            // 解码文件名用于下载
-            link.download = decodeURIComponent(filename);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+            downloadSound(event, item.getAttribute('data-src'), item.getAttribute('data-filename'));
+        });
         
-        // 移动端触摸处理
-        let longPressTimer;
+        item.addEventListener('touchstart', (event) => {
+            handleTouchStart(event, item.getAttribute('data-src'), item.getAttribute('data-filename'));
+        });
         
-        function handleTouchStart(event, url, filename) {
-            longPressTimer = setTimeout(() => {
-                downloadSound(event, url, filename);
-            }, 1000); // 长按1秒触发下载
+        item.addEventListener('touchend', handleTouchEnd);
+        item.addEventListener('touchmove', handleTouchMove);
+    });
+}
+
+function getFileNameWithoutExtension(filePath) {
+    const fileName = filePath.split('/').pop();
+    const audioExtensions = ['.mp3', '.wav', '.ogg', '.m4a', '.flac', '.aac', '.wma', '.opus'];
+    
+    for (const ext of audioExtensions) {
+        if (fileName.toLowerCase().endsWith(ext)) {
+            return fileName.replace(new RegExp(ext + '$', 'i'), '');
         }
-        
-        function handleTouchEnd() {
-            clearTimeout(longPressTimer);
-        }
-        
-        function handleTouchMove() {
-            clearTimeout(longPressTimer);
-        }
+    }
+    return fileName; 
+}
+
+function playSound(src) {
+    const audioPlayer = document.createElement('audio'); 
+    audioPlayer.src = src;
+    audioPlayer.play().catch(e => {
+        console.error('播放音频出错:', e);
+    });
+}
+
+function downloadSound(event, url, filename) {
+    event.preventDefault();
+    
+    const link = document.createElement('a');
+    link.href = url;
+    
+    link.download = decodeURIComponent(filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+let longPressTimer;
+
+function handleTouchStart(event, url, filename) {
+    longPressTimer = setTimeout(() => {
+        downloadSound(event, url, filename);
+    }, 1000); 
+}
+
+function handleTouchEnd() {
+    clearTimeout(longPressTimer);
+}
+
+function handleTouchMove() {
+    clearTimeout(longPressTimer);
+}
     </script>
 
 <style>
-/* 统一的页面载入动画 */
-@keyframes pageSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
+    @keyframes pageSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+    .container {
+        animation: pageSlideIn 0.4s ease-out forwards;
     }
-}
 
-/* 应用到所有页面容器 */
-.container {
-    animation: pageSlideIn 0.4s ease-out forwards;
-}
+    .content {
+        animation: pageSlideIn 0.4s ease-out forwards;
+    }
 
-/* 为已有动画的页面调整动画 */
-.content {
-    animation: pageSlideIn 0.4s ease-out forwards;
-}
+    .video-list {
+        animation: pageSlideIn 0.4s ease-out forwards;
+    }
 
-/* 视频列表动画 */
-.video-list {
-    animation: pageSlideIn 0.4s ease-out forwards;
-}
+    #sound-display {
+        animation: pageSlideIn 0.4s ease-out forwards;
+    }
 
-/* 音效容器动画 */
-#sound-display {
-    animation: pageSlideIn 0.4s ease-out forwards;
-}
+    #image-display {
+        animation: pageSlideIn 0.4s ease-out forwards;
+    }
 
-/* 图片容器动画 */
-#image-display {
-    animation: pageSlideIn 0.4s ease-out forwards;
-}
+    .bottom-nav {
+        animation: pageSlideIn 0.4s ease-out 0.1s forwards;
+        animation-fill-mode: both;
+    }
 
-/* 导航栏动画 */
-.bottom-nav {
-    animation: pageSlideIn 0.4s ease-out 0.1s forwards;
-    animation-fill-mode: both;
-}
-
-/* 初始状态设置 */
-.container,
-.content,
-.video-list,
-#sound-display,
-#image-display,
-.bottom-nav {
-    opacity: 0;
-}
-
-/* 延迟显示内容，避免闪烁 */
-@media (prefers-reduced-motion: reduce) {
     .container,
     .content,
     .video-list,
     #sound-display,
     #image-display,
     .bottom-nav {
-        animation: none;
-        opacity: 1;
+        opacity: 0;
     }
-}
+
+    @media (prefers-reduced-motion: reduce) {
+        .container,
+        .content,
+        .video-list,
+        #sound-display,
+        #image-display,
+        .bottom-nav {
+            animation: none;
+            opacity: 1;
+        }
+    }
 </style>
 
 </body>
