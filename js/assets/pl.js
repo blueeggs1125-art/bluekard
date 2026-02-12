@@ -330,7 +330,7 @@ async function deleteComment(commentId, imagePath) {
     }
 }
 
-// 添加玻璃质感样式
+
 function addGlassStyle() {
     if (document.getElementById('comments-modal-styles')) {
         return;
@@ -406,6 +406,7 @@ function addGlassStyle() {
         .modal-header h3 {
             margin: 0;
             font-size: 16px;
+            color: white; /* 标题文字颜色设为白色 */
         }
 
         .close-modal {
@@ -488,18 +489,18 @@ function addGlassStyle() {
 
         .comment-user {
             font-weight: bold;
-            color: #333;
+            color: white; /* 用户名文字颜色设为白色 */
             font-size: 14px;
         }
 
         .comment-time {
-            color: #999;
+            color: #ccc; /* 时间文字颜色设为浅灰色 */
             font-size: 12px;
             margin-left: 5px;
         }
 
         .comment-content {
-            color: #555;
+            color: white; /* 评论内容文字颜色设为白色 */
             line-height: 1.5;
             margin-left: 38px;
             font-size: 14px;
@@ -530,7 +531,7 @@ function addGlassStyle() {
         .no-comments {
             text-align: center;
             padding: 20px;
-            color: #999;
+            color: #ccc; /* 无评论提示文字颜色设为浅灰色 */
             font-style: italic;
             font-size: 14px;
         }
@@ -538,7 +539,7 @@ function addGlassStyle() {
         .loading-comments {
             text-align: center;
             padding: 20px;
-            color: #666;
+            color: #ccc; /* 加载提示文字颜色设为浅灰色 */
             font-size: 14px;
         }
 
@@ -555,6 +556,7 @@ function addGlassStyle() {
             background: rgba(255, 255, 255, 0.7); /* 半透明背景 */
             backdrop-filter: blur(10px); /* 模糊效果 */
             -webkit-backdrop-filter: blur(10px); /* Safari兼容 */
+            color: white; /* 输入框文字颜色设为白色 */
         }
 
         .submit-comment-btn {
@@ -585,6 +587,7 @@ function addGlassStyle() {
             font-size: 14px;
             backdrop-filter: blur(10px); /* 模糊效果 */
             -webkit-backdrop-filter: blur(10px); /* Safari兼容 */
+            color: white; /* 登录提示文字颜色设为白色 */
         }
 
         .login-prompt a {
