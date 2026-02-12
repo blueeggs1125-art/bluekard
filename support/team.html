@@ -2,19 +2,19 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/png" sizes="16x16" href="../icon/16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="../icon/32x32.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="../icon/48x48.png">
-    <link rel="icon" type="image/png" sizes="64x64" href="../icon/64x64.png">
-    <link rel="icon" type="image/png" sizes="128x128" href="../icon/128x128.png">
-    <link rel="icon" type="image/png" sizes="256x256" href="../icon/256x256.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="../icon/512x512.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="../icon/180x180.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../icon/16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../icon/32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="../../icon/48x48.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="../../icon/64x64.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="../../icon/128x128.png">
+    <link rel="icon" type="image/png" sizes="256x256" href="../../icon/256x256.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../../icon/512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../icon/180x180.png">
     <link rel="manifest" href="site.webmanifest">
     <meta name="theme-color" content="#ffffff">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/team.css">
-    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../css/team.css">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
     <title>FUCK 1939</title>
     <style>
         * {
@@ -69,7 +69,7 @@
             justify-content: center;
             width: 100%;
             padding: 20px;
-            flex-wrap: nowrap; /* 关键：防止换行 */
+            flex-wrap: nowrap; 
         }
 
         .content-image {
@@ -92,11 +92,11 @@
             max-width: calc(100% - 270px); 
         }
 
-        /* 新增：链接一行显示的样式 */
+   
         .link-row {
             display: flex;
             align-items: center;
-            gap: 20px; /* 两个链接之间的间距 */
+            gap: 20px; 
         }
 
         .content-link {
@@ -104,11 +104,11 @@
             text-decoration: none;
             font-size: 36px;
             font-weight: bold;
-            margin-bottom: 5px; /* 减小与下方小字的间距 */
-            word-wrap: break-word; /* 允许长单词换行 */
+            margin-bottom: 5px; 
+            word-wrap: break-word; 
         }
 
-        /* 新增：QQ链接样式，和bilibili链接保持一致 */
+      
         .qq-link {
             color: #1e90ff;
             text-decoration: none;
@@ -118,11 +118,11 @@
             word-wrap: break-word;
         }
 
-        /* 新增：下方小字样式 */
+       
         .link-subtext {
             font-size: 16px;
             color: #666;
-            margin-left: 2px; /* 与链接对齐 */
+            margin-left: 2px; 
         }
 
         .content-link:hover, .qq-link:hover {
@@ -133,17 +133,17 @@
             font-size: 24px;
             font-weight: bold;
             margin: 10px 0;
-            word-wrap: break-word; /* 允许长单词换行 */
+            word-wrap: break-word;
         }
 
         .normal-text {
             font-size: 16px;
             font-weight: normal;
             color: #555;
-            word-wrap: break-word; /* 允许长单词换行 */
+            word-wrap: break-word;
         }
         
-        /* 调整：联系文字直接放在content内的样式 */
+  
         .contact-text {
             margin-top: 30px;
             padding: 20px;
@@ -170,7 +170,7 @@
             line-height: 1.5;
         }
 
-        /* 手机适配 */
+      
        @media (max-width: 768px) {
             body {
                 padding-bottom: 50px;
@@ -186,12 +186,12 @@
             }
 
             .image-link-container {
-                flex-direction: row; /* 保持水平排列 */
+                flex-direction: row; 
                 padding: 15px;
-                flex-wrap: nowrap; /* 防止换行 */
+                flex-wrap: nowrap; 
             }
 
-            /* 其他原有样式保持不变 */
+  
             .content-image {
                 height: 60%;
                 max-width: 200px;
@@ -204,12 +204,12 @@
                 text-align: center;
             }
 
-            /* 适配手机端链接字体大小 */
+           
             .content-link, .qq-link {
                 font-size: 28px;
             }
 
-            /* 适配手机端小字大小 */
+         
             .link-subtext {
                 font-size: 14px;
             }
@@ -254,13 +254,13 @@
             }
 
             .image-link-container {
-                flex-direction: row; /* 保持水平排列 */
+                flex-direction: row; 
                 padding: 10px;
                 text-align: center;
-                flex-wrap: nowrap; /* 防止换行 */
+                flex-wrap: nowrap; 
             }
 
-            /* 其他原有样式保持不变 */
+    
             .content-image {
                 height: 40%;
                 max-width: 150px;
@@ -273,12 +273,12 @@
                 max-width: 100%;
             }
 
-            /* 适配小屏手机链接字体大小 */
+            
             .content-link, .qq-link {
                 font-size: 24px;
             }
 
-            /* 适配小屏手机小字大小 */
+           
             .link-subtext {
                 font-size: 13px;
             }
@@ -309,7 +309,7 @@
             }
         }
 
-        /* 超窄屏幕适配 */
+       
         @media (max-width: 320px) {
             .content-link, .qq-link {
                 font-size: 20px;
@@ -344,7 +344,7 @@
             }
         }
 
-        /* 底部导航栏 */
+        
         .bottom-nav {
             position: fixed;
             bottom: 10px;
@@ -380,7 +380,7 @@
 <body>
 
     <div class="container">
-        
+      
         <div class="content">
             <div class="image-link-container">
                 <img src="../pwp.png" alt="marisa" class="content-image">
@@ -388,14 +388,14 @@
                     
                     <div class="link-row">
                         <a href="https://space.bilibili.com/596035099" target="_blank" class="content-link">blueeggs</a>
-                        <a href="about:blank" target="_blank" class="qq-link"></a>
+                        <a href="About:blank" target="_blank" class="qq-link">1</a>
                     </div>
                     
                     <div class="link-subtext"></div>
                 </div>
             </div>
             
-            
+          
             <div class="contact-text">
                 <div class="contact-title">联系我们</div>
                 <div class="contact-email">Support@fk1939.cn</div>
@@ -409,19 +409,19 @@
     </div>
 
     <div class="bottom-nav">
-        <a href="../index.html" onmouseover="this.style.background='rgba(255,255,255,0.12)';" 
+        <a href="/" onmouseover="this.style.background='rgba(255,255,255,0.12)';" 
            onmouseout="this.style.background='transparent';"
            onmousedown="this.style.transform='scale(0.92)';"
            onmouseup="this.style.transform='scale(1)';">
             主页
         </a>
-        <a href="../account/myaccount.html" onmouseover="this.style.background='rgba(255,255,255,0.12)';" 
+        <a href="../../admin/account/" onmouseover="this.style.background='rgba(255,255,255,0.12)';" 
            onmouseout="this.style.background='transparent';"
            onmousedown="this.style.transform='scale(0.92)';"
            onmouseup="this.style.transform='scale(1)';">
             我的
         </a>
-        <a href="../support/team.html" onmouseover="this.style.background='rgba(255,255,255,0.12)';" 
+        <a href="../../support/about/" onmouseover="this.style.background='rgba(255,255,255,0.12)';" 
            onmouseout="this.style.background='transparent';"
            onmousedown="this.style.transform='scale(0.92)';"
            onmouseup="this.style.transform='scale(1)';">
@@ -429,8 +429,8 @@
         </a>
     </div>
 
-    <script src="../js/daohanglan.js"></script>
-    <script src="/js/panquan.js"></script>
+    <script src="../../js/daohanglan.js"></script>
+    <script src="../../js/panquan.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const content = document.querySelector('.content');
@@ -442,5 +442,4 @@
     </script>
 
 </body>
-
 </html>
