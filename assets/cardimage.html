@@ -17,12 +17,12 @@
     <title>FUCK 1939</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <style>
-        /* 添加到<style>标签内的其他样式后面 */
+
 .image-item .image-name {
     display: none;
 }
 
-/* 如果只想在某些屏幕尺寸下隐藏文件名，可以使用媒体查询 */
+
 @media (max-width: 768px) {
     .image-item .image-name {
         display: none;
@@ -777,6 +777,16 @@
     font-size: 14px;
 }
 
+.image-history {
+    font-size: 12px;
+    color: #666;
+    padding: 5px;
+    background: #f0f0f0;
+    border-top: 1px solid #ddd;
+    text-align: left;
+    word-wrap: break-word;
+}
+
 .comment-input-section textarea {
     width: 100%;
     padding: 10px;
@@ -952,12 +962,12 @@
 
     
 
-  <!-- 替换现有的移动端筛选按钮和面板代码 -->
 
-<!-- 移动端筛选按钮 -->
+
+
 <div class="mobile-filter-btn" id="mobile-filter-btn">+</div>
 
-<!-- 移动端筛选面板 -->
+
 <div class="mobile-filter-overlay" id="mobile-filter-overlay"></div>
 
 <div class="mobile-filter-tooltip" id="mobile-filter-tooltip">
@@ -966,7 +976,7 @@
         <button class="close-tooltip" id="close-mobile-tooltip">×</button>
     </div>
     
-    <!-- 将搜索框添加到国家筛选部分上方 -->
+   
     <div class="tooltip-section">
         <h4>搜索</h4>
         <input type="text" id="mobile-search-input" placeholder="搜索卡牌名称或描述..." style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ddd;">
@@ -1010,6 +1020,49 @@
             </div>
         </div>
     </div>
+
+    <div class="tooltip-section">
+    <h4>设置</h4>
+    <div class="tooltip-options" id="setting-icon-options">
+        <div class="tooltip-option" data-value="基础" data-type="setting">
+            <img src="../image/icon/基础.png" alt="基础">
+        </div>
+        <div class="tooltip-option" data-value="忠诚" data-type="setting">
+            <img src="../image/icon/忠诚.png" alt="忠诚">
+        </div>
+        <div class="tooltip-option" data-value="战友" data-type="setting">
+            <img src="../image/icon/战友.png" alt="战友">
+        </div>
+        <div class="tooltip-option" data-value="突破" data-type="setting">
+            <img src="../image/icon/突破.png" alt="突破">
+        </div>
+        <div class="tooltip-option" data-value="军团" data-type="setting">
+            <img src="../image/icon/军团.png" alt="军团">
+        </div>
+        <div class="tooltip-option" data-value="世纪大战" data-type="setting">
+            <img src="../image/icon/世纪大战.png" alt="世纪大战">
+        </div>
+        <div class="tooltip-option" data-value="冬季战争" data-type="setting">
+            <img src="../image/icon/冬季战争.png" alt="冬季战争">
+        </div>
+        <div class="tooltip-option" data-value="秘密行动" data-type="setting">
+            <img src="../image/icon/秘密行动.png" alt="秘密行动">
+        </div>
+        <div class="tooltip-option" data-value="血与铁" data-type="setting">
+            <img src="../image/icon/血与铁.png" alt="血与铁">
+        </div>
+        <div class="tooltip-option" data-value="海战" data-type="setting">
+            <img src="../image/icon/海战.png" alt="海战">
+        </div>
+        <div class="tooltip-option" data-value="国土阵线" data-type="setting">
+            <img src="../image/icon/国土阵线.png" alt="国土阵线">
+        </div>
+
+        <div class="tooltip-option" data-value="战区" data-type="setting">
+            <img src="../image/icon/战区.png" alt="战区">
+        </div>
+    </div>
+</div>
 
     <!-- 其他筛选部分保持不变 -->
     <div class="tooltip-section">
@@ -1207,7 +1260,7 @@
                   <label for="setting-select" style="font-size: 14px; white-space: nowrap;">设置:</label>
                   <select id="setting-select" style="padding: 6px 10px; border: 2px solid #1e90ff; border-radius: 5px; background-color: white; color: #333; font-size: 14px; cursor: pointer; min-width: 100px;">
                     <option value="">全部</option>
-                    <option value="秘密行動">秘密行動</option>
+                    <option value="秘密行动">秘密行动</option>
                     <option value="海战">海战</option>
                     <option value="世纪大战">世纪大战</option>
                     <option value="血与铁">血与铁</option>
@@ -1275,15 +1328,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // 修改 applyMobileFilter 函数以正确处理搜索
- function applyMobileFilter() {
-    // 获取所有选中的选项
+    
+function applyMobileFilter() {
     const selectedOptions = document.querySelectorAll('.tooltip-option.selected');
-    
-    // 获取搜索关键词
     const searchKeyword = mobileSearchInput ? mobileSearchInput.value.trim().toLowerCase() : '';
-    
-    // 构建筛选条件对象
+
     const filters = {
         rarity: [],
         type: [],
@@ -1292,16 +1341,15 @@ document.addEventListener('DOMContentLoaded', function() {
         veteran: [],
         derived: [],
         country: [],
-        setting: [],
-        search: searchKeyword // 添加搜索关键词
+        setting: [], // 初始化设置筛选数组
+        search: searchKeyword
     };
-        
-    // 分类选中的选项
+
     selectedOptions.forEach(option => {
         const type = option.dataset.type;
         const value = option.dataset.value;
-        
-        switch(type) {
+
+        switch (type) {
             case 'rarity':
                 filters.rarity.push(value);
                 break;
@@ -1323,42 +1371,26 @@ document.addEventListener('DOMContentLoaded', function() {
             case 'country':
                 filters.country.push(value);
                 break;
-            case 'setting':
-                filters.setting.push(value);
+            case 'setting': // 处理设置筛选
+                filters.setting.push(value); // 确保设置值被加入
+                console.log('选中的设置值:', value); // 调试输出
                 break;
         }
     });
-    
-    // 如果选择了特殊分类，直接显示
-    if (filters.country.includes('总部')) {
-        displaySpecialImages('总部');
-        return;
+
+    // 新增：显式提示空筛选条件
+    if (filters.setting.length === 0) {
+        console.warn('未选中任何设置筛选条件');
     }
-    
-    if (filters.country.includes('卡背')) {
-        displaySpecialImages('卡背');
-        return;
-    }
-    
-    // 如果选择了老兵或衍生，需要特殊处理
-    if (filters.veteran.length > 0 && filters.veteran[0] === 'true') {
-        displaySpecialImages('老兵');
-        return;
-    }
-    
-    if (filters.derived.length > 0 && filters.derived[0] === 'true') {
-        displaySpecialImages('衍生');
-        return;
-    }
-    
-    // 应用筛选到图片（添加这一行）
+
+    console.log('移动端筛选条件:', filters); // 调试输出
     filterImagesByMobile(filters);
 }
 
 
     loadInitialImages();
     
-    // 特殊图标点击事件处理
+  
     const cardbackIcon = document.getElementById('cardback-icon');
     const headquartersIcon = document.getElementById('headquarters-icon');
     
@@ -1453,34 +1485,35 @@ function loadInitialImages() {
 }
 
     
-    // 创建卡牌和图片的映射关系
-    function createCardImageMap(cardsData, imagesData) {
-        const cardImageMap = [];
-        
-        // 遍历所有卡牌
-        cardsData.forEach(card => {
-            const country = card.国家;
-            const cardName = card.名称;
-            
-            // 在图片数据中查找对应的图片
-            if (imagesData[country]) {
-                for (const subtype in imagesData[country]) {
-                    const foundImage = imagesData[country][subtype].find(imgPath => 
-                        imgPath.includes(cardName)
-                    );
-                    if (foundImage) {
-                        cardImageMap.push({
-                            card: card,
-                            imagePath: foundImage
-                        });
-                        break;
-                    }
+   
+   function createCardImageMap(cardsData, imagesData) {
+    const cardImageMap = [];
+
+    cardsData.forEach(card => {
+        const country = card.国家;
+        const cardName = card.名称;
+
+        if (imagesData[country]) {
+            for (const subtype in imagesData[country]) {
+                
+                const foundImage = imagesData[country][subtype].find(imgPath => {
+                    const fileName = imgPath.split('/').pop().replace(/\.[^/.]+$/, ""); 
+                    return fileName === cardName; 
+                });
+
+                if (foundImage) {
+                    cardImageMap.push({
+                        card: card,
+                        imagePath: foundImage
+                    });
+                    break;
                 }
             }
-        });
-        
-        return cardImageMap;
-    }
+        }
+    });
+
+    return cardImageMap;
+}
     
     // 按指挥点排序卡牌
     function sortCardsByCommandPoint(cards) {
@@ -1492,48 +1525,44 @@ function loadInitialImages() {
     }
     
     // 更新筛选器函数（支持多选）
-    function updateFilter(type, value) {
-        let selectElement;
-        switch(type) {
-            case 'country':
-                selectElement = document.getElementById('country-select');
-                break;
-            case 'rarity':
-                selectElement = document.getElementById('rarity-select');
-                break;
-            case 'type':
-                selectElement = document.getElementById('type-select');
-                break;
-            case 'command-point':
-                selectElement = document.getElementById('command-point-select');
-                break;
-            case 'status':
-                selectElement = document.getElementById('status-select');
-                break;
-            case 'setting':
-                selectElement = document.getElementById('setting-select');
-                break;
-        }
-        
-        if (selectElement) {
-            // 对于所有筛选条件，使用多选逻辑
-            const currentValues = selectElement.value ? selectElement.value.split(',') : [];
-            const valueIndex = currentValues.indexOf(value);
-            
-            if (valueIndex > -1) {
-                // 如果已选中，则移除
-                currentValues.splice(valueIndex, 1);
-            } else {
-                // 如果未选中，则添加
-                currentValues.push(value);
-            }
-            
-            selectElement.value = currentValues.join(',');
-            
-            // 同步移动端筛选器
-            syncMobileFilters(type, selectElement.value);
-        }
+function updateFilter(type, value) {
+    let selectElement;
+    switch(type) {
+        case 'country':
+            selectElement = document.getElementById('country-select');
+            break;
+        case 'rarity':
+            selectElement = document.getElementById('rarity-select');
+            break;
+        case 'type':
+            selectElement = document.getElementById('type-select');
+            break;
+        case 'command-point':
+            selectElement = document.getElementById('command-point-select');
+            break;
+        case 'status':
+            selectElement = document.getElementById('status-select');
+            break;
+        case 'setting':
+            selectElement = document.getElementById('setting-select');
+            break;
     }
+
+    if (selectElement) {
+        const currentValues = selectElement.value ? selectElement.value.split(',') : [];
+        const valueIndex = currentValues.indexOf(value);
+
+        if (valueIndex > -1) {
+            currentValues.splice(valueIndex, 1); // 移除已选中项
+        } else {
+            currentValues.push(value); // 添加新选中项
+        }
+
+        selectElement.value = currentValues.join(',');
+        syncMobileFilters(type, selectElement.value); // 同步移动端
+        applyFilters(); // 应用筛选
+    }
+}
     
     // 应用筛选条件
     function applyFilters() {
@@ -1565,28 +1594,72 @@ function loadInitialImages() {
                filters.search;
     }
     
-    // 显示特殊分类图片
-    function displaySpecialImages(category) {
-        imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
-        
-        fetch('../data/newimages.json')
-            .then(response => response.json())
-            .then(imagesData => {
-                if (imagesData[category] && Array.isArray(imagesData[category])) {
-                    const imagePaths = imagesData[category].map(imgPath => ({
-                        path: imgPath,
-                        name: imgPath.split('/').pop()
-                    }));
-                    renderImages(imagePaths);
-                } else {
-                    imageDisplay.innerHTML = '<div class="no-images">未找到相关图片</div>';
-                }
-            })
-            .catch(error => {
-                console.error('加载图片出错:', error);
-                imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
+    
+function displaySpecialImages(category) {
+    imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
+
+    
+    Promise.all([
+        fetch('../data/newimages.json').then(response => response.json()),
+        fetch('../data/hq.json').then(response => response.json())
+    ])
+    .then(([imagesData, hqData]) => {
+        if (imagesData[category] && Array.isArray(imagesData[category])) {
+            const imagePaths = imagesData[category].map(imgPath => {
+                const fileName = imgPath.split('/').pop().replace(/\.[^/.]+$/, ""); 
+                const historyInfo = hqData[fileName]?.历史 || "暂无历史信息"; 
+
+                return {
+                    path: imgPath,
+                    name: fileName,
+                    history: historyInfo
+                };
             });
-    }
+            renderImagesWithHistory(imagePaths); // 使用新的渲染函数
+        } else {
+            imageDisplay.innerHTML = '<div class="no-images">未找到相关图片</div>';
+        }
+    })
+    .catch(error => {
+        console.error('加载图片出错:', error);
+        imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
+    });
+}
+
+function renderImagesWithHistory(images) {
+    let html = '<div class="image-container">';
+    images.forEach(image => {
+        const imagePath = image.path;
+        const fileName = image.name;
+        const historyInfo = image.history;
+
+        // 自动添加 ../ 前缀以适应 assets 文件夹的位置
+        let correctedImagePath = imagePath;
+        if (!imagePath.startsWith('http') && !imagePath.startsWith('../')) {
+            correctedImagePath = '../' + imagePath;
+        }
+
+        const encodedImagePath = encodeImagePath(correctedImagePath);
+        const encodedFileName = encodeURIComponent(fileName);
+
+        html += `
+            <div class="image-item">
+                <img src="${encodedImagePath}" alt="${fileName}" 
+                     data-url="${encodedImagePath}"
+                     data-filename="${encodedFileName}"
+                     onload="this.parentNode.classList.add('loaded')"
+                     style="cursor: pointer;">
+                <div class="image-name">${fileName}</div>
+                <div class="image-history" style="font-size: 12px; color: #666; padding: 5px; background: #f0f0f0; border-top: 1px solid #ddd;">
+                    ${historyInfo}
+                </div>
+            </div>
+        `;
+    });
+    html += '</div>';
+
+    imageDisplay.innerHTML = html;
+}
     
     // 根据筛选条件显示图片
 function displayFilteredImages(filters) {
@@ -1644,12 +1717,17 @@ function displayFilteredImages(filters) {
             });
         }
         
-        // 应用设置筛选
-        if (filters.setting.length > 0) {
-            filteredCards = filteredCards.filter(card => 
-                filters.setting.includes(card.详细信息?.设置)
-            );
-        }
+      
+if (filters.setting.length > 0) {
+    console.log('进入设置筛选');
+    filteredCards = filteredCards.filter(card => {
+        const settingField = card.详细信息?.设置?.trim(); 
+        console.log('卡牌设置字段:', settingField);
+
+ 
+        return settingField && filters.setting.includes(settingField);
+    });
+}
         
         // 应用搜索筛选 - 这是新添加的部分
         if (filters.search) {
@@ -1753,70 +1831,65 @@ function renderImages(images) {
         document.body.style.overflow = 'auto';
     });
     
-    // 移动端筛选选项点击事件
-    document.querySelectorAll('.tooltip-option').forEach(option => {
-        option.addEventListener('click', function() {
-            const type = this.dataset.type;
-            const value = this.dataset.value;
-            
-            // 特殊处理：如果点击的是国家选项且值为特殊分类
-            if (type === 'country' && (value === '总部' || value === '卡背')) {
-                // 清除所有选中状态
-                document.querySelectorAll('.tooltip-option').forEach(opt => {
-                    opt.classList.remove('selected');
-                });
-                
-                // 选中当前选项
-                this.classList.add('selected');
-                
-                // 显示对应图片
-                displaySpecialImages(value);
-                return;
-            }
-            
-            // 对于所有筛选条件，使用多选
-            this.classList.toggle('selected');
-            
-            // 立即应用筛选
-            applyMobileFilter();
-        });
+document.querySelectorAll('.tooltip-option').forEach(option => {
+    option.addEventListener('click', function (event) {
+        event.preventDefault(); // 阻止默认行为（如页面刷新）
+
+        const type = this.dataset.type;
+        const value = this.dataset.value;
+
+        // 如果是特殊选项（如总部、卡背），单独处理
+        if (type === 'country' && (value === '总部' || value === '卡背')) {
+            document.querySelectorAll('.tooltip-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            this.classList.add('selected');
+            displaySpecialImages(value);
+            return;
+        }
+
+        // 切换选中状态
+        this.classList.toggle('selected');
+
+        // 立即应用筛选
+        applyMobileFilter();
     });
+});
     
 
     
- function filterImagesByMobile(filters) {
+function filterImagesByMobile(filters) {
     imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
-    
+
     // 并行获取卡牌数据和图片数据
     Promise.all([
         fetch('../data/newk.json').then(response => response.json()),
         fetch('../data/newimages.json').then(response => response.json())
     ])
     .then(([cardsData, imagesData]) => {
-        // 筛选卡牌
         let filteredCards = cardsData;
-        
+
         // 应用国家筛选
         if (filters.country.length > 0) {
-            filteredCards = filteredCards.filter(card => 
+            filteredCards = filteredCards.filter(card =>
                 filters.country.includes(card.国家)
             );
         }
-        
+
         // 应用稀有度筛选
         if (filters.rarity.length > 0) {
-            filteredCards = filteredCards.filter(card => 
+            filteredCards = filteredCards.filter(card =>
                 filters.rarity.includes(card.详细信息?.稀有度)
             );
         }
-        
+
         // 应用类型筛选
         if (filters.type.length > 0) {
-            filteredCards = filteredCards.filter(card => 
+            filteredCards = filteredCards.filter(card =>
                 filters.type.includes(card.详细信息?.类型)
             );
         }
-        
+
         // 应用指挥点筛选
         if (filters.commandPoint.length > 0) {
             filteredCards = filteredCards.filter(card => {
@@ -1829,7 +1902,7 @@ function renderImages(images) {
                 return filters.commandPoint.includes(commandPoint);
             });
         }
-        
+
         // 应用状态筛选
         if (filters.status.length > 0) {
             filteredCards = filteredCards.filter(card => {
@@ -1838,56 +1911,43 @@ function renderImages(images) {
                 return filters.status.includes(statusStr);
             });
         }
-        
-        // 应用设置筛选
+
+        // 应用设置筛选（新增：同时检查字段和文件名）
         if (filters.setting.length > 0) {
-            filteredCards = filteredCards.filter(card => 
-                filters.setting.includes(card.详细信息?.设置)
-            );
+            console.log('进入设置筛选');
+            filteredCards = filteredCards.filter(card => {
+                const settingField = card.详细信息?.设置; // 检查字段
+                const imageName = card.名称; // 检查文件名
+
+                // 判断字段或文件名是否匹配任意一个筛选值
+                return filters.setting.some(filterValue =>
+                    settingField === filterValue || imageName.includes(filterValue)
+                );
+            });
         }
-        
+
         // 应用搜索筛选
         if (filters.search) {
             filteredCards = filteredCards.filter(card => {
-                // 搜索卡牌名称和描述
                 const nameMatch = card.名称.toLowerCase().includes(filters.search);
                 const descMatch = card.描述 && card.描述.toLowerCase().includes(filters.search);
-                
-                // 搜索文件名
-                let fileNameMatch = false;
-                const country = card.国家;
-                const cardName = card.名称;
-                
-                if (imagesData[country]) {
-                    for (const subtype in imagesData[country]) {
-                        const foundImage = imagesData[country][subtype].find(imgPath => 
-                            imgPath.includes(cardName)
-                        );
-                        if (foundImage) {
-                            const fileName = foundImage.split('/').pop().toLowerCase();
-                            fileNameMatch = fileName.includes(filters.search);
-                            break;
-                        }
-                    }
-                }
-                
-                return nameMatch || descMatch || fileNameMatch;
+                return nameMatch || descMatch;
             });
         }
-        
+
         // 创建卡牌和图片的映射关系
         const cardImageMap = createCardImageMap(filteredCards, imagesData);
-        
+
         // 按指挥点排序
         const sortedCards = sortCardsByCommandPoint(cardImageMap);
-        
-        // 只提取图片信息，但保留 cardData 用于判断是否为预备卡牌
+
+        // 提取图片信息
         const filteredImages = sortedCards.map(item => ({
             path: item.imagePath,
             name: item.imagePath.split('/').pop(),
-            cardData: item.card // 保留 cardData 信息
+            cardData: item.card
         }));
-        
+
         if (filteredImages.length === 0) {
             imageDisplay.innerHTML = '<div class="no-images">未找到匹配的图片</div>';
         } else {
@@ -1898,47 +1958,54 @@ function renderImages(images) {
         console.error('加载图片出错:', error);
         imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
     });
+
+    console.log('筛选条件:', filters);
+console.log('设置筛选值:', filters.setting);
 }
+
     
 
-    function syncMobileFilters(type, value) {
+function syncMobileFilters(type, value) {
+    // 清除移动端所有同类选项的选中状态
+    document.querySelectorAll(`.tooltip-option[data-type="${type}"]`).forEach(opt => {
+        opt.classList.remove('selected');
+    });
 
-        document.querySelectorAll(`.tooltip-option[data-type="${type}"]`).forEach(opt => {
-            opt.classList.remove('selected');
+    // 设置新选中项
+    if (value) {
+        const values = value.split(',');
+        values.forEach(val => {
+            const selectedOption = document.querySelector(`.tooltip-option[data-type="${type}"][data-value="${val}"]`);
+            if (selectedOption) {
+                selectedOption.classList.add('selected');
+            }
         });
-        
-        if (value) {
-            const values = value.split(',');
-            values.forEach(val => {
-                const selectedOption = document.querySelector(`.tooltip-option[data-type="${type}"][data-value="${val}"]`);
-                if (selectedOption) {
-                    selectedOption.classList.add('selected');
-                }
-            });
-        }
     }
+}
     
 
 
 
 function encodeImagePath(path) {
-    // 处理相对路径，确保在 assets 文件夹中正确访问上层目录资源
+   
     if (path.startsWith('../')) {
-        // 已经有 ../ 前缀，正常处理
+
         const parts = path.split('/');
         return parts.map((part, index) => {
-            // 第一个部分是 ..，不需要编码
+  
             if (index === 0) return part;
             return encodeURIComponent(part);
         }).join('/');
     } else if (path.startsWith('http')) {
-        // 完整URL，直接返回
+  
         return path;
     } else {
-        // 添加 ../ 前缀并编码
+      
         const parts = path.split('/');
         return '../' + parts.map(part => encodeURIComponent(part)).join('/');
     }
 }
 });
+
+
 </script>
