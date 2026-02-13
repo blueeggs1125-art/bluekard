@@ -1598,68 +1598,30 @@ function updateFilter(type, value) {
 function displaySpecialImages(category) {
     imageDisplay.innerHTML = '<div class="loading">加载中...</div>';
 
-    
-    Promise.all([
-        fetch('../data/newimages.json').then(response => response.json()),
-        fetch('../data/hq.json').then(response => response.json())
-    ])
-    .then(([imagesData, hqData]) => {
-        if (imagesData[category] && Array.isArray(imagesData[category])) {
-            const imagePaths = imagesData[category].map(imgPath => {
-                const fileName = imgPath.split('/').pop().replace(/\.[^/.]+$/, ""); 
-                const historyInfo = hqData[fileName]?.历史 || "暂无历史信息"; 
+    fetch('../data/newimages.json')
+        .then(response => response.json())
+        .then(imagesData => {
+            if (imagesData[category] && Array.isArray(imagesData[category])) {
+                const imagePaths = imagesData[category].map(imgPath => {
+                    const fileName = imgPath.split('/').pop().replace(/\.[^/.]+$/, "");
 
-                return {
-                    path: imgPath,
-                    name: fileName,
-                    history: historyInfo
-                };
-            });
-            renderImagesWithHistory(imagePaths); // 使用新的渲染函数
-        } else {
-            imageDisplay.innerHTML = '<div class="no-images">未找到相关图片</div>';
-        }
-    })
-    .catch(error => {
-        console.error('加载图片出错:', error);
-        imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
-    });
+                    return {
+                        path: imgPath,
+                        name: fileName
+                    };
+                });
+                renderImages(imagePaths); // 直接调用 renderImages
+            } else {
+                imageDisplay.innerHTML = '<div class="no-images">未找到相关图片</div>';
+            }
+        })
+        .catch(error => {
+            console.error('加载图片出错:', error);
+            imageDisplay.innerHTML = '<div class="no-images">加载图片失败</div>';
+        });
 }
 
-function renderImagesWithHistory(images) {
-    let html = '<div class="image-container">';
-    images.forEach(image => {
-        const imagePath = image.path;
-        const fileName = image.name;
-        const historyInfo = image.history;
 
-        // 自动添加 ../ 前缀以适应 assets 文件夹的位置
-        let correctedImagePath = imagePath;
-        if (!imagePath.startsWith('http') && !imagePath.startsWith('../')) {
-            correctedImagePath = '../' + imagePath;
-        }
-
-        const encodedImagePath = encodeImagePath(correctedImagePath);
-        const encodedFileName = encodeURIComponent(fileName);
-
-        html += `
-            <div class="image-item">
-                <img src="${encodedImagePath}" alt="${fileName}" 
-                     data-url="${encodedImagePath}"
-                     data-filename="${encodedFileName}"
-                     onload="this.parentNode.classList.add('loaded')"
-                     style="cursor: pointer;">
-                <div class="image-name">${fileName}</div>
-                <div class="image-history" style="font-size: 12px; color: #666; padding: 5px; background: #f0f0f0; border-top: 1px solid #ddd;">
-                    ${historyInfo}
-                </div>
-            </div>
-        `;
-    });
-    html += '</div>';
-
-    imageDisplay.innerHTML = html;
-}
     
     // 根据筛选条件显示图片
 function displayFilteredImages(filters) {
@@ -1776,13 +1738,7 @@ function renderImages(images) {
         const fileName = imagePath.split('/').pop();
         const displayName = typeof image === 'object' ? (image.name || fileName) : fileName;
         const encodedFileName = encodeURIComponent(fileName);
-        
-        // 如果 image 对象包含 cardData，则检查是否为预备卡牌
-        let isReserve = false;
-        if (image.cardData) {
-            isReserve = image.cardData.详细信息?.活跃 === "false";
-        }
-        
+
         html += `
             <div class="image-item">
                 <img src="${encodedImagePath}" alt="${displayName}" 
@@ -1790,17 +1746,12 @@ function renderImages(images) {
                      data-filename="${encodedFileName}"
                      onload="this.parentNode.classList.add('loaded')"
                      style="cursor: pointer;">
-                ${isReserve ? `<img 
-                    src="../image/T_nui-icon-Reserves-gritty-256.png" 
-                    alt="预备" 
-                    class="reserve-icon"
-                >` : ''}
                 <div class="image-name">${displayName}</div>
             </div>
         `;
     });
     html += '</div>';
-    
+
     imageDisplay.innerHTML = html;
 }
     
